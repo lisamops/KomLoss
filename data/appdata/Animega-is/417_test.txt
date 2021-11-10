@@ -1,0 +1,4 @@
+Julia Gelin,//,,,,,,,,
+Datum,Typ,Uppgift,RM,FM,%RM,RO,FO,%RO,SL
+2021-03-09 18:25:18,test,5 - uppgift 3,0,0,  0.0,0,0,  0.0,0m 4.2s
+2021-03-09 18:25:07,test,5 - uppgift 6,0,0,  0.0,0,0,  0.0,0m 5.9s

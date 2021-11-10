@@ -1,0 +1,579 @@
+---
+title             : "Developmental trajectories of reading ability in adolescents with intellectual disability"
+
+shorttitle        : "Title"
+
+author: 
+  - name          : "Karin Nilsson"
+    affiliation   : "1,2"
+    corresponding : yes 
+    address       : "Department of behavioural science and learning, Disability research division, Linköping University, 58381, Linköping, Sweden"
+    email         : "karin.a.nilsson@liu.se"
+  - name          : "Åsa Elwér"
+    affiliation   : "1"
+  - name          : "David Messer"
+    affiliation   : "3,4"
+  - name          : "Lucy Henry"
+    affiliation   : "4"
+  - name          : "Henrik Danielsson"
+    affiliation   : "1,2"
+
+affiliation:
+  - id            : "1"
+    institution   : "Linköping University, Sweden"
+  - id            : "2"
+    institution   : "The Swedish Institute for Disability Research, Sweden"
+  - id            : "3"
+    institution   : "The Open University, UK"
+  - id            : "4"
+    institution   : "City, University of London, UK"
+
+authornote: |
+  Enter author note here.
+
+abstract: |
+  Add abstract here.
+
+  
+keywords          : "decoding, reading comprehension, development, intellectual disability, mental age"
+
+bibliography      : [r-references.bib,All_references.bib]
+
+floatsintext      : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+lineno            : yes
+
+header-includes   : \raggedbottom 
+lang              : "english"
+class             : "man"
+output            : papaja::apa6_pdf
+
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(papaja)
+library(citr)
+library(readxl)
+library(janitor)
+library(tidyverse)
+library(psych)
+library(dplyr)
+library(mice)
+library(GGally)
+library(ggplot2)
+library(ggpubr)
+
+seed <- 1
+set.seed(seed)
+
+```
+
+
+# Introduction
+It is well known that individuals with intellectual disability (ID) exhibit difficulties with reading, and these difficulties apply both to decoding ability and reading comprehension ability. The current study aimed at investigating the concurrent developmental trajectories of decoding and reading comprehension in a sample of adolescents with ID. Studies on the development of these abilities in this group are sparse, and this need to be better understood to be able to adapt and implement reading instruction and interventions for individuals with ID.
+
+A large study by @Ratz2013 showed that many students with ID fail to progress in the early stages of decoding development. In a group of individuals aged 11-15 years (*n* = 631), 29.8% still read at the alphabetic stage. Reading at this stage is characterized by decoding a word letter by letter, as the decoding process is not yet automatized. For the individuals aged 16-21 (*n* = 417), the corresponding figure was 18.6%. The authors concluded that decoding ability develops from elementary school up to secondary school but hardly makes any progress after that. A study by @Lemons2013 found that over 50% of individuals with ID in Grade 11 had word reading abilities corresponding to the benchmark for Grade 1. These figures indicate that a substantial proportion of individuals with intellectual disability do not develop an automatized decoding ability with increasing chronological age.
+In relation to the development of reading comprehension abilities, @Wei2011 used a longitudinal data set to model reading growth curves for students with different disabilities aged between 7-17 years. The models showed that the growth rate for all disability groups decreased over time, but that students with ID were the group with the lowest scores on passage comprehension. From these studies, it is clear that individuals with ID are delayed relative to chronological age both in decoding abilities and reading comprehension abilities. In the current study, we argue that an important issue is to investigate growth trajectories in those with ID. Further, we argue that looking at these trajectories in relation to mental age rather than chronological age is the best approach since it is not expected that individuals with ID should develop in accordance with their chronological age. Hence, the aim of this study was to explore the developmental trajectories of decoding ability and reading comprehension ability in relation to mental age in a group of adolescents with ID. Since there is a limited amount of research in this area, an exploratory approach was adopted. 
+
+## Development of decoding abilities
+As outlined earlier, the level of decoding ability in individuals with ID does not always correspond to their chronological age [e.g. @Lemons2013; @Ratz2013]. When mental age (MA) is used, the results are inconsistent. Some research shows that individuals with ID perform on par with their peers matched on MA [@Menghini2004], some research indicates poorer performance [@Channell2013], and yet other research shows that individuals with ID perform better than their MA matched peers [@Boudreau2002]. These differences could be due to the aetiology of the ID in these studies, but they could also depend on the measure of decoding that was used. In the study by @Menghini2004, a group of individuals with Williams syndrome (WS) was compared to a group of typically developing children matched on MA. Here, the groups did not differ on accuracy measures of word recognition but they did differ significantly on accuracy measures of phonological decoding, i.e. nonword reading. In contrast, a study investigating reading abilities in a group with Down syndrome (DS) found that the group with DS performed better than the MA matched control group on a measure of word recognition, while there were no group differences on a measure of phonological decoding [@Boudreau2002].
+
+## Development of reading comprehension abilities
+The limited findings about the development of reading comprehension in individuals with ID also are inconsistent. Individuals with WS were found to perform more poorly on a reading comprehension task in comparison to MA matched typically developing children [@Menghini2004]. In contrast, a study on individuals with DS showed that the DS group performed on par with the MA matched control group on a test of passage comprehension [@Boudreau2002]. These different patterns could be explained by syndrome specific differences or level of reading comprehension ability that was required to solve the tasks. For example, in a study by @VanWingerden2014, a group of individuals with mixed aetiology ID were compared to a group of younger typically developing children on measures of higher and lower level reading comprehension. The lower level comprehension task included the use of explicit text cues, while the higher level comprehension task assessed the participant's ability to make inferences and to extract the main topic of the story. The results showed that there were no group differences on lower level reading comprehension, while there was a significant group difference on higher level reading comprehension [@VanWingerden2014]. 
+
+Figure \@ref(fig:test-readingage) shows the expected growth trajectories of decoding and reading comprehension in relation to reading age in a Swedish sample of typically developing children. These trajectories were based on the normative data from the decoding test LäSt [@Elwer2016] used in the current study. The normative data comes from Swedish speaking children with a chronological age between 7 and 13 years. According to these normative data, there should be a continuous development of both decoding and reading comprehension abilities up to the reading age of 13 years in Swedish speaking children. Reading age is expected to coincide with chronological age in a typical reader, in the same manner as MA is expected to coincide with chronological age in a typically developing individual.
+
+```{r test-readingage, fig.cap="Expected growth trajectories for decoding and reading comprehension in relation to reading age.", fig.dim=c(10, 8), echo=FALSE, message=FALSE, warning=FALSE}
+reading_age_data <- read_excel("reading_age.xlsx")
+
+reading_age_data$dec_mean_z <-scale(reading_age_data$dec_mean)
+reading_age_data$readcomp_z <-scale(reading_age_data$readcomp)
+
+RA_plotdata <- reading_age_data %>%
+  select(readingage, dec_mean_z, readcomp_z) %>%
+  gather(key = "variable", value = "value", -readingage)
+
+
+ggplot(RA_plotdata, aes(x=readingage, y=value, color=variable)) + 
+  geom_smooth(method = "loess") + 
+  geom_point(aes(shape=variable)) + 
+  facet_wrap(~ variable, labeller = labeller(variable = c("dec_mean_z" = "Decoding", "readcomp_z" = "Reading comprehension"))) +
+  stat_cor(label.x = 120, label.y = 2.0) +
+  stat_regline_equation(label.x = 100, label.y = 2.0, aes(label = ..rr.label..)) + 
+  labs(x="Reading age (months)", color="Variable", shape="Variable") +
+  theme(legend.position = "none")
+
+
+```
+
+## Present study
+The previous studies reviewed focused on whether literacy abilities in those with ID are better, worse or similar to MA matched groups of typical individuals. As such, they can elucidate whether developmental approaches [e.g., @Burack2021] are suitable to account for decoding and reading comprehension development in samples of young people with ID, i.e., are literacy abilities commensurate with mental age?  However, these studies do not tell us about the general rate or pace of development in relation to MA because they consider mean scores between groups. Additional information can be captured using a developmental trajectories approach because this allows us to see whether development proceeds (in relation to MA) at an ‘improving’ rate that is broadly linear, or whether there are plateaus at certain points. 
+In the present study, developmental trajectories for decoding and reading comprehension were investigated in relation to MA in a sample of 136 adolescents with ID of unknown aetiology using a cross-sectional design. Two earlier studies with the same sample have described the predictors of decoding and reading comprehension, respectively [@Nilsson2017; @Nilsson2017a]. The study focussing on decoding showed that this ability was predicted by phonological awareness and rapid automatized naming [RAN\; @Nilsson2017] and it was evident that phonological awareness exhibited the strongest predictive relationship to decoding. For typically developing adolescent readers in a transparent orthography, the opposite is often true. This is because, in typical readers, phonological awareness often diminishes as a predictor of decoding with increasing age, while RAN persists as a predictor [@Furnes2010; @Landerl2008]. This implies that adolescents with ID have not shifted decoding strategies and progressed into an orthographic stage, and that they have a delayed profile of decoding. The study of reading comprehension showed that comprehension was best explained by decoding, vocabulary, and phonological executive-loaded working memory [ELWM\; @Nilsson2017a], indicating a delayed pattern of predictors since the same predictors are often found in younger typically developing children. Given the results of these previous studies, the variables of interest in the current study were decoding and reading comprehension, but also their respective predictors. The present study used an exploratory approach in answering the following research question: What are the developmental trajectories of decoding and reading comprehension together with their predictors in relation to mental age in adolescents with ID?
+
+```{r import-data, message=FALSE, warning=FALSE, include=FALSE}
+#### Import data ####
+## Create list of sheetnames according to the Excel file
+sheetname_list <- c("word_recognition_timed", "word_recognition_untimed", "phonological_decoding_timed", "phonological_decoding_untimed", 
+                    "visual_stm", "reading_comprehension", "verbal_fluency_letter", "verbal_fluency_category", 
+                    "blending", "elision", "fortysix_items", "ran_colors", 
+                    "ran_letters", "verbal_elwm", "vocabulary", "listening_comprehension", "home_literacy", "phonological_stm", 
+                    "grammatical_comprehension", "visual_elwm", "spatial_stm", "hearing", "vision")
+
+## Read in data from excel file
+read_data_function <- function(sheet) {
+  read_excel("rawdata_aidr.xlsx", sheet = sheet)
+}
+
+data_decoding <- map(.x = sheetname_list, ~read_data_function(.x))
+
+#convert variable names to snake (will mostly remove Swedish characters in variable names) and adds sheetname to all variables except participant
+for (i in 1:length(sheetname_list)) {
+  data_decoding[[i]] <- clean_names(data_decoding[[i]], "snake")
+  colnames(data_decoding[[i]])[2:length(colnames(data_decoding[[i]]))] <- paste0(sheetname_list[[i]], "__",
+                                                                                 colnames(data_decoding[[i]])[2:length(colnames(data_decoding[[i]]))]) #adds __ as separator between test name och variable
+}
+
+## Read sample characteristics from a separate file
+data_sample_characteristics <- read_excel("samplechar_aidr.xlsx") %>%
+  clean_names("snake") %>%
+  dplyr::select(participant, sex_0m_1f, ca_months_tot, iq_estimate) #only selects the variables that are used later
+
+## Join and convert to one dataframe
+imported_df <- data_decoding %>% reduce(full_join, by = "participant") %>%
+  full_join(data_sample_characteristics, by = "participant")
+
+```
+
+```{r data-wrangling, include=FALSE}
+## In the preregistration, two types of missing was specified. However, only one type of missing was used, 999. The other missing code for missing due to not completion of a task due to too difficult is not used. Below, all 999 are replaced with NA 
+imported_df <- imported_df %>%
+  mutate_all(list(~na_if(., "999")))
+
+
+#### Excluding participants that don't meet the inclusion criteria####
+
+# Exclusion can be made on any of the following criteria- related to the data
+# NA on most test, n=161 -> n=139
+# NA on any of the decoding tests, n=138
+# Hearing, PTA up to 25, n=136
+# Vision, visual acuity >=0.8, none exclude, n=136 
+
+
+# calculation number of NAs per persons so that persons with too many NAs can be excluded
+number_of_NAs <- apply(imported_df, MARGIN = 1, function(x) sum(is.na(x)))
+imported_df <- cbind(imported_df, number_of_NAs)
+
+
+# Excluding persons with too many NAs or NA on any of the four decoding tests 
+# Too many means that they have not been tested on basically all tests. Here operationalized as more than 890 NAs of 920 variables
+# NA on any of the four decoding test have here been operationalized as NA on the first item of each test
+imported_df <- imported_df %>%
+  dplyr::filter(number_of_NAs<890) %>%
+  dplyr::filter(!is.na(word_recognition_timed__ar_1)) %>%
+  dplyr::filter(!is.na(word_recognition_untimed__is_1)) %>%
+  dplyr::filter(!is.na(phonological_decoding_timed__us_1)) %>%
+  dplyr::filter(!is.na(phonological_decoding_untimed__of_1))
+
+
+# Excluding two persons related to hearing (PTA > 25 or hearing not tested) but keeping hearing aid users who have NA on PTA because they cannot be tested with the equipment
+imported_df <- imported_df %>%
+  mutate(hearing_better_ear_pta=pmin(hearing__right_pta, hearing__left_pta, na.rm=TRUE)) %>%
+  dplyr::filter((hearing_better_ear_pta <= 25)|(hearing__hearing_aid=="yes")) #removes two participants with PTA>25 but keeps the hearing aid user aidr111 who don't have a pta
+
+
+# Excluding none with vision problems (inclusion criterion any vision measure >=0.8) 
+imported_df <- imported_df %>%
+  dplyr::filter((as.numeric(vision__vision_10_feet) >= 0.8)|(as.numeric(vision__vision_16_inches) >= 0.8)) #removes zero participants with vision <= 0.8
+
+
+# removing the measures used for exclusion from the dataframe because they are not needed below
+imported_df <- imported_df %>%
+  dplyr::select(- number_of_NAs, -contains("hearing"), -contains("vision"))
+
+
+
+
+
+
+
+#### Correcting home literacy for single parents####
+
+
+## Doubling the scores for single parents on home literacy according to pre-registration
+imported_df <- imported_df %>%
+  mutate(home_literacy__home_literacy_parent2_books = if_else(is.na(home_literacy__home_literacy_parent2_books), home_literacy__home_literacy_parent1_books, home_literacy__home_literacy_parent2_books)) %>%
+  mutate(home_literacy__home_literacy_parent2_web = if_else(is.na(home_literacy__home_literacy_parent2_web), home_literacy__home_literacy_parent1_web, home_literacy__home_literacy_parent2_web)) %>%
+  mutate(home_literacy__home_literacy_parent2_comics = if_else(is.na(home_literacy__home_literacy_parent2_comics), home_literacy__home_literacy_parent1_comics, home_literacy__home_literacy_parent2_comics)) %>%
+  mutate(home_literacy__home_literacy_parent2_magazines = if_else(is.na(home_literacy__home_literacy_parent2_magazines), home_literacy__home_literacy_parent1_magazines, home_literacy__home_literacy_parent2_magazines)) %>%
+  mutate(home_literacy__home_literacy_parent2_education = if_else(is.na(home_literacy__home_literacy_parent2_education), home_literacy__home_literacy_parent1_education, home_literacy__home_literacy_parent2_education))
+
+
+
+
+
+
+####Calculate sum variables 
+## Calculate the sum for each test that has sum scores for all variables except home literacy. No variables, except home literacy, has missing for a single item. Either they did the full test or not. Therefore, home literacy is separated here and joined back with the dataframe after the calculations
+
+df_home_literacy <- imported_df %>%
+  dplyr::select(participant, contains("home_literacy"))
+
+
+df_for_imputation <- imported_df %>% 
+  dplyr::select(everything() , -contains("total")) %>% #some variables has a total score in the data file. This should not be included in the sum. It has manually been checked that the calculated sum and the total score are the same
+  gather(key = "key", value = "value", -contains("participant"), -contains("error") #excludes the RAN errors from the sum of RAN scores
+         , -contains("home_literacy")) %>% #excludes home literacy variables
+  separate(col = "key", into = c("variable_name", "item"), sep = "__", fill="right") %>% #the sample characteristics will be kept here with NA for item
+  mutate(value = as.numeric(value)) %>% 
+  dplyr::filter(!is.na(value)) %>%
+  group_by(participant, variable_name) %>%
+  summarise(sum = sum(value, na.rm = TRUE)) %>%
+  spread(variable_name, sum) %>%
+  ungroup()
+
+
+
+
+
+#### Calculate computed variables for mental age, decoding, Phonological awareness, RAN and Verbal fluency based on variables without NA####
+
+df_for_imputation <- df_for_imputation %>%
+  mutate(mental_age = ca_months_tot * iq_estimate / 100)
+
+#### PCA analysis decoding variables ####
+
+
+decoding_pca1 <- df_for_imputation %>%
+  dplyr::select(contains("word_recognition"), contains("phonological_decoding")) %>%
+  principal(nfactors = 1, method = "regression")
+
+# It is doubble checked that a one component solution is good by inspecting the eigenvalues
+decoding_pca1[["values"]]
+# [1] 3.2758489 0.4061958 0.2188975 0.0990578
+# As can be seen, only the first value is higher than 1, so a one component solution is used
+
+
+decoding_variable <- as.data.frame(decoding_pca1[["scores"]])
+
+df_for_imputation$dec_composite <- decoding_variable$PC1
+
+
+#calculate measures from the PCA to be used in the text
+pca_decoding_loadings_min <- min(decoding_pca1[["loadings"]])
+pca_decoding_loadings_max <- max(decoding_pca1[["loadings"]])
+pca_decoding_explained_variance_percent <- decoding_pca1[["Vaccounted"]][2,1]*100
+
+#### z-transformed measures ####
+
+## PA ##
+
+pa_ztrans <- df_for_imputation %>%
+  select(blending, elision, fortysix_items) %>%
+  scale() %>%
+  as.data.frame()
+
+pa_ztrans$sum_z_pa <- rowSums(cbind(pa_ztrans$blending, pa_ztrans$elision, pa_ztrans$fortysix_items))
+
+df_for_imputation$pa_composite <- pa_ztrans$sum_z_pa
+
+
+
+## RAN ## 
+
+ran_ztrans <- df_for_imputation %>%
+  select(ran_letters, ran_colors) %>%
+  scale() %>%
+  as.data.frame()
+
+ran_ztrans$sum_z_ran <- rowSums(cbind(ran_ztrans$ran_letters, ran_ztrans$ran_colors))
+
+df_for_imputation$ran_composite <- ran_ztrans$sum_z_ran
+
+
+
+## Verbal fluency ##
+
+vf_ztrans <- df_for_imputation %>%
+  select(verbal_fluency_category, verbal_fluency_letter) %>%
+  scale() %>%
+  as.data.frame()
+
+vf_ztrans$sum_z_vf <- rowSums(cbind(vf_ztrans$verbal_fluency_category, vf_ztrans$verbal_fluency_letter))
+
+df_for_imputation$vf_composite <- vf_ztrans$sum_z_vf
+
+
+
+#calculate correlations between the variables that are z-transformed so that they can be reported in the text
+cor_pa <- df_for_imputation %>%
+  select(blending, elision, fortysix_items) %>%
+  cor()
+cor_ran <- df_for_imputation %>%
+  select(ran_letters, ran_colors) %>%
+  cor()
+cor_vf <- df_for_imputation %>%
+  select(verbal_fluency_category, verbal_fluency_letter) %>%
+  cor()
+
+cor_ztransform_variables_min <-min(cor_pa[2,1], cor_pa[3,1], cor_pa[3,2],
+                                   cor_ran[2,1])
+cor_ztransform_variables_max <-max(cor_pa[2,1], cor_pa[3,1], cor_pa[3,2],
+                                   cor_ran[2,1])
+
+
+
+
+#calculate number of included participants and number of girls to be used in the text
+n_included <- nrow(df_for_imputation)
+n_girls <- sum(df_for_imputation$sex_0m_1f) #girls are coded as 1 and boys as 0, so a sum gives number of girls
+
+
+
+
+# adding the home literacy variables to the dataframe again
+df_for_imputation <- full_join(df_for_imputation, df_home_literacy, by="participant")
+
+
+```
+
+```{r imputation, include=FALSE, cache=FALSE}
+#### Missing values imputation####
+
+## Checking percentage of missing data 
+pMiss <- function(x){sum(is.na(x))/length(x)*100}
+missing_per_column <- apply(df_for_imputation,2,pMiss)
+missing_per_column_max <- max(missing_per_column)
+missing_average <- mean(missing_per_column)
+# The variable with most missing was a home literacy variable with 2.2% missing. Therefore imputation of variables are conducted
+
+## Impute missing data
+#initiatie the imputation so that the method is visible in meth and so that the predictor matrix can be manipulated
+init = mice(df_for_imputation, maxit=0)
+meth = init$method
+predM = init$predictorMatrix
+
+#Manipulate the predictor matrix so that participant, the decoding variables and reading comprehension is not used as a basis for the imputation
+predM[, c("participant")]=0
+predM[, c("word_recognition_timed")]=0
+predM[, c("word_recognition_untimed")]=0
+predM[, c("phonological_decoding_timed")]=0
+predM[, c("phonological_decoding_untimed")]=0
+predM[, c("reading_comprehension")]=0
+predM[, c("dec_composite")]=0
+
+number_of_datasets <- 5
+imputed_datsets <- mice(df_for_imputation, predictorMatrix=predM, m=number_of_datasets, maxit=5, meth='pmm', seed=seed) #pmm is the default method 
+
+
+complete_data_list <- vector(mode = "list", length = number_of_datasets)
+for (i in 1:number_of_datasets) {
+  complete_data_list[[i]] <- complete(imputed_datsets, i)
+}
+
+
+# A function that sums the home literacy variables of one dataframe and then adds the home_literacy sum to the dataframe and removes the home literacy variables for individual questions
+calculate_home_literacy_sum_function <- function(df) {
+  df_hl <- df %>%
+    dplyr::select(participant, contains("home_literacy"), -contains("total")) %>% #selects all home literacy variables except the total
+    gather(key = "key", value = "value", -participant) %>%
+    separate(col = "key", into = c("variable_name", "item"), sep = "__") %>%
+    group_by(participant, variable_name) %>%
+    summarise(sum = sum(value, na.rm = TRUE), .groups="drop") %>%
+    spread(variable_name, sum) 
+  
+  df <- left_join(df, df_hl, by = "participant") %>%
+    dplyr::select(-contains("home_literacy__"))
+  
+  return(df)
+}
+
+
+complete_data_list <- map(complete_data_list, ~calculate_home_literacy_sum_function(.x)) #runs the calculate_home_literacy_sum_function on all complete datasets
+
+## Selecting data points relevant for developmental trajectories analysis
+devtrajdata <- as.data.frame(complete_data_list[1]) %>%
+  select(participant, blending, ca_months_tot, elision, fortysix_items, iq_estimate, phonological_decoding_timed, phonological_decoding_untimed, ran_colors, ran_letters, reading_comprehension, verbal_elwm, vocabulary, word_recognition_timed, word_recognition_untimed, mental_age, dec_composite, pa_composite, ran_composite)
+
+```
+
+(ref:descriptives-table-caption) Descriptive statistics of participant characteristics and task performances (raw scores) of adolescents with intellectual disability (n = `r n_included`).
+
+```{r descriptives-table}
+#### Descriptive statistics ####
+
+
+descriptives_data <- devtrajdata %>%
+dplyr::select(-participant, -dec_composite, -ran_composite, -pa_composite) %>%
+dplyr::rename("Blending" = "blending", "Elision" = "elision", "46-items" = "fortysix_items", "Phonological decoding timed" = "phonological_decoding_timed", "Phonological decoding untimed" = "phonological_decoding_untimed", "RAN colors" = "ran_colors", "RAN letters" = "ran_letters", "Phonological ELWM" = "verbal_elwm", "Vocabulary" = "vocabulary", "Word recognition timed" = "word_recognition_timed", "Word recognition untimed" = "word_recognition_untimed", "Mental age (months)" = "mental_age", "Chronological age (months)" = "ca_months_tot", "IQ" = "iq_estimate", "Reading comprehension" = "reading_comprehension") %>%
+psych::describe()
+
+descriptives_data <- descriptives_data %>%
+    as.data.frame() %>%
+    dplyr::select(mean, sd, min, max, skew, kurtosis) %>%
+    rownames_to_column()
+
+
+#reorder variables for table
+descriptives_data <- descriptives_data[c(2, 15, 5, 13, 14, 6, 7, 10, 1, 3, 4, 8, 9, 11, 12),]
+
+
+apa_table(descriptives_data, digits = 2,
+          font_size = "footnotesize",
+          col.names = c("Test", "$M$", "$SD$", "Min",  "Max", "Skewness", "Kurtosis"),
+          caption = "(ref:descriptives-table-caption)")
+```
+
+
+
+# Methods
+The data used in this study was collected in a larger project on reading abilities in adolescents with ID.
+
+## Participants
+For inclusion in this study the following were required: 1) age 12-19 years; 2) a level of decoding ability that could be measured with the tests used in this study (i.e. >0 words correct); 3) normal or corrected to normal vision and hearing; 4) Swedish speaking home environment since birth; and 5) mild ID of unknown aetiology. A total of 136 participants were included. The mean chronological age was `r descriptives_data$mean[descriptives_data$rowname=="Chronological age (months)"]` months (*SD* = `r descriptives_data$sd[descriptives_data$rowname=="Chronological age (months)"]` months), the mean estimated IQ level of the participants was `r descriptives_data$mean[descriptives_data$rowname=="IQ"]` (*SD* = `r descriptives_data$sd[descriptives_data$rowname=="IQ"]`), and the mean mental age was `r descriptives_data$mean[descriptives_data$rowname=="Mental age (months)"]` months (*SD* = `r descriptives_data$sd[descriptives_data$rowname=="Mental age (months)"]` months). More detailed information is provided in Table \@ref(tab:descriptives-table). IQ level was estimated using two sub-tests from the WISC-V [@Wechsler2014]. Fifteen participants were estimated to have an IQ above 70, however, all participants were enrolled in special education classes during data collection, which in Sweden means that they have been thoroughly tested and diagnosed as having ID and an IQ < 70 by a clinician. Participants were recruited via schools, and both written and oral consent was obtained. For participants under the age of 15 years, written consent was obtained from caregivers and oral consent was obtained from the participant. For participants over the age of 15, written consent was obtained from both caregivers and participants and oral consent was obtained from the participant.
+
+## Assessment
+All participants were assessed in their school environment. The sessions took approximately 4 hours, and were divided into shorter parts compliant with the school schedule. Sessions were completed on different days and breaks were allowed when necessary to avoid fatigue. A wide range of tests was administered, but only the measures of interest for the current study are described below.
+
+### Decoding
+Decoding was measured using the LäSt test [@Elwer2016]. This test includes measurements of word recognition and phonological decoding. The test consists of two forms, A and B, covering both types of decoding. The A-form was used to assess timed decoding ability and the participants were instructed to read separate lists of words and nonwords as quickly as possible during 45 seconds. The B-form was used to assess untimed decoding ability and the participants were instructed to read the whole list of words and nonwords as accurately as possible. Testing with the B-form was stopped following 10 consecutive errors. The raw scores were calculated from the total number of correct words that were read on each form.
+
+### Reading comprehension
+Reading comprehension was measured using the LäSt test [@Elwer2016]. The test consists of 17 texts of increasing length and complexity, and the level of comprehension is measured via multiple-choice questions following each text. The first three texts were mandatory. After finishing these texts, testing was stopped if the participant answered less than two questions correctly. This stopping criterion was chosen on the basis that two correct answers represent more than chance. The raw score was the total number of correct answers.
+
+### Phonological awareness
+Phonological awareness was measured using three different tests. Two of them were subtests from the Comprehensive Test of Phonological Processing (CTOPP) [@Wagner1999]. The Blending Words subtest requires participants to blend sounds together to say a word. The Elision subtest requires the participants to repeat a word after the examiner and then say the word again but leaving certain sounds out. Both these tests consist of 20 items and testing was stopped following three consecutive errors. The third test, called 46-items [@Olson1994], requires the participants to repeat nonwords presented orally by the examiner and then to say the word again but leaving certain sounds out, which makes the nonword a real word. There are 46 items and testing was stopped following five consecutive errors. Raw scores on each test in this section were the total number correct. All measures of phonological awareness were combined (sum of z-transformed measures) to give one variable that was used in the regression analysis. 
+
+### Rapid automatized naming (RAN)
+RAN is a task that measures how quickly individuals can name aloud objects, colours, or symbols (letters or digits) [@Wagner1999]. Participants were given two different RAN tests; they were asked to name as quickly as possible six different letters and to name six different colours, both presented randomly. Time in seconds was recorded. The raw score was the total number of seconds from both forms. Measures of both letters and colours were combined (sum of z-transformed measures) to one variable that was used in the regression analysis. Because a lower score indicates better performance, RAN usually displays a negative relationship with other variables. For reporting and visual interpretation purposes, this variable was inverted. 
+
+### Vocabulary
+Receptive vocabulary was measured using the Peabody Picture Vocabulary Test, Third Edition (PPVT-III) [@Dunn1997]. The participants were asked to match a stimulus word, which was presented orally by the examiner, to one of four black-and-white line drawings. The test is arranged in blocks of 12 items and has a total of 204 items. The blocks are arranged in order of increasing difficulty and testing is stopped following eight or more errors within one block. According to the manual, the level of difficulty of the initial testing should be related to the participant's age. In this study, we started from the first block with all participants as it can be difficult to ascertain where to start graded tests in individuals with ID. Because the test has been translated into Swedish, the order of increasing difficulty has been changed slightly, which also justifies the decision to start with the easiest block. The raw score was the total number of correct answers.
+
+### Phonological executive-loaded working memory (ELWM)
+Phonological ELWM was measured using listening span. This test requires participants to listen to a sentence spoken by the examiner, state whether it is true or false, and then retain the last word of that sentence while subsequent sentences are presented and processed. This test was in the format of a span test which had three trials per list length, and the participants were allowed to continue to the next span level if two out of three trials were correct (both items and serial order). Item sequences started with one or two items but became longer until the stopping rule was fulfilled. The raw score was the total number of trials correct.
+
+### Mental age (MA)
+MA was calculated using full-scale IQ and chronological age (MA = CA x IQ/100). Full-scale IQ was estimated with the Block design and Vocabulary subtests from Wechsler Intelligence Scale for Children-Fifth Edition (WISC-V) [@Wechsler2014]. These subtests were chosen due to their high reliability and a high correlation with the full-scale IQ [@Silverstein1983]. Testing and scoring were done according to the manual. Block design is a subtest in which participants were asked to arrange several blocks according to a given pattern. Testing was stopped following two consecutive errors. Vocabulary is a subtest where the participants were asked to name pictures and describe the meaning of words. Testing was stopped following three consecutive errors.
+
+## Data analysis
+We used `r cite_r("r-references.bib")` for all our analyses. The main decoding variable was calculated with a principal component analysis (PCA) on two measures of word recognition and two measures of phonological decoding. The PCA favored a one component solution with high loadings for all decoding measures (range `r pca_decoding_loadings_min` to `r pca_decoding_loadings_max`) that explained `r pca_decoding_explained_variance_percent` % of the variance. For two assessments, composite measures were calculated by combining scores (RAN 2 measures; phonological awareness 3 measures). The sum of the z-transformed measures gave two composite variables used in the analysis. The intra-correlations between the measures ranged between `r cor_ztransform_variables_min` and `r cor_ztransform_variables_max`.
+All variables were z-transformed to facilitate comparison between variables. 
+
+```{r prepare-data, message=FALSE, warning=FALSE, include=FALSE}
+## Preparing data for analyses
+## Divide into age groups
+devtrajdata_analysis <- devtrajdata %>%
+  mutate(age_group = case_when(mental_age <= 105 ~ "MAmax105",
+                               mental_age > 105 ~ "MAmin105"))
+
+
+describeBy(devtrajdata_analysis, group = "age_group")
+
+## Inverting RAN scores for easier visual interpretation
+
+devtrajdata_analysis <- devtrajdata_analysis %>%
+  mutate(ran_inverted = ran_composite * -1)
+
+
+## z-transforming all variables
+devtrajdata_analysis$reading_comprehension_z <-scale(devtrajdata_analysis$reading_comprehension)
+
+devtrajdata_analysis$vocabulary_z <- scale(devtrajdata_analysis$vocabulary)
+
+devtrajdata_analysis$verbal_elwm_z <- scale(devtrajdata_analysis$verbal_elwm)
+
+devtrajdata_analysis$pa_z <- scale(devtrajdata_analysis$pa_composite)
+
+devtrajdata_analysis$dec_z <- scale(devtrajdata_analysis$dec_composite)
+
+devtrajdata_analysis$ran_inverted_z <- scale(devtrajdata_analysis$ran_inverted)
+
+## Choosing variables and converting to long format
+plotdata_all <- devtrajdata_analysis %>%
+  select(ca_months_tot, mental_age, age_group, dec_z, reading_comprehension_z, pa_z, vocabulary_z, verbal_elwm_z, ran_inverted_z) %>%
+  gather(key = "variable", value = "value", -ca_months_tot, -mental_age, -age_group)
+
+
+
+```
+
+```{r plot-loess, fig.cap="Visualization of all variables fitted against mental age using method = 'loess'. *r^2^* and *r* together with significant values are presented for each plot. At an MA of 105 months, there is a clear deceleration of growth for decoding, phonological awareness, RAN, and phonological ELWM.", fig.dim=c(12, 10), echo=FALSE, message=FALSE, warning=FALSE}
+## Plot using method = "loess" for visual inspection
+
+ggplot(plotdata_all, aes(x=mental_age, y=value, color=variable)) + 
+  geom_smooth(method = "loess") + 
+  geom_point(aes(shape=variable)) + 
+  facet_wrap(~ variable, labeller = labeller(variable = c("dec_z" = "Decoding", "pa_z" = "Phonological awareness",
+                                                          "ran_inverted_z" = "RAN", "reading_comprehension_z" = "Reading comprehension",
+                                                          "verbal_elwm_z" = "Phonological ELWM", "vocabulary_z" = "Vocabulary"))) +
+  stat_cor(label.x = 120, label.y = 2.5) +
+  stat_regline_equation(label.x = 70, label.y = 2.5, aes(label = ..rr.label..)) + 
+  labs(x="Mental age (months)", color="Variable", shape="Variable") +
+  theme(legend.position = "none")
+
+```
+
+
+
+```{r plot-lm, fig.cap="Visualization of all variables fitted against mental age using method = 'lm', with the sample divided into age groups. *r^2^* and *r* together with significant values are presented for each plot.", fig.dim=c(12, 10), echo=FALSE, message=FALSE, warning=FALSE}
+
+## decoding, readcomp, vocabulary, verbal elwm, pa, ran - ma divided into age groups
+plot <- ggplot(plotdata_all, aes(x=mental_age, y=value, color=age_group)) + 
+  geom_smooth(method = "lm") +
+  geom_point() + 
+  facet_wrap(~ variable, labeller = labeller(variable = c("dec_z" = "Decoding", "pa_z" = "Phonological awareness",
+                                                          "ran_inverted_z" = "RAN", "reading_comprehension_z" = "Reading comprehension",
+                                                          "verbal_elwm_z" = "Phonological ELWM", "vocabulary_z" = "Vocabulary"))) +
+  stat_cor(label.x = 120) +
+  stat_regline_equation(label.x = 70, aes(label = ..rr.label..)) + 
+  labs(x="Mental age (months)", color="Age group") 
+
+plot
+
+```
+```{r plotdata, message=FALSE, warning=FALSE, include=FALSE}
+## Extracting data from ggplot
+plotdata <- ggplot_build(plot)
+
+plotdata_table <- cbind.data.frame(plotdata[["data"]][[3]][["r"]], plotdata[["data"]][[3]][["rr"]], plotdata[["data"]][[3]][["p"]])
+colnames(plotdata_table) <- c("r", "rr", "p")
+rownames(plotdata_table) <- c("dec_young", "dec_old", "pa_young", "pa_old", "ran_young", "ran_old", "rc_young", "rc_old", "elwm_young", "elwm_old", "voc_young", "voc_old")
+
+```
+
+
+# Results
+Descriptive data for all variables can be seen in Table \@ref(tab:descriptives-table). Decoding, phonological awareness, RAN, reading comprehension, phonological ELWM, and vocabulary were each fitted against MA using a local polynomial regression (method = "loess"). A visual inspection revealed a clear deceleration of growth around an MA of 105 months for the following variables: decoding, phonological awareness, RAN and phonological ELWM (see Figure \@ref(fig:plot-loess)). Therefore, the sample was divided into two age groups; MA <= 105 months (*n* = `r sum(devtrajdata_analysis$age_group == "MAmax105")`) and MA > 105 months (*n* = `r sum(devtrajdata_analysis$age_group == "MAmin105")`). The variables were fitted again, but this time using linear regressions for each age group (see Figure \@ref(fig:plot-lm)). 
+
+
+
+# Discussion
+Previous research concerned with the development of literacy in those with ID has usually focused on whether their literacy abilities are better, worse or similar to MA matched groups of typical individuals [@Boudreau2002; @Channell2013; @Menghini2004; @VanWingerden2014]. This study was designed to provide the first the first description, in those with ID, about the developmental trajectories of decoding and reading comprehension and their respective predictors in relation to MA. Our study used a cross-sectional design with 136 individuals who have ID with an unknown aetiology. The results showed three important features. First, up to 105 months, the literacy and predictor abilities of individuals with ID appeared to be related to their growth in MA; this involved decoding and its predictors of phonological awareness and RAN, as well as reading comprehension and its predictors of vocabulary and ELWM. Second, after the age of 105 months, the abilities of reading comprehension and vocabulary continued to show growth related to MA. Third, after the age of 105 months, there was no growth related to MA for decoding together with its two main predictors of phonological awareness and RAN, and for phonological ELWM, which had been identified as a predictor of reading comprehension. In other words, after 105 months, was an unexpected plateau in development in these variables in relation to MA. What explanations can be put forward to explain this pattern of development, and in particular, why did some abilities not increase with increases in MA?
+
+Some of these developmental trajectories are similar to those of typical readers. In typical readers, as chronological age increases, decoding and reading comprehension abilities increase. This increase is visualized in relation to reading age in Figure \@ref(fig:test-readingage), where the normative data from the decoding test LäSt [@Elwer2016] was used. According to this data, decoding and reading comprehension is expected to exhibit a significant growth up to a reading age of 13 years in a typical reader. Furthermore, for typical readers, reading age and MA should be highly related. In other words, for typical readers decoding ability and reading comprehension ability should increase with MA. Consequently, if the individuals with ID were following a delayed developmental path [@Burack2021], growth in literacy related abilities would be expected as MA increases. This was the pattern observed for all variables before an MA of 105 months, and for reading comprehension and vocabulary after an MA of 105 months. Thus, in these two cases, individuals with ID appeared to be following a developmental trajectory that had some correspondence to that in typically developing children. However, after an MA of 105 months (i.e., 8:9 years), for our ID sample, as MA increased there was no growth in the abilities of decoding, phonological awareness, RAN or phonological ELWM, suggesting that in these cases a different developmental path was being followed. Both cognitive and environmental explanations can be put forward to account for this pattern of development. 
+
+One possible explanation lies in the ID diagnosis. Having an ID will, by definition, affect the development of academic abilities, even though a mild ID means that some degree of academic success can be reached [@AmericanPsychiatricAssociation2013]. Therefore, it could be that the deficits in cognitive functioning hinders further development in decoding abilities. It would be reasonable to assume that individuals with ID reach their full potential in an earlier stage of decoding development compared to typical readers. This is also in line with the developmental delay model, where individuals with ID of unknown aetiology are expected to develop at a slower rate and with a lower maximum level of functioning [@Burack2021; @Zigler1967]. However, this explanation do not account for the fact that reading comprehension and vocabulary continues to develop beyond the MA where the development decoding, phonological awareness, RAN, and phonological ELWM levels out. 
+
+The explanation could also be connected to educational factors. In the Swedish school system, individuals with ID follow a different curriculum compared to general compulsory school [@Skolverket2018], and students with ID could either be enrolled in an inclusive setting, where they are part of a general education classroom, or be enrolled in a special school. The adolescent participants in the present study were all enrolled in special schools. The curriculum for students with ID stresses reading instruction with a focus on phonics for Grade 4-6. However, this focus is shifted for Grade 7-9, and reading instruction instead targets the development of reading strategies, such as reading between the lines. This could offer an explanation to our results that the development of decoding plateaus, while reading comprehension continue to develop. Since it is known that individuals with ID develop at a slower rate, it would be reasonable to assume that these students would benefit from reading instruction that continues to focus on teaching phonics for a longer period of time. In addition, earlier research have found that being fully included in a general education classroom predicts more progress in reading skills compared to being enrolled in a special school [@SermierDessemontet2011; @SermierDessemontet2015; @Turner2008]. This was also found to be true for language and memory abilities [@Laws2000]. These studies originate from Switzerland [@SermierDessemontet2011; @SermierDessemontet2015] where the special schools lack an imposed curriculum, and the UK [@Laws2000; @Turner2008] where the National Curriculum must be followed by schools controlled by local authority, while non-maintained schools can devise their own curriculum. This means that it could be difficult to translate these findings to a Swedish setting, where the students follow the same curriculum regardless of the form of schooling. However, the difference between special schools and the inclusive setting might also be attributed to other environmental variables, such as the impact of being surrounded by students that do or do not exhibit the same cognitive difficulties.
+
+## Conclusion
+The development of decoding and reading comprehension follow two different developmental trajectories, with evidence for continued development (alongside MA level) for reading comprehension, but a plateau in decoding development occurring at an MA of 105 months. The reasons behind this plateau in decoding are still uncertain. It might be that having an ID hinders further development in automatized decoding, although reading instruction practices could also be relevant as the focus on the development of decoding abilities traditionally ends after the early school years. For individuals with ID, a continuing focus on developing decoding abilities after elementary and secondary school might prove beneficial. More research needs to be directed towards investigating and understanding the development of reading abilities in individuals with ID, to develop appropriate interventions and school curricula. 
+
+## Limitations
+The sample in this study was recruited only from special schools in Sweden, making a comparison between special schools and the inclusive setting impossible. To further understand the reasons behind the different developmental paths for decoding and reading comprehension, future research needs to include a range of environmental variables such as type of school placement and the amount of hours spent on teaching phonics.
+
+
+\newpage
+
+# References
+
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id="refs" custom-style="Bibliography"></div>
+\endgroup
