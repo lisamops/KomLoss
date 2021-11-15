@@ -1,0 +1,102 @@
+---
+title: "Presenation resultat KomLoss 15 nov 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE, results='asis', warning = FALSE, echo = FALSE, include = FALSE, message = FALSE)
+```
+
+```{r load_packages, include = FALSE}
+library(sjPlot)
+```
+
+```{r load_environment}
+load("environment.RData")
+``` 
+
+## Phonological awareness (PA)
+
+**Jämförelsegruppen mot de tre interventionsgrupperna tillsammans**
+
+```{r PA, include = TRUE, results='asis'}
+tab_model(model_PA_3, model_PA_4, show.df = TRUE)
+```
+
+**Kombigruppen mot de två interventionsgrupperna ALL och Animega-is**
+
+```{r PA-kombi, include = TRUE, results='asis'}
+tab_model(model_PA_7, show.df = TRUE)
+```
+
+## Letter-sound recognition
+**Jämförelsegruppen mot de tre interventionsgrupperna tillsammans**
+
+```{r letter, include = TRUE, results='asis'}
+tab_model(model_letter_3, model_letter_4, show.df = TRUE)
+```
+
+**Kombigruppen mot de två interventionsgrupperna ALL och Animega-is**
+
+```{r letter-kombi, include = TRUE, results='asis'}
+tab_model(model_letter_7, show.df = TRUE)
+```
+
+**ALL-gruppen mot de kombigruppen och Animega-is**
+
+```{r letter-ALL, include = TRUE, results='asis'}
+tab_model(model_letter_9, show.df = TRUE)
+```
+
+
+
+## Word reading
+
+**Jämförelsegruppen mot de tre interventionsgrupperna tillsammans**
+
+```{r word, include = TRUE, results='asis'}
+tab_model(model_word_3, model_word_4, show.df = TRUE)
+```
+
+**Kombigruppen mot de två interventionsgrupperna ALL och Animega-is**
+
+```{r word-kombi, include = TRUE, results='asis'}
+tab_model(model_word_7, show.df = TRUE)
+```
+
+
+## Sentence reading
+
+**Jämförelsegruppen mot de tre interventionsgrupperna tillsammans**
+
+```{r DLS, include = TRUE, results='asis'}
+tab_model(DLS_poisson_3, DLS_poisson_4)
+```
+
+**Kombigruppen mot de två interventionsgrupperna ALL och Animega-is**
+
+```{r DLSon-kombi, include = TRUE, results='asis'}
+tab_model(DLS_poisson_7)
+```
+
+
+## PA on letter-sound recognition and word recognition
+
+```{r PA-letter-word, include = TRUE, results='asis'}
+tab_model(model_PA_letter, model_PA_word, model_PA_DLS)
+```
+
+
+##Sammanfattning resultat
+
+**Fonologisk medvetenhet**
+I alla tre interventionsgrupper tillsammans förbättras den *fonologiska medvetenheten* mer jämfört med jämförelsegruppen som inte tränade. Kombinerad träning förbättrar fonologisk medvetenhet mer än de andra interventionsgrupperna.
+
+**Bokstavsidentifikation**
+I alla tre interventionsgrupper tillsammans förbättras *bokstavsidentifikation* mer jämfört med jämförelsegruppen som inte tränade. ALL träningen förbättrar bokstavsidentifikation mer än de andra interventionsgrupperna.
+
+**IQ**
+IQ påverkar ingångsvärdet för samtliga läsmått utom meningsläsning (*p* = .071). IQ påverkar utfallet över tid i fonologisk medvetenhet och meningsläsning och är nästan signifikant även för ordläsning (*p* = .054). 
+
+**Kan poäng på fonologisk medvetenhet vid T1 predicera utfallet över tid**   
+Ja,utvecklingen av bokstavsidentifikation, ordläsning, och meningsläsning kan prediceras av hur bra man presterade på fonologisk medvetenhet vid T1. 

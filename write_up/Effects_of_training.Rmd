@@ -56,7 +56,7 @@ header-includes:
 
 lang              : "english"
 class             : "man"
-output            : papaja::apa6_pdf
+#output            : papaja::apa6_pdf
 #output            : papaja::apa6_word
 # output:
 #   html_document:
@@ -78,7 +78,7 @@ options(digits=3, Encoding="UTF-8") #default decimal digits
 
 ```{r load_environment}
 load("environment.RData")
-#source('scripts/analysis.R') #kolla upp hur man kan göra såhär istället för använda environmentgrejen. Just nu funkar inte pathen
+#source('scripts/MLM_time_continous.R') #kolla upp hur man kan göra såhär istället för använda environmentgrejen. Just nu funkar inte pathen
 ``` 
 
 ```{r load_packages, include = FALSE}
@@ -89,6 +89,7 @@ library(papaja)
 # library(psych) # for cor.test
 library(lmerTest)# to get p-value estimations that are not part of the standard lme4 packages 
 library(lme4)
+library(sjPlot)
 # library(nlme)
 # library(reshape)
 # library(tidyr)
@@ -132,7 +133,10 @@ p_small <- function(value){
 
 # Introduction
 
-To be added...
+Children with intellectual and communicative disabilities may be among the most socially disadvantaged student categories. Failing in acquiring literacy skills is a serious and common problem. The purpose of this project is to investigate the effects of two specific digital literacy learning tools (apps) on the acquisition of literacy skills in children with intellectual disability and who are reliant on augmentative and alternative communication, AAC. This means that they need aids such as manual signing, symbols/pictures, speech-generating devices, etc. to understand and/or express themselves. 
+
+We will recruit children with intellectual disability of different etiologies from special needs schools. The age range will be broad. The children will be assigned to one of three interventions or to a comparison group that will receive teaching-as-usual (TaU). The three interventions are: 1) the ALL-Accessible Literacy Learning app (phonemic strategies); the Animega-is app (comprehension-based strategies); 3) a combination of both ALL and Animega-is. The children’s literacy development during a 12-week intervention period will be compared across the four different groups. In line with a previous study targeting children in reading difficulties (Gustafson et al., 2011), we expect a positive effect on reading and phonological awareness across all intervention groups, with the largest effect in the group receiving the combined intervention.
+Hypotheses
 
 ## Hypotheses
 
@@ -140,7 +144,8 @@ To be added...
 2: Training phonemic or comprehension-based reading strategies improves reading ability. 
 3: The combined training is more effective than either intervention on its own.
 
- The hypotheses will be tested on these outcome variables: phonological awareness (1, 3), word reading (2, 3), and sentence reading (2, 3).
+The hypotheses will be tested on these outcome variables: phonological awareness (1, 3), word reading (2, 3), and sentence reading (2, 3).
+
 
 
 # Methods
@@ -158,29 +163,28 @@ mean((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$IQ)
 ```
 
 ## Participants
-Participants were recruited from schools in southern Sweden. Participation was voluntary. The participants were recruited after the consent of the school’s principal. All caregivers signed an informed consent, regarding the confidentiality of data and group-level analysis. All participants gave oral consent at the beginning of the test session. The study follows the Ethical principles for medical research involving human subjects from the WMA Declaration of Helsinki [@WorldMedicalAssociation2013]. The study was reviewed and approved by the Ethical Review Board, Sweden (*insert dr no*).
+Participants were recruited from special needs schools in southern Sweden, after consent of the school’s principal. Participating children  gave oral consent at the beginning of the first test session and  prior to the study, caregivers signed an informed consent, regarding the confidentiality of data and group-level analysis. The study follows the Ethical principles for medical research involving human subjects from the WMA Declaration of Helsinki [@WorldMedicalAssociation2013]. The study was reviewed and approved by the Ethical Review Board, Sweden (*insert dr no*).
 
-The participants attended schools for children with special needs. In Sweden, enrolment criterion for special schools is having a ID diagnosis[^1]. The comparison group comprised of children with a TD attending primary schools. The recruitment process resulted in `r printnum(length(background_raven$id), numerals = T) ` participants ($n_{girls}$ = `r length((background_raven %>% filter(gender == "Girl"))$id) `, $n_{boys}$ = `r length((background_raven %>% filter(gender == "Boy"))$id)`). One participant was excluded from the study due to testing not being followed as per protocol. 
+In Sweden, special schools are open for children with an ID diagnosis^1. The recruitment process resulted in `r printnum(length(background_raven$id), numerals = T) ` participants ($n_{girls}$ = `r length((background_raven %>% filter(gender == "Girl"))$id) `, $n_{boys}$ = `r length((background_raven %>% filter(gender == "Boy"))$id)`). However, one participant was excluded from the study due to testing not being followed as per protocol, and the final sample thus included `r printnum(length((mlm_data %>% filter(time == 1))$id), numerals = T) ` participants (for demographics, see Table ...). Data on diagnoses were collected using parental surveys. The diagnoses in the ID group can be seen in Table\ \@ref(tab:diagnosis-table).
 
 [^1]:In Sweden, the diagnosis Intellectual Disability is made after a thorough assessment by a licensed psychologist according to criteria from the DSM-5 [@APA2013].
 
+##Behavioral measures 
+Non-verbal intelligence and reading measures were collected. 
+
+###Non-verbal intelligence
+
 The participants’ IQ were calculated based on The Raven’s 2 Progressive Matrices Clinical Edition (Raven’s 2; *Raven, Rust, Chan, & Zhou, 2018*). 
 
-The participants were randomly selected on school level to different intervention groups. This was done to try to match the groups on IQ. Nevertheless, the IQ in the groups differed significantly, `r apa_print(kruskal_test_IQ)$statistic `.@Facon2011 proposed groups be equated with an α-level of *p* > 0.50. The Animega-is group had a significantly higher IQ (
-*m* =`r mean((mlm_data %>% filter(time == 1)%>% filter(group == "Animega-is"))$IQ) `; 
-*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group == "Animega-is"))$IQ) `) compared to the Comparison group (
-*m* =`r mean((mlm_data %>% filter(time == 1)%>% filter(group == "Control"))$IQ, na.rm = TRUE) `; 
-*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group == "Control"))$IQ, na.rm = TRUE) `), 
-*p* `r p_small(DT_IQ[["res"]][["P.adj"]][5]) `, the ALL group (
-*m* =`r mean((mlm_data %>% filter(time == 1)%>% filter(group == "ALL"))$IQ) `; 
-*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group == "ALL"))$IQ) `),  
-*p* `r p_small(DT_IQ[["res"]][["P.adj"]][1]) `, and the combination group (
-*m* =`r mean((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$IQ) `; 
-*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$IQ) `), 
-*p* `r p_small(DT_IQ[["res"]][["P.adj"]][3]) `. Thus, IQ was used as a control variable in all outcome variables. 
+###Phonological awareness
+Three subtests from MiniDUVAN (Wolff, 2013) were used to assess phonological awareness skills: A2 Rhyme identification, A3 Phoneme identification, and B4 Phoneme synthesis. The dependent measure was total number of correct answers across all subtests (max = 45). 
+###Letter-sound knowledge
+...
+###Word reading
+OS64 (Nielsen et al., 1997) and OLAF (Magnusson & Naucler, 2010) were used to assess word reading skills. However, the presentation of tasks, and response modes, were adapted to suit the participants in this project. In OS64, ... matched a written word to a widgit symbol. In OLAF, written words were matched to pictures. The dependent measure was the total number of correct answers (max = 15 for OS64, and max = 20 for OLAF). 
+###Sentence reading 
+In DLS Bas (Järpsten, 2004) the participants read short sentences and match these to their corresponding pictures. The dependent measure was the total number of correct answers (max = 20).
 
-## Diagnoses
-Data on diagnoses were collected using parental surveys. The diagnoses in the ID group can be seen in Table\ \@ref(tab:diagnosis-table).
 
 ```{r diagnosis-table, include=TRUE, results='asis'}
 
@@ -210,22 +214,12 @@ Data on diagnoses were collected using parental surveys. The diagnoses in the ID
 
 ```
 
-## Materials: ALL and Animega-is
+## Instruction materials: ALL and Animega-is
 
 
 ## Procedure
-The training took place in the participants’ school. The participants trained in a group in schools and the teachers were instructed to allow the students to train for 300 minutes (20 sessions for 15 min, five days a week for four weeks). The teachers were asked to let the participants train by themselves and to not assist in solving the tasks for the children. No verbal or written instructions were given to the participants. A research group member attended the first training session to instruct  how to operate the tablet and program. All included participants that attended the same class also trained in the same room. However, in some cases only one student in the class participated in the study. Thus, sometimes the participants trained in a group and sometimes the participant sat by themselves, but the participant always trained on their own.
+The training took place in the participants’ school. The participants trained in a group in schools and the teachers were instructed to allow the students to train for 300 minutes (20 sessions for 15 min, five days a week for four weeks). The teachers were asked to let the participants train by themselves and to not assist in solving the tasks for the children. No verbal or written instructions were given to the participants. A research group member attended the first training session to instruct how to operate the tablet and program. All included participants that attended the same class also trained in the same room. However, in some cases only one student in the class participated in the study. Thus, sometimes the participants trained in a group and sometimes the participant sat by themselves, but the participant always trained on their own.
 
-## Variables
-
-### Letter sound recognition
-To be added...
-### PA
-To be added...
-### Word reading
-To be added...
-### Sentence readining
-To be added...
 ### Time
 The children were tested on four occasions, before the intervention, half way through the intervention, right after the intervention, and at a six week follow-up after the intervention had stopped. Due to practical and external reasons (e.g. restrictions and sick leave due to the COVID-19 pandemic), the testing could not be done with the same intervals for all children. Thus, time was coded as an interval variable rather than a categorical, using days and the first testing time set to 0. 
 
@@ -235,7 +229,7 @@ Training time was extracted from time spent training in the program and was meas
 ## Data analysis
 The $\alpha$-value was set to 0.05.
 
-All statistical analyses were performed using R version 3.5.1, in R Studio version 1.1.463 [@R-base]. The r-packages: dplyr [@R-dplyr], afex [@afex], car [@R-car], emmeans [@emmeans] and psych [@R-psych] were used. The plots were made in ggplot [@ggplot2] and beeswarm [@beeswarm]. The manuscript was written in Rmarkdown using papaja [@R-papaja] and citr [@citr] for formatting and references.
+For all our analyses, we used `r cite_r("r-references.bib")`. DETTA MÅSTE KOMPLETTERAS SÅ ATT RÄTT REFERENSER KOMMER MED.
 
 
 ### Statistical analysis
@@ -310,27 +304,50 @@ The descriptive statistics for all variables on each assessment time can be seen
 
 ```
 
+The participants were randomly selected on school level to different intervention groups. This was done to try to match the groups on IQ. Nevertheless, the IQ in the groups differed significantly, *H*(`r kruskal_test_IQ[["parameter"]]`) = `r kruskal_test_IQ[["statistic"]]`, *p* `r p_small(kruskal_test_IQ[["p.value"]])`. 
+@Facon2011 proposed groups be equated with an α-level of *p* > 0.50. The Animega-is group had a significantly higher IQ (
+*m* =`r mean((mlm_data %>% filter(time == 1)%>% filter(group == "Animega-is"))$IQ) `; 
+*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group == "Animega-is"))$IQ) `) compared to the Comparison group (
+*m* =`r mean((mlm_data %>% filter(time == 1)%>% filter(group == "Control"))$IQ, na.rm = TRUE) `; 
+*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group == "Control"))$IQ, na.rm = TRUE) `), 
+*p* `r p_small(DT_IQ[["res"]][["P.adj"]][5]) `, the ALL group (
+*m* =`r mean((mlm_data %>% filter(time == 1)%>% filter(group == "ALL"))$IQ) `; 
+*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group == "ALL"))$IQ) `),  
+*p* `r p_small(DT_IQ[["res"]][["P.adj"]][1]) `, and the combination group (
+*m* =`r mean((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$IQ) `; 
+*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$IQ) `), 
+*p* `r p_small(DT_IQ[["res"]][["P.adj"]][3]) `. Thus, IQ was used as a control variable in all outcome variables. 
+
 ## Training time
 
 ```{r train time in different groups}
 kruskal_test_TT <- kruskal.test(tot_train_time~group, data = mlm_data%>% filter(time == 1)%>% filter(group != "Control"))
 ```
 
-The participants were instructed to train for a total of 18 hours (36 sessions á 30 minutes, three days a week for a 12-week period). The teachers were instructed to adapt the length of the training sessions after the need of the student. That is, if the student could not sit for a full 30 minute session the teacher was encouraged to have shorter sessions but more often than three times a week. On average the participants trained for `r mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE) ` (*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE) `) minutes (`r mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60 ` (*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60 `) hours). There was no difference on training time between the three intervention groups (`r apa_print(kruskal_test_TT)$statistic `). 
+The participants were instructed to train for a total of 18 hours (36 sessions for 30 minutes, three days a week for a 12-week period). The teachers were instructed to adapt the length of the training sessions after the need of the student. That is, if the student could not sit for a full 30 minute session the teacher was encouraged to have shorter sessions but more often than three times a week. On average the participants trained for `r mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE) ` (*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE) `) minutes (`r mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60 ` (*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60 `) hours). There was no difference on training time between the three intervention groups (*H*(`r kruskal_test_TT[["parameter"]]`) = `r kruskal_test_TT[["statistic"]]`, *p* `r p_small(kruskal_test_TT[["p.value"]])` ).
 
 ## Phonological awareness
 
 ### Hypothesis 1: Training phonemic or comprehension-based reading strategies improves phonological awareness. 
 
-There was a significant interaction between time and intervention, the intervention groups improved more than the comparison group (est =`r  summary(model_PA_3)[10]$coefficients[4,][1] `, SE =`r  summary(model_PA_3)[10]$coefficients[4,][2] `, df =`r  summary(model_PA_3)[10]$coefficients[4,][3] `, *t* =`r  summary(model_PA_3)[10]$coefficients[4,][4] `, *p*`r  p_small(summary(model_PA_3)[10]$coefficients[4,][5]) `). 
+There was a significant interaction between time and intervention, the intervention groups improved more than the comparison group (`r apa_print(model_PA_3)$full_result$days_intervention_y_n`). 
 
 ### Effect on IQ
-There was a significant main effect on IQ (est =`r  summary(model_PA_4)[10]$coefficients[4,][1] `, SE =`r  summary(model_PA_4)[10]$coefficients[4,][2] `, df =`r  summary(model_PA_4)[10]$coefficients[4,][3] `, *t* =`r  summary(model_PA_4)[10]$coefficients[4,][4] `, *p*`r  p_small(summary(model_PA_4)[10]$coefficients[4,][5]) `), indicating that higher IQ results in higher PA at the pretesting. Moreover, there was a significant interaction between time and IQ (est =`r  summary(model_PA_4)[10]$coefficients[6,][1] `, SE =`r  summary(model_PA_4)[10]$coefficients[6,][2] `, df =`r  summary(model_PA_4)[10]$coefficients[6,][3] `, *t* =`r  summary(model_PA_4)[10]$coefficients[6,][4] `, *p*`r  p_small(summary(model_PA_4)[10]$coefficients[6,][5]) `), indicating that the participants with the highest IQ benefited the most from the intervention. 
+There was a significant main effect on IQ 
+
+(est =`r  summary(model_PA_4)[10]$coefficients[4,][1] `, SE =`r  summary(model_PA_4)[10]$coefficients[4,][2] `, df =`r  summary(model_PA_4)[10]$coefficients[4,][3] `, *t* =`r  summary(model_PA_4)[10]$coefficients[4,][4] `, *p*`r  p_small(summary(model_PA_4)[10]$coefficients[4,][5]) `), indicating that higher IQ results in higher PA at the pretesting. Moreover, there was a significant interaction between time and IQ (est =`r  summary(model_PA_4)[10]$coefficients[6,][1] `, SE =`r  summary(model_PA_4)[10]$coefficients[6,][2] `, df =`r  summary(model_PA_4)[10]$coefficients[6,][3] `, *t* =`r  summary(model_PA_4)[10]$coefficients[6,][4] `, *p*`r  p_small(summary(model_PA_4)[10]$coefficients[6,][5]) `), indicating that the participants with the highest IQ benefited the most from the intervention. 
+
+The results from the PA models can be seen in Table\ \@ref(tab:PA-table).
+
+```{r PA-table, include=TRUE, results='asis'}
+tab_model(model_PA_3, model_PA_4, model_PA_7)
+```
 
 ### Hypothesis 3: The combined training is more effective than either intervention on its own.
 
-There was a significant interaction between the combined group and the other two intervention groups  (est =`r  summary(model_PA_7)[10]$coefficients[4,][1] `, SE =`r  summary(model_PA_7)[10]$coefficients[4,][2] `, df =`r  summary(model_PA_7)[10]$coefficients[4,][3] `, *t* =`r  summary(model_PA_7)[10]$coefficients[4,][4] `, *p*`r  p_small(summary(model_PA_7)[10]$coefficients[4,][5]) `), the combined training improved PA over time more than the other two intervention groups.
+There was a significant interaction between the combined group and the other two intervention groups  
 
+(est =`r  summary(model_PA_7)[10]$coefficients[4,][1] `, SE =`r  summary(model_PA_7)[10]$coefficients[4,][2] `, df =`r  summary(model_PA_7)[10]$coefficients[4,][3] `, *t* =`r  summary(model_PA_7)[10]$coefficients[4,][4] `, *p*`r  p_small(summary(model_PA_7)[10]$coefficients[4,][5]) `), the combined training improved PA over time more than the other two intervention groups.
 
 # Word reading
 
@@ -338,13 +355,14 @@ There was a significant interaction between the combined group and the other two
 
 There was no significant interaction between time and intervention, the intervention groups did not improve more than the comparison group on word reading (est =`r  summary(model_word_3)[10]$coefficients[4,][1] `, SE =`r  summary(model_word_3)[10]$coefficients[4,][2] `, df =`r  summary(model_word_3)[10]$coefficients[4,][3] `, *t* =`r  summary(model_word_3)[10]$coefficients[4,][4] `, *p*`r  p_small(summary(model_word_3)[10]$coefficients[4,][5]) `). 
 
+
 ### Effect on IQ
 There was a significant main effect on IQ (est =`r  summary(model_word_4)[10]$coefficients[4,][1] `, SE =`r  summary(model_word_4)[10]$coefficients[4,][2] `, df =`r  summary(model_word_4)[10]$coefficients[4,][3] `, *t* =`r  summary(model_word_4)[10]$coefficients[4,][4] `, *p*`r  p_small(summary(model_word_4)[10]$coefficients[4,][5]) `), indicating that higher IQ results in higher word reading at the pretesting. Moreover, there was an almost significant interaction between time and IQ (est =`r  summary(model_word_4)[10]$coefficients[4,][1] `, SE =`r  summary(model_word_4)[10]$coefficients[4,][2] `, df =`r  summary(model_word_4)[10]$coefficients[4,][3] `, *t* =`r  summary(model_word_4)[10]$coefficients[4,][4] `, *p*`r  p_small(summary(model_word_4)[10]$coefficients[4,][5]) `), indicating that the participants with the highest IQ improved the most over time regardless of intervention.
+
 
 ### Hypothesis 3: The combined training is more effective than either intervention on its own.
 
 There was no significant interaction between the combined group and the other two intervention groups  (est =`r  summary(model_word_7)[10]$coefficients[4,][1] `, SE =`r  summary(model_word_7)[10]$coefficients[4,][2] `, df =`r  summary(model_word_7)[10]$coefficients[4,][3] `, *t* =`r  summary(model_word_7)[10]$coefficients[4,][4] `, *p*`r  p_small(summary(model_word_7)[10]$coefficients[4,][5]) `), the combined training did not improve word reading over time more than the other two intervention groups.
-
 
 # Sentence reading
 
@@ -365,14 +383,23 @@ There was no significant interaction between the combined group and the other tw
 
 ### Prediction 1: Training phonemic or comprehension-based reading strategies improves lettter-sound recognition. 
 
-There was a significant interaction between time and intervention, the intervention groups improved more than the comparison group (est =`r  summary(model_letter_3)[10]$coefficients[4,][1] `, SE =`r  summary(model_letter_3)[10]$coefficients[4,][2] `, df =`r  summary(model_letter_3)[10]$coefficients[4,][3] `, *t* =`r  summary(model_letter_3)[10]$coefficients[4,][4] `, *p*`r  p_small(summary(model_letter_3)[10]$coefficients[4,][5]) `). 
+There was a significant interaction between time and intervention, the intervention groups improved more than the comparison group (`r apa_print(model_letter_3)$full_result$scaledays_center___FALSE_intervention_y_n`). 
+
 
 ### Effect on IQ
 There was a significant main effect on IQ (est =`r  summary(model_letter_4)[10]$coefficients[4,][1] `, SE =`r  summary(model_letter_4)[10]$coefficients[4,][2] `, df =`r  summary(model_letter_4)[10]$coefficients[4,][3] `, *t* =`r  summary(model_letter_4)[10]$coefficients[4,][4] `, *p*`r  p_small(summary(model_letter_4)[10]$coefficients[4,][5]) `), indicating that higher IQ results in higher letter-sound recognition at the pretesting. However, there was no significant interaction between time and IQ (est =`r  summary(model_letter_4)[10]$coefficients[6,][1] `, SE =`r  summary(model_letter_4)[10]$coefficients[6,][2] `, df =`r  summary(model_letter_4)[10]$coefficients[6,][3] `, *t* =`r  summary(model_letter_4)[10]$coefficients[6,][4] `, *p*`r  p_small(summary(model_letter_4)[10]$coefficients[6,][5]) `), indicating that the participants benefited equally regardless of IQ of the intervention. 
 
+```{r tra7in timeee in ddif3ferent groups}
+kruskal_test_TT <- kruskal.test(tot_train_time~group, data = mlm_data%>% filter(time == 1)%>% filter(group != "Control"))
+```
+
 ### Prediction 2: The combined training is more effective than either intervention on its own.
 
 There was not a significant interaction between the combined group and the other two intervention groups  (est =`r  summary(model_letter_7)[10]$coefficients[4,][1] `, SE =`r  summary(model_letter_7)[10]$coefficients[4,][2] `, df =`r  summary(model_letter_7)[10]$coefficients[4,][3] `, *t* =`r  summary(model_letter_7)[10]$coefficients[4,][4] `, *p*`r  p_small(summary(model_letter_7)[10]$coefficients[4,][5]) `), the combined training did not improve letter-sound recognition over time more than the other two intervention groups.
+
+```{r trai5n timeee in ddif3ferent groups}
+kruskal_test_TT <- kruskal.test(tot_train_time~group, data = mlm_data%>% filter(time == 1)%>% filter(group != "Control"))
+```
 
 ### Prediction 3: The PA training is more effective than either intervention on its own.
 
@@ -405,6 +432,7 @@ Blablabla
 
 # References
 ```{r create_r-references}
+r_refs(file = "r-references.bib")
 #r_refs(file = "library.bib")
 ```
 

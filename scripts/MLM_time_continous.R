@@ -6,6 +6,7 @@
   source("scripts/read_data.R")
   set.seed(42)
   
+  library(dplyr)
   library(lme4) # for the analysis
   library(ggplot2)
   library(lmerTest)# to get p-value estimations that are not part of the standard lme4 packages
@@ -36,22 +37,11 @@
                            labels = c("Control", "ALL", "Animega-is", "Combi"))
   
   # Comparing combi with other intervention groups
-  mlm_data_combi <- mlm_data %>% filter(group != 1) #exclude control group
+  mlm_data_combi <- mlm_data %>% filter(group != "Control") #exclude control group
   
   #IQ in the different groups
   IQ_group_anova <- aov(IQ_scale ~ group, mlm_data)
-  summary(IQ_group_anova)
-  emmeans(IQ_group_anova, pairwise~group, adjust = "tukey")
-  summary(mlm_data$IQ)
-  
-  boxplot(IQ_scale~group, data = mlm_data)
-  kruskal.test(IQ_scale~group, data = mlm_data)
-  
-  boxplot(IQ~group, data = mlm_data)
-  kruskal.test(IQ~group, data = mlm_data)
-  
-  
-  
+
   # PHONOLOGICAL AWARENESS (PA) ####
   # PA CONTROLL VS INTERVENTION ####
   
@@ -61,26 +51,22 @@
   
   # adding random slope, no covariance structure (variance components)
   model_PA_2 <- lmer(PA ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
-  anova(model_PA_1, model_PA_2) #Not sig better
+  #anova(model_PA_1, model_PA_2) #Not sig better
   
   # adding random slope, unstructured covariance 
   model_PA_2b <- lmer(PA ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
-  anova(model_PA_2, model_PA_2b) # - not better -2*loglikelihood thus skipping random slopes in following analyses
+  #anova(model_PA_2, model_PA_2b) # - not better -2*loglikelihood thus skipping random slopes in following analyses
   
   #conditional model (e.g. including PA)
   #adding intervention (no random slope) improves model significantly (chi2 2*loglikelihood)
   model_PA_3 <- lmer(PA ~ days*intervention_y_n + (1|id), data = mlm_data, REML = FALSE)
-  anova(model_PA_1, model_PA_3) #sig better model.
-  
+  #anova(model_PA_1, model_PA_3) #sig better model.
+
   summary(model_PA_3)
   
   #Adding IQ - model improves a lot. IQ can explain how well the participants are developing over time #Kan Emil testa detta sig. i excell?
   model_PA_4 <- lmer(PA ~ days*intervention_y_n + IQ_scale*days + (1|id), data = mlm_data, REML = FALSE)
-  summary(model_PA_4)
-  
-  AIC(model_PA_3)
-  AIC(model_PA_4)
-  
+
   #Conclusion: Intervention groups improves more than control. IQ can explain how well the participants are developing over time (higher IQ = better improvement)
   
   # PA COMBI VS OTER INTERVENTION ####
@@ -92,26 +78,23 @@
   # adding random slope - not better -2*loglikelihood thus skipping random slopes in following analyses
   #no covariance structure (variance components)
   model_PA_6 <- lmer(PA ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data_combi, REML = FALSE) #scaling days due to convergence issues
-  anova(model_PA_5, model_PA_6) #not sig. better.
+  #anova(model_PA_5, model_PA_6) #not sig. better.
   
   # adding random slope - not better -2*loglikelihood thus skipping random slopes in following analyses
   #unstructured covariance
   model_PA_6b <- lmer(PA ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data_combi, REML = FALSE) #scaling days due to convergence issues
-  anova(model_PA_5, model_PA_6b) #not sig. better.
+  #anova(model_PA_5, model_PA_6b) #not sig. better.
   
   
   #conditional model (e.g. including PA)
   #adding combi group (no random slope) 
   model_PA_7 <- lmer(PA ~ days*group_combi + (1|id), data = mlm_data_combi, REML = FALSE)
   
-  anova(model_PA_5, model_PA_7) #sig better model.
-  
-  summary(model_PA_7)
-  
+  #anova(model_PA_5, model_PA_7) #sig better model.
+
   #adding IQ
   model_PA_8 <- lmer(PA ~ days*group_combi + IQ_scale*days + (1|id), data = mlm_data_combi, REML = FALSE)
-  summary(model_PA_8)
-  
+
   AIC(model_PA_7)
   AIC(model_PA_8) #AIC improves KAN EMIL TESTA DETTA MED CHI2 TEST?
   
@@ -127,20 +110,20 @@
   
   # adding random slope, no covariance structure (variance components)
   model_word_2 <- lmer(word ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
-  anova(model_word_1, model_word_2) #model improves sig. 
+  #anova(model_word_1, model_word_2) #model improves sig. 
   
   # adding random slope, unstructured covariance 
   model_word_2b <- lmer(word ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
-  anova(model_word_2, model_word_2b) #model improves sig. using unstructured covariance))
+  #anova(model_word_2, model_word_2b) #model improves sig. using unstructured covariance))
   
   #conditional model (e.g. including word)
   #adding intervention (OBS! with random slope) # no sig interaction
   model_word_3 <- lmer(word ~ scale(days, center = FALSE)*intervention_y_n + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
-  anova(model_word_2b, model_word_3) # not  sig. improved
+  #anova(model_word_2b, model_word_3) # not  sig. improved
   
   #Adding IQ - model improves. IQ can explain how well the participants are developing over time (p = .070)
   model_word_4 <- lmer(word ~ scale(days, center = FALSE) + IQ_scale*days + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
-  summary(model_word_4)
+
   
   AIC(model_word_3) #867
   AIC(model_word_4) #838
@@ -159,18 +142,17 @@
   # adding random slope, unstructured covariance 
   model_word_6b <- lmer(word ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data_combi, REML = FALSE) #scaling days due to convergence issues
   
-  anova(model_word_6, model_word_6b) #does not improve sig (p = .097) using no covariance strucutre
+  #anova(model_word_6, model_word_6b) #does not improve sig (p = .097) using no covariance strucutre
   
   #conditional model (e.g. including word)
   #adding combi group (random slope) #ingen sig interaktion
   model_word_7 <- lmer(word ~ scale(days, center = FALSE)*group_combi + (1+scale(days, center = FALSE)||id), data = mlm_data_combi, REML = FALSE)
-  summary(model_word_7)
-  
-  anova(model_word_6, model_word_7) #not improves sig. 
+
+  #anova(model_word_6, model_word_7) #not improves sig. 
   
   #adding IQ
   model_word_8 <- lmer(word ~ scale(days, center = FALSE)*group_combi + IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data_combi, REML = FALSE)
-  summary(model_word_8)
+
   AIC(model_word_7) #678
   AIC(model_word_8) #675
   
@@ -183,31 +165,27 @@
   #Unconditional model - only includes temporal predictor and not other explanatory variables (e.g. DLS)
   #model with random intercept with ID estimating DLS difference over time
   model_DLS_1 <- lmer(DLS ~ days + (1|id), data = mlm_data, REML = FALSE)
-  summary(model_DLS_1)
+
   
   # DLS has a strongly skewed distribution, thus a poisson distrobution is used for fitting the models rather than a normal distribution
     DLS_poisson <- glmer(DLS ~ scale(days, center = FALSE) + (1|id), data = mlm_data,family=poisson)
-  summary(DLS_poisson) #model is much beter in terms of AIC and loglikelihood, using poisson dist istället.
+  #summary(DLS_poisson) #model is much beter in terms of AIC and loglikelihood, using poisson dist istället.
 
   DLS_poisson_2 <- glmer(DLS ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data,family=poisson)
-  summary(DLS_poisson_2)
-  
+
   DLS_poisson_2b <- glmer(DLS ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data,family=poisson)
-  summary(DLS_poisson_2b)
-  
-  anova(DLS_poisson_2, DLS_poisson_2b)  #not sig.
+
+  #anova(DLS_poisson_2, DLS_poisson_2b)  #not sig.
   
   DLS_poisson_3 <- glmer(DLS ~ scale(days, center = FALSE)*intervention_y_n + (1+scale(days, center = FALSE)||id), data = mlm_data,family=poisson)
-  summary(DLS_poisson_3)
-  
-  anova(DLS_poisson_2, DLS_poisson_3)  #not sig.
+
+  #anova(DLS_poisson_2, DLS_poisson_3)  #not sig.
   
   #Adding IQ - model improves a lot. IQ can explain how well the participants are developing over time
   #Does not include intervention as it did not improve model
   
   DLS_poisson_4 <- glmer(DLS ~ scale(days, center = FALSE) + IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data,family=poisson)
-  summary(DLS_poisson_4)
-  
+
   AIC(DLS_poisson_3) #1046
   AIC(DLS_poisson_4) #1008
   
@@ -218,31 +196,26 @@
   #Unconditional model - only includes temporal predictor and not other explanatory variables (e.g. DLS)
   #model with random intercept with ID estimating DLS difference over time
    DLS_poisson_5 <- glmer(DLS ~ scale(days, center = FALSE) + (1|id), data = mlm_data_combi,family=poisson)
-  summary(DLS_poisson_5) 
-  
+
   # adding random slope, no covariance structure (variance components)
   DLS_poisson_6 <- glmer(DLS ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data_combi,family=poisson)
-  summary(DLS_poisson_6)
-  anova(DLS_poisson_5, DLS_poisson_6) #improves sig.
+  #anova(DLS_poisson_5, DLS_poisson_6) #improves sig.
   
   # adding random slope, with unsctructed covariance
   DLS_poisson_6b <- glmer(DLS ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data_combi,family=poisson)
-  summary(DLS_poisson_6b)
-  anova(DLS_poisson_6, DLS_poisson_6b)  #not sig.
+  #anova(DLS_poisson_6, DLS_poisson_6b)  #not sig.
   
   
   #conditional model (e.g. including DLS)
   #adding combi group (WITH random slope, no covariance structure) 
   #OBS! estimaten negativa... kan ha med Animega-is gruppens IQ att göra. 
   DLS_poisson_7 <- glmer(DLS ~ scale(days, center = FALSE)*group_combi + (1+scale(days, center = FALSE)||id), data = mlm_data_combi,family=poisson)
-  summary(DLS_poisson_7)
-  
-  anova(DLS_poisson_6, DLS_poisson_7) #not sig.
+
+  #anova(DLS_poisson_6, DLS_poisson_7) #not sig.
   
   #adding IQ removes intervention (combigroup)
   DLS_poisson_8 <- glmer(DLS ~ IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data_combi,family=poisson)
-  summary(DLS_poisson_8)
-  
+
   AIC(DLS_poisson_6) #1043
   AIC(DLS_poisson_8) #1008
   
@@ -256,30 +229,26 @@
   #Unconditional model - only includes temporal predictor and not other explanatory variables (e.g. letter)
   #model with random intercept with ID estimating letter difference over time
   model_letter_1 <- lmer(letter ~ days + (1|id), data = mlm_data, REML = FALSE)
-  summary(model_letter_1)
-  
+
   # adding random slope, no covariance structure (variance components)
   model_letter_2 <- lmer(letter ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
-  isSingular(model_letter_2) #MODEL IS SINGULAR. Often indicates an overfitted model. Won't use variance components
+  #isSingular(model_letter_2) #MODEL IS SINGULAR. Often indicates an overfitted model. Won't use variance components
   
   # adding random slope, with unsctructed covariance
   model_letter_2b <- lmer(letter ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
-  summary(model_letter_2b)
-  
-  anova(model_letter_1, model_letter_2b) # sig.
+
+  #anova(model_letter_1, model_letter_2b) # sig.
   
   #conditional model (e.g. including letter)
   #adding intervention (WITH random slope) improves model significantly 
   model_letter_3 <- lmer(letter ~ scale(days, center = FALSE)*intervention_y_n + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
-  summary(model_letter_3)
-  
-  anova(model_letter_2, model_letter_3) # sig.
+
+  #anova(model_letter_2, model_letter_3) # sig.
   
   
   #Adding IQ - OBS! IQ does not interact with days. Only interaction between days and intervention! 
   model_letter_4 <- lmer(letter ~ scale(days, center = FALSE)*intervention_y_n + IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
-  summary(model_letter_4)
-  
+
   AIC(model_letter_3) #1877
   AIC(model_letter_4) #1831
   
@@ -290,28 +259,24 @@
   #Unconditional model - only includes temporal predictor and not other explanatory variables (e.g. letter)
   #model with random intercept with ID estimating letter difference over time
   model_letter_5 <- lmer(letter ~ days + (1|id), data = mlm_data_combi, REML = FALSE)
-  summary(model_letter_5)
-  
+
   # adding random slope, no covariance structure (variance components)
   model_letter_6 <- lmer(letter ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data_combi, REML = FALSE) #scaling days due to convergence issues
-  isSingular(model_letter_6) #MODEL IS SINGULAR. Often indicates an overfitted model. Won't use variance components
+  #isSingular(model_letter_6) #MODEL IS SINGULAR. Often indicates an overfitted model. Won't use variance components
   
   # adding random slope, with unsctructed covariance
   model_letter_6 <- lmer(letter ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data_combi, REML = FALSE) #scaling days due to convergence issues
-  summary(model_letter_6)
-  
-  anova(model_letter_5, model_letter_6) #Sig.
+
+  #anova(model_letter_5, model_letter_6) #Sig.
   
   #conditional model (e.g. including letter)
   #adding combi group (WITH random slope) #INGEN INTERAKTION!!!
   model_letter_7 <- lmer(letter ~ scale(days, center = FALSE)*group_combi + (1+scale(days, center = FALSE)|id), data = mlm_data_combi, REML = FALSE)
-  summary(model_letter_7)
-  
-  anova(model_letter_6, model_letter_7) # not sig. 
+
+  #anova(model_letter_6, model_letter_7) # not sig. 
   
   #adding IQ #IQ PÅVERKAR MEN FORTFARANDE INGEN INTERAKTION MELLAN GRUPPERNA 
   model_letter_8 <- lmer(letter ~ scale(days, center = FALSE)*group_combi + IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data_combi, REML = FALSE)
-  summary(model_letter_8)
   AIC(model_letter_6) #1486
   AIC(model_letter_8) #1490
   
@@ -325,9 +290,8 @@
   #conditional model (e.g. including letter)
   #adding ALL group (with random slope) #SIG INTERAKTION???
   model_letter_9 <- lmer(letter ~ scale(days, center = FALSE)*group_ALL + (1+scale(days, center = FALSE)|id), data = mlm_data_combi, REML = FALSE)
-  summary(model_letter_9)
-  
-  anova(model_letter_6, model_letter_9) #  sig
+
+  #anova(model_letter_6, model_letter_9) #  sig
   
   #Conclusion ALL better on letter recognition!
   
@@ -336,22 +300,18 @@
   #conditional model (e.g. including letter)
   #adding animega-is group (with random slope) # NO SIG INTERAKTION!!!
   model_letter_10 <- lmer(letter ~ scale(days, center = FALSE)*group_animega + (1+scale(days, center = FALSE)|id), data = mlm_data_combi, REML = FALSE)
-  summary(model_letter_10)
-  
-  anova(model_letter_6, model_letter_10) #  not sig. 
+
+  #anova(model_letter_6, model_letter_10) #  not sig. 
   
   #Conclusion Animega-is not better on letter recognition!
   
   # Explorativ analys: Kan PA predicera utvecklingen av letter sound, ordläsining och meningsläsning över tid? ja! ####
-  model_PA_letter <- lmer(letter ~ intervention_y_n*PA*days + (1|id), data = mlm_data, REML = FALSE)
-  summary(model_PA_letter)
-  
-  model_PA_word <- lmer(word ~ intervention_y_n*PA*days + (1|id), data = mlm_data, REML = FALSE)
-  summary(model_PA_word)
-  
-  model_PA_DLS <- lmer(DLS ~ intervention_y_n*PA*days + (1|id), data = mlm_data, REML = FALSE)
-  summary(model_PA_DLS)
-  
+  model_PA_letter <- lmer(letter ~ intervention_y_n*scale(PA, center = TRUE)*days + (1|id), data = mlm_data, REML = FALSE)
+
+  model_PA_word <- lmer(word ~ intervention_y_n*scale(PA, center = TRUE)*days + (1|id), data = mlm_data, REML = FALSE)
+
+  model_PA_DLS <- lmer(DLS ~ intervention_y_n*scale(PA, center = TRUE)*days + (1|id), data = mlm_data, REML = FALSE)
+
   # #Checking assumptions
   # require("lattice")
   # 
@@ -395,60 +355,83 @@
   #   ylab("Scores") 
   # 
   # 
-  # 
-  # 
-  # #Plot data for PA 
-  # ggplot(data      = mlm_data,
-  #        aes(x     = days,
-  #            y     = PA,
-  #            col   = group,
-  #            group = group))+ #to add the colours for different classes
-  #   geom_smooth(method   = lm,
-  #               se       = T, 
-  #               size     = 1, 
-  #               linetype = 1, 
-  #               alpha    = .2)+
-  #   theme_minimal()+
-  #   labs(title    = "Phonological awareness",
-  #        subtitle = "change over time")+
-  #   scale_color_manual(name   =" Group",
-  #                      labels = c("Control", "ALL", "Animega-is", "Combo"),
-  #                      values = c("blue", "red", "green", "yellow"))
-  # 
-  # #Plot data for DLS 
-  # ggplot(data      = mlm_data,
-  #        aes(x     = days,
-  #            y     = DLS_reading_comp_sum,
-  #            col   = group,
-  #            group = group))+ #to add the colours for different classes
-  #   geom_smooth(method   = lm,
-  #               se       = T, 
-  #               size     = 1, 
-  #               linetype = 1, 
-  #               alpha    = .2)+
-  #   theme_minimal()+
-  #   labs(title    = "DLS over days",
-  #        subtitle = "change in sentence readin over time in the different groups")+
-  #   scale_color_manual(name   =" Group",
-  #                      labels = c("Control", "ALL", "Animega-is", "Combo"),
-  #                      values = c("blue", "red", "green", "yellow"))
-  # 
-  # 
-  # #Plot data for word 
-  # ggplot(data      = mlm_data,
-  #        aes(x     = days,
-  #            y     = word_reading_total,
-  #            col   = group,
-  #            group = group))+ #to add the colours for different classes
-  #   geom_smooth(method   = lm,
-  #               se       = T, 
-  #               size     = 1, 
-  #               linetype = 1, 
-  #               alpha    = .2)+
-  #   theme_minimal()+
-  #   labs(title    = "word reading over days",
-  #        subtitle = "change in word reading training over time in the different groups")+
-  #   scale_color_manual(name   =" Group",
-  #                      labels = c("Control", "ALL", "Animega-is", "Combo"),
-  #                      values = c("blue", "red", "green", "yellow"))
+  
+  library(ggplot2)
+  
+   
+
+  #Plot data for PA
+  ggplot(data      = mlm_data,
+         aes(x     = days,
+             y     = PA,
+             col   = group,
+             group = group))+ #to add the colours for different classes
+    geom_smooth(method   = lm,
+                se       = T,
+                size     = 1,
+                linetype = 1,
+                alpha    = .2)+
+    theme_minimal()+
+    labs(title    = "Phonological awareness",
+         subtitle = "change over time")+
+    scale_color_manual(name   =" Group",
+                       labels = c("Control", "ALL", "Animega-is", "Combo"),
+                       values = c("blue", "red", "green", "yellow"))
+
+  #Plot data for DLS
+  ggplot(data      = mlm_data,
+         aes(x     = days,
+             y     = DLS,
+             col   = group,
+             group = group))+ #to add the colours for different classes
+    geom_smooth(method   = lm,
+                se       = T,
+                size     = 1,
+                linetype = 1,
+                alpha    = .2)+
+    theme_minimal()+
+    labs(title    = "DLS over days",
+         subtitle = "change in sentence readin over time in the different groups")+
+    scale_color_manual(name   =" Group",
+                       labels = c("Control", "ALL", "Animega-is", "Combo"),
+                       values = c("blue", "red", "green", "yellow"))
+
+
+  #Plot data for word
+  ggplot(data      = mlm_data,
+         aes(x     = days,
+             y     = word,
+             col   = group,
+             group = group))+ #to add the colours for different classes
+    geom_smooth(method   = lm,
+                se       = T,
+                size     = 1,
+                linetype = 1,
+                alpha    = .2)+
+    theme_minimal()+
+    labs(title    = "word reading over days",
+         subtitle = "change in word reading training over time in the different groups")+
+    scale_color_manual(name   =" Group",
+                       labels = c("Control", "ALL", "Animega-is", "Combo"),
+                       values = c("blue", "red", "green", "yellow"))
+  
+  
+  #Plot data for word
+  ggplot(data      = mlm_data,
+         aes(x     = days,
+             y     = letter,
+             col   = group,
+             group = group))+ #to add the colours for different classes
+    geom_smooth(method   = lm,
+                se       = T,
+                size     = 1,
+                linetype = 1,
+                alpha    = .2)+
+    theme_minimal()+
+    labs(title    = "word reading over days",
+         subtitle = "change in word reading training over time in the different groups")+
+    scale_color_manual(name   =" Group",
+                       labels = c("Control", "ALL", "Animega-is", "Combo"),
+                       values = c("blue", "red", "green", "yellow"))
+
   
