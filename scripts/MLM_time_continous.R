@@ -61,7 +61,12 @@
   #adding intervention (no random slope) improves model significantly (chi2 2*loglikelihood)
   model_PA_3 <- lmer(PA ~ days*intervention_y_n + (1|id), data = mlm_data, REML = FALSE)
   #anova(model_PA_1, model_PA_3) #sig better model.
+  
+  summary(lm(write ~ race.f, hsb2))
+  summary(lmer(PA ~ days*group + (1|id), data = mlm_data, REML = FALSE))
 
+  
+  
   summary(model_PA_3)
   
   #Adding IQ - model improves a lot. IQ can explain how well the participants are developing over time #Kan Emil testa detta sig. i excell?
@@ -120,6 +125,9 @@
   #adding intervention (OBS! with random slope) # no sig interaction
   model_word_3 <- lmer(word ~ scale(days, center = FALSE)*intervention_y_n + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
   #anova(model_word_2b, model_word_3) # not  sig. improved
+  
+  
+  summary(lmer(DLS ~ days*group + (1|id), data = mlm_data, REML = FALSE))
   
   #Adding IQ - model improves. IQ can explain how well the participants are developing over time (p = .070)
   model_word_4 <- lmer(word ~ scale(days, center = FALSE) + IQ_scale*days + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
@@ -305,13 +313,14 @@
   
   #Conclusion Animega-is not better on letter recognition!
   
-  # Explorativ analys: Kan PA predicera utvecklingen av letter sound, ordläsining och meningsläsning över tid? ja! ####
+  # Explorativ analys: Kan PA predicera utvecklingen av letter sound, ordläsining och meningsläsning över tid? nja! ####
   model_PA_letter <- lmer(letter ~ intervention_y_n*scale(PA, center = TRUE)*days + (1|id), data = mlm_data, REML = FALSE)
-
+summary(model_PA_letter)
   model_PA_word <- lmer(word ~ intervention_y_n*scale(PA, center = TRUE)*days + (1|id), data = mlm_data, REML = FALSE)
-
+  summary(model_PA_word)
   model_PA_DLS <- lmer(DLS ~ intervention_y_n*scale(PA, center = TRUE)*days + (1|id), data = mlm_data, REML = FALSE)
-
+  summary(model_PA_DLS)
+  
   # #Checking assumptions
   # require("lattice")
   # 
