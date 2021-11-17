@@ -40,24 +40,23 @@ mlm_data$group <- factor(mlm_data$group,
 IQ_group_anova <- aov(IQ_scale ~ group, mlm_data)
 
 # PHONOLOGICAL AWARENESS (PA) ####
-# PA CONTROLL VS INTERVENTION ####
 
 #Unconditional model - only includes temporal predictor and not other explanatory variables (e.g. PA)
 #model with random intercept with ID estimating PA difference over time
-model_PA_1 <- lmer(PA ~ days + (1|id), data = mlm_data, REML = FALSE)
+#model_PA_1 <- lmer(PA ~ days + (1|id), data = mlm_data, REML = FALSE)
 
 # adding random slope, no covariance structure (variance components)
-model_PA_2 <- lmer(PA ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
+#model_PA_2 <- lmer(PA ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
 #anova(model_PA_1, model_PA_2) #Not sig better
 
 # adding random slope, unstructured covariance 
-model_PA_2b <- lmer(PA ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
+#model_PA_2b <- lmer(PA ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
 #anova(model_PA_2, model_PA_2b) # - not better -2*loglikelihood thus skipping random slopes in following analyses
 
 #conditional model (e.g. including PA)
 #adding control vs ALL, control vs Animega, and combi vs ALL+animega, improves model significantly (chi2 2*loglikelihood)
 model_PA_3 <- lmer(PA ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_4vs23 + (1|id), data = mlm_data, REML = FALSE)
-anova(model_PA_2b, model_PA_3) # sig better model.
+#anova(model_PA_2b, model_PA_3) # sig better model.
 
 #Adding IQ - model improves a lot. IQ can explain how well the participants are developing over time #Kan Emil testa detta sig. i excell?
 model_PA_4 <- lmer(PA ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_4vs23 + days*IQ_scale + (1|id), data = mlm_data, REML = FALSE)
@@ -69,59 +68,55 @@ model_PA_4 <- lmer(PA ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_
 
 #Unconditional model - only includes temporal predictor and not other explanatory variables (e.g. word)
 #model with random intercept with ID estimating word difference over time
-model_word_1 <- lmer(word ~ days + (1|id), data = mlm_data, REML = FALSE)
+#model_word_1 <- lmer(word ~ days + (1|id), data = mlm_data, REML = FALSE)
 
 # adding random slope, no covariance structure (variance components)
-model_word_2 <- lmer(word ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
+#model_word_2 <- lmer(word ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
 #anova(model_word_1, model_word_2) #model improves sig. 
 
 # adding random slope, unstructured covariance 
-model_word_2b <- lmer(word ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
+#model_word_2b <- lmer(word ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
 #anova(model_word_2, model_word_2b) #model improves sig. using unstructured covariance))
 
 #conditional model (e.g. including word)
 #adding intervention (OBS! with random slope) # no sig interaction
 model_word_3 <- lmer(word ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
-anova(model_word_2b, model_word_3) # not  sig. improved
+#anova(model_word_2b, model_word_3) # not  sig. improved
 
 #Adding IQ - model improves. IQ can explain how well the participants are developing over time (p = .070)
 model_word_4 <- lmer(word ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23  + IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
-summary(model_word_4)
-
 
 #Conclusion: Intervention groups does not improve more than control. IQ can explain how well the participants are developing over time (higher IQ = better improvement)
 #Conclusion: Combi groups does not improve more than other intervention groups. Tendency for IQ to explain how well the participants are developing over time 
 #(higher IQ = better improvement). Thus, might underestimate the effect of the combigroup due to Animega-is group having higher IQ
 
 # DLS ####
-# DLS CONTROLL VS INTERVENTION ####
 
 #Unconditional model - only includes temporal predictor and not other explanatory variables (e.g. DLS)
 #model with random intercept with ID estimating DLS difference over time
-model_DLS_1 <- lmer(DLS ~ days + (1|id), data = mlm_data, REML = FALSE)
+#model_DLS_1 <- lmer(DLS ~ days + (1|id), data = mlm_data, REML = FALSE)
 
+# DLS has a strongly skewed distribution, thus a poisson distribution is used for fitting the models rather than a normal distribution
+#DLS_poisson <- glmer(DLS ~ scale(days, center = FALSE) + (1|id), data = mlm_data,family=poisson) #rescaling due to convergence issues
+#summary(DLS_poisson) #model is much better in terms of AIC and loglikelihood, using poisson dist. instead of normal dist. 
 
-# DLS has a strongly skewed distribution, thus a poisson distrobution is used for fitting the models rather than a normal distribution
-DLS_poisson <- glmer(DLS ~ scale(days, center = FALSE) + (1|id), data = mlm_data,family=poisson)
-#summary(DLS_poisson) #model is much beter in terms of AIC and loglikelihood, using poisson dist istället.
+#DLS_poisson_2 <- glmer(DLS ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data,family=poisson)
 
-DLS_poisson_2 <- glmer(DLS ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data,family=poisson)
-
-DLS_poisson_2b <- glmer(DLS ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data,family=poisson)
+#DLS_poisson_2b <- glmer(DLS ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data,family=poisson)
 
 #anova(DLS_poisson_2, DLS_poisson_2b)  #not sig.
 
 DLS_poisson_3 <- glmer(DLS ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + (1+scale(days, center = FALSE)||id), data = mlm_data,family=poisson)
-summary(DLS_poisson_3)
+#summary(DLS_poisson_3)
 #anova(DLS_poisson_2, DLS_poisson_3)  #not sig.
 
 #Adding IQ - model improves a lot. IQ can explain how well the participants are developing over time
-#Does not include intervention as it did not improve model
+#DLS_poisson_4 <- glmer(DLS ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 
+#                       + IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data,family=poisson) #fails to converge
+DLS_poisson_4 <- glmer(DLS ~ IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data,family=poisson) #removes intervention variables
 
-DLS_poisson_4 <- glmer(DLS ~ scale(days, center = FALSE) + IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data,family=poisson)
-
-AIC(DLS_poisson_3) #1046
-AIC(DLS_poisson_4) #1008
+#AIC(DLS_poisson_3) #1046
+#AIC(DLS_poisson_4) #1008
 
 #Conclusion: Intervention groups does NOT improves more than control. IQ can explain how well the participants are developing over time (higher IQ = better improvement)
 #Conclusion: Combi groups does not improve more than other intervention groups. IQ can explain how well the participants are developing over time 
@@ -135,24 +130,24 @@ AIC(DLS_poisson_4) #1008
 model_letter_1 <- lmer(letter ~ days + (1|id), data = mlm_data, REML = FALSE)
 
 # adding random slope, no covariance structure (variance components)
-model_letter_2 <- lmer(letter ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
+#model_letter_2 <- lmer(letter ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
 #isSingular(model_letter_2) #MODEL IS SINGULAR. Often indicates an overfitted model. Won't use variance components
 
 # adding random slope, with unsctructed covariance
-model_letter_2b <- lmer(letter ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
+#model_letter_2b <- lmer(letter ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
 
 #anova(model_letter_1, model_letter_2b) # sig.
 
 #conditional model (e.g. including letter)
 #adding intervention (WITH random slope) improves model significantly 
 model_letter_3 <- lmer(letter ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
-summary(model_letter_3)
+#summary(model_letter_3)
 #anova(model_letter_2, model_letter_3) # sig.
 
 
 #Adding IQ - OBS! IQ does not interact with days. Only interaction between days and intervention! 
 model_letter_4 <- lmer(letter ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
-summary(model_letter_4)
+#summary(model_letter_4)
 
 #Conclusion: Intervention groups improves more than control. IQ CANNOT explain how well the participants are developing over time 
 
@@ -162,16 +157,16 @@ summary(model_letter_4)
 
 
 # Explorativ analys: Kan PA predicera utvecklingen av letter sound, ordläsining och meningsläsning över tid? nja! ####
-model_PA_letter <- lmer(letter ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + 
-                          IQ_scale*scale(days, center = FALSE) + scale(days, center = FALSE)*PA + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
-summary(model_PA_letter)
+model_PA_letter <- lmer(letter ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_4vs23 + IQ_scale*days + days*scale(PA, center = TRUE) + (1|id), data = mlm_data, REML = FALSE)
+#summary(model_PA_letter)
 
+model_PA_word <- lmer(word ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_4vs23  + IQ_scale*days + days*scale(PA, center = TRUE) + (1|id), data = mlm_data, REML = FALSE)
+#summary(model_PA_word)
 
-model_PA_word <- lmer(word ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23  + 
-                        IQ_scale*scale(days, center = FALSE) + scale(days, center = FALSE)*PA + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
-isSingular(model_PA_word) #model_PA_word is singular, thus removes all intervention measures and run again
-model_PA_DLS <- lmer(DLS ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + (1|id), data = mlm_data, REML = FALSE)
-summary(model_PA_DLS)
+model_PA_DLS <- glmer(DLS ~ IQ_scale*scale(days, center = FALSE) + scale(days, center = FALSE)*scale(PA, center = TRUE) + (1|id), data = mlm_data,family=poisson)  #removes intervention variables and random slope for days due to converging issues
+#summary(model_PA_DLS)
+
+#anova(model_word_4, model_PA_word)
 
 # #Checking assumptions
 # require("lattice")
