@@ -677,8 +677,8 @@ ggplot(data      = mlm_data,
               linetype = 1,
               alpha    = .2)+
   theme_minimal()+
-  labs(title    = "word reading over days",
-       subtitle = "change in letter-sound regognition over time in the different groups")+
+  labs(title    = "Letter-sound recognition reading over days",
+       subtitle = "change in letter-sound recognition over time in the different groups")+
   scale_color_manual(name   =" Group",
                      labels = c("Control", "ALL", "Animega-is", "Combo"),
                      values = c("blue", "red", "green", "yellow"))
