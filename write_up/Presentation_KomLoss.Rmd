@@ -1,6 +1,7 @@
 ---
 title: "Presenation resultat KomLoss 15 nov 2021"
-output: html_document
+#output: html_document
+output: papaja::apa6_pdf
 ---
 
 ```{r setup, include=FALSE}
@@ -25,10 +26,6 @@ tab_model(model_PA_3, model_PA_4, show.df = TRUE)
 
 **Kombigruppen mot de två interventionsgrupperna ALL och Animega-is**
 
-```{r PA-kombi, include = TRUE, results='asis'}
-tab_model(model_PA_7, show.df = TRUE)
-```
-
 ## Letter-sound recognition
 **Jämförelsegruppen mot de tre interventionsgrupperna tillsammans**
 
@@ -38,15 +35,7 @@ tab_model(model_letter_3, model_letter_4, show.df = TRUE)
 
 **Kombigruppen mot de två interventionsgrupperna ALL och Animega-is**
 
-```{r letter-kombi, include = TRUE, results='asis'}
-tab_model(model_letter_7, show.df = TRUE)
-```
-
 **ALL-gruppen mot de kombigruppen och Animega-is**
-
-```{r letter-ALL, include = TRUE, results='asis'}
-tab_model(model_letter_9, show.df = TRUE)
-```
 
 
 
@@ -60,10 +49,6 @@ tab_model(model_word_3, model_word_4, show.df = TRUE)
 
 **Kombigruppen mot de två interventionsgrupperna ALL och Animega-is**
 
-```{r word-kombi, include = TRUE, results='asis'}
-tab_model(model_word_7, show.df = TRUE)
-```
-
 
 ## Sentence reading
 
@@ -74,10 +59,6 @@ tab_model(DLS_poisson_3, DLS_poisson_4)
 ```
 
 **Kombigruppen mot de två interventionsgrupperna ALL och Animega-is**
-
-```{r DLSon-kombi, include = TRUE, results='asis'}
-tab_model(DLS_poisson_7)
-```
 
 
 ## PA on letter-sound recognition and word recognition

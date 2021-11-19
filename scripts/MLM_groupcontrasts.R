@@ -16,7 +16,7 @@ library(sjstats)
 #options(scipen=999)
 
 mlm_data <- data_df %>% 
-  select(id, group, time, days, letter = letter_sum, fonem_sum, fonemsynthesis_sum, rhyme_sum, word = word_reading_total, DLS = DLS_reading_comp_sum, IQ_scale, IQ, tot_train_time_scale, tot_train_time) %>%
+  select(id, group, time, days, age_in_days, letter = letter_sum, fonem_sum, fonemsynthesis_sum, rhyme_sum, word = word_reading_total, DLS = DLS_reading_comp_sum, IQ_scale, IQ, tot_train_time_scale, tot_train_time) %>%
   mutate(PA= fonem_sum+fonemsynthesis_sum+rhyme_sum) %>%
   select(-fonem_sum, -fonemsynthesis_sum, -rhyme_sum) %>% 
   mutate(contrast_1vs234= ifelse(group == 1, (-1),  (1/3))) %>%  #control vs ALL,animega,combi
@@ -24,8 +24,8 @@ mlm_data <- data_df %>%
   mutate(contrast_1vs2= ifelse(group == 1, (-1),  ifelse(group == 2, 1, 0))) %>%  #control vs ALL
   mutate(contrast_1vs3= ifelse(group == 1, (-1),  ifelse(group == 3, 1, 0))) #control vs animega
 
-mlm_data$centred <- scale(mlm_data$days, center = TRUE)
-mlm_data$days_not_centred <- scale(mlm_data$days, center = FALSE)
+#mlm_data$centred <- scale(mlm_data$days, center = TRUE)
+#mlm_data$days_not_centred <- scale(mlm_data$days, center = FALSE)
 
 #write.csv(mlm_data,'mlm_data.csv', na = "9999")
 
@@ -90,6 +90,11 @@ model_word_4 <- lmer(word ~ scale(days, center = FALSE)*contrast_1vs2 + scale(da
 #Conclusion: Combi groups does not improve more than other intervention groups. Tendency for IQ to explain how well the participants are developing over time 
 #(higher IQ = better improvement). Thus, might underestimate the effect of the combigroup due to Animega-is group having higher IQ
 
+# Explorativ analys: Kan PA predicera utvecklingen av letter sound, ordläsining och meningsläsning över tid? nja! ####
+model_PA_word <- lmer(word ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23  + IQ_scale*scale(days, center = FALSE) + scale(days, center = FALSE)*scale(PA, center = TRUE) + (1|id), data = mlm_data, REML = FALSE)
+
+#summary(model_PA_word)
+
 # DLS ####
 
 #Unconditional model - only includes temporal predictor and not other explanatory variables (e.g. DLS)
@@ -107,27 +112,27 @@ model_word_4 <- lmer(word ~ scale(days, center = FALSE)*contrast_1vs2 + scale(da
 #anova(DLS_poisson_2, DLS_poisson_2b)  #not sig.
 
 DLS_poisson_3 <- glmer(DLS ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + (1+scale(days, center = FALSE)||id), data = mlm_data,family=poisson)
-#summary(DLS_poisson_3)
 #anova(DLS_poisson_2, DLS_poisson_3)  #not sig.
 
 #Adding IQ - model improves a lot. IQ can explain how well the participants are developing over time
 #DLS_poisson_4 <- glmer(DLS ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 
 #                       + IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data,family=poisson) #fails to converge
-DLS_poisson_4 <- glmer(DLS ~ IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data,family=poisson) #removes intervention variables
+DLS_poisson_4 <- glmer(DLS ~ IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data,family=poisson) #removes intervention variables
 
-#AIC(DLS_poisson_3) #1046
-#AIC(DLS_poisson_4) #1008
 
 #Conclusion: Intervention groups does NOT improves more than control. IQ can explain how well the participants are developing over time (higher IQ = better improvement)
 #Conclusion: Combi groups does not improve more than other intervention groups. IQ can explain how well the participants are developing over time 
 #(higher IQ = better improvement). Thus, might underestimate the effect of the combigroup due to Animega-is group having higher IQ
+
+# Explorativ analys: Kan PA predicera utvecklingen av letter sound, ordläsining och meningsläsning över tid? nja! ####
+model_PA_DLS <- glmer(DLS ~ IQ_scale*scale(days, center = FALSE) + scale(days, center = FALSE)*scale(PA, center = TRUE) + (1|id), data = mlm_data,family=poisson) #removes intervention variables AND days as random slope due to convergence issues
 
 # letter ####
 # letter CONTROLL VS INTERVENTION ####
 
 #Unconditional model - only includes temporal predictor and not other explanatory variables (e.g. letter)
 #model with random intercept with ID estimating letter difference over time
-model_letter_1 <- lmer(letter ~ days + (1|id), data = mlm_data, REML = FALSE)
+#model_letter_1 <- lmer(letter ~ days + (1|id), data = mlm_data, REML = FALSE)
 
 # adding random slope, no covariance structure (variance components)
 #model_letter_2 <- lmer(letter ~ scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data, REML = FALSE) #scaling days due to convergence issues
@@ -155,16 +160,11 @@ model_letter_4 <- lmer(letter ~ scale(days, center = FALSE)*contrast_1vs2 + scal
 #(higher IQ = better improvement). Thus, might underestimate the effect of the combigroup due to Animega-is group having higher IQ
 #Conclusion ALL better on letter recognition!
 
-
 # Explorativ analys: Kan PA predicera utvecklingen av letter sound, ordläsining och meningsläsning över tid? nja! ####
-model_PA_letter <- lmer(letter ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_4vs23 + IQ_scale*days + days*scale(PA, center = TRUE) + (1|id), data = mlm_data, REML = FALSE)
+model_PA_letter <- lmer(letter ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + IQ_scale*scale(days, center = FALSE) + scale(days, center = FALSE)*scale(PA, center = TRUE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
+
 #summary(model_PA_letter)
 
-model_PA_word <- lmer(word ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_4vs23  + IQ_scale*days + days*scale(PA, center = TRUE) + (1|id), data = mlm_data, REML = FALSE)
-#summary(model_PA_word)
-
-model_PA_DLS <- glmer(DLS ~ IQ_scale*scale(days, center = FALSE) + scale(days, center = FALSE)*scale(PA, center = TRUE) + (1|id), data = mlm_data,family=poisson)  #removes intervention variables and random slope for days due to converging issues
-#summary(model_PA_DLS)
 
 #anova(model_word_4, model_PA_word)
 

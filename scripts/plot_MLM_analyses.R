@@ -10,8 +10,6 @@
 
 library(ggplot2)
 
-
-
 #Plot data for PA
 ggplot(data      = mlm_data,
        aes(x     = days,
@@ -30,25 +28,6 @@ ggplot(data      = mlm_data,
                      labels = c("Control", "ALL", "Animega-is", "Combo"),
                      values = c("blue", "red", "green", "yellow"))
 
-#Plot data for DLS
-ggplot(data      = mlm_data,
-       aes(x     = days,
-           y     = DLS,
-           col   = group,
-           group = group))+ #to add the colours for different classes
-  geom_smooth(method   = lm,
-              se       = T,
-              size     = 1,
-              linetype = 1,
-              alpha    = .2)+
-  theme_minimal()+
-  labs(title    = "DLS over days",
-       subtitle = "change in sentence readin over time in the different groups")+
-  scale_color_manual(name   =" Group",
-                     labels = c("Control", "ALL", "Animega-is", "Combo"),
-                     values = c("blue", "red", "green", "yellow"))
-
-
 #Plot data for word
 ggplot(data      = mlm_data,
        aes(x     = days,
@@ -62,13 +41,32 @@ ggplot(data      = mlm_data,
               alpha    = .2)+
   theme_minimal()+
   labs(title    = "word reading over days",
-       subtitle = "change in word reading training over time in the different groups")+
+       subtitle = "change in word reading over time in the different groups")+
   scale_color_manual(name   =" Group",
                      labels = c("Control", "ALL", "Animega-is", "Combo"),
                      values = c("blue", "red", "green", "yellow"))
 
 
-#Plot data for word
+#Plot data for DLS
+ggplot(data      = mlm_data,
+       aes(x     = days,
+           y     = DLS,
+           col   = group,
+           group = group))+ #to add the colours for different classes
+  geom_smooth(method   = lm,
+              se       = T,
+              size     = 1,
+              linetype = 1,
+              alpha    = .2)+
+  theme_minimal()+
+  labs(title    = "DLS over days",
+       subtitle = "change in sentence reading over time in the different groups")+
+  scale_color_manual(name   =" Group",
+                     labels = c("Control", "ALL", "Animega-is", "Combo"),
+                     values = c("blue", "red", "green", "yellow"))
+
+
+#Plot data for letter
 ggplot(data      = mlm_data,
        aes(x     = days,
            y     = letter,
@@ -81,7 +79,7 @@ ggplot(data      = mlm_data,
               alpha    = .2)+
   theme_minimal()+
   labs(title    = "word reading over days",
-       subtitle = "change in word reading training over time in the different groups")+
+       subtitle = "change in letter-sound regognition over time in the different groups")+
   scale_color_manual(name   =" Group",
                      labels = c("Control", "ALL", "Animega-is", "Combo"),
                      values = c("blue", "red", "green", "yellow"))

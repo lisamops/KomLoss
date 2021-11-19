@@ -71,7 +71,7 @@ class             : "man"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(cache = FALSE, results='asis', warning = FALSE, echo = FALSE, include = FALSE)
+knitr::opts_chunk$set(cache = FALSE, results='asis', warning = FALSE, echo = FALSE, include = FALSE, message = FALSE)
 options(digits=3, Encoding="UTF-8") #default decimal digits
 
 ```
@@ -82,24 +82,14 @@ load("environment.RData")
 ``` 
 
 ```{r load_packages, include = FALSE}
-#library(plyr)
 library(papaja)
-# library(car) # for Levenes test
- library(dplyr)
-# library(psych) # for cor.test
+library(dplyr)
 library(lmerTest)# to get p-value estimations that are not part of the standard lme4 packages 
 library(lme4)
 library(sjPlot)
-# library(nlme)
-# library(reshape)
-# library(tidyr)
-# library(RcppArmadillo)
-# library(MASS)
-# library(mgcv)
-# library(parallel)
-# library(stats)
-# library(ggplot2)
-# library(beeswarm)
+library(ggpubr)
+library(ggplot2)
+library(FSA)
 ```
 
 ```{r analysis_preferences}
@@ -150,18 +140,6 @@ The hypotheses will be tested on these outcome variables: phonological awareness
 
 # Methods
 
-```{r IQ in different groups}
-kruskal_test_IQ <- kruskal.test(IQ~group, data = mlm_data)
-library(FSA)
-DT_IQ = dunnTest(IQ ~ group, data=mlm_data, method="bh") 
-
-mean((mlm_data %>% filter(time == 1)%>% filter(group == "Control"))$IQ, na.rm = TRUE)
-mean((mlm_data %>% filter(time == 1)%>% filter(group == "ALL"))$IQ)
-mean((mlm_data %>% filter(time == 1)%>% filter(group == "Animega-is"))$IQ)
-mean((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$IQ)
-
-```
-
 ## Participants
 Participants were recruited from special needs schools in southern Sweden, after consent of the school’s principal. Participating children  gave oral consent at the beginning of the first test session and  prior to the study, caregivers signed an informed consent, regarding the confidentiality of data and group-level analysis. The study follows the Ethical principles for medical research involving human subjects from the WMA Declaration of Helsinki [@WorldMedicalAssociation2013]. The study was reviewed and approved by the Ethical Review Board, Sweden (*insert dr no*).
 
@@ -184,35 +162,6 @@ Three subtests from MiniDUVAN (Wolff, 2013) were used to assess phonological awa
 OS64 (Nielsen et al., 1997) and OLAF (Magnusson & Naucler, 2010) were used to assess word reading skills. However, the presentation of tasks, and response modes, were adapted to suit the participants in this project. In OS64, ... matched a written word to a widgit symbol. In OLAF, written words were matched to pictures. The dependent measure was the total number of correct answers (max = 15 for OS64, and max = 20 for OLAF). 
 ###Sentence reading 
 In DLS Bas (Järpsten, 2004) the participants read short sentences and match these to their corresponding pictures. The dependent measure was the total number of correct answers (max = 20).
-
-
-```{r diagnosis-table, include=TRUE, results='asis'}
-
-# diangosis_names <- c("Mild intellectual disability only", "Down Syndrome", "William Syndrome", "Mild intellectual disability and Attention deficit hyperactivity disorder", "Mild intellectual disability and language disorder", "More than one additional diagnosis", "Total")
-# 
-# N_diagnois <- c(length((df_include_Q2Q3 %>% filter(diagnosis == "MID"))$user_id), 
-#                 length((df_include_Q2Q3 %>% filter(diagnosis == "DS"))$user_id), 
-#                 length((df_include_Q2Q3 %>% filter(diagnosis == "WS"))$user_id), 
-#             #    length((df_include_Q2Q3 %>% filter(diagnosis == "MID.ASD"))$user_id), 
-#                 length((df_include_Q2Q3 %>% filter(diagnosis == "MID.ADHD"))$user_id), 
-#                 length((df_include_Q2Q3 %>% filter(diagnosis == "MID.Other behavioural disability"))$user_id), 
-#                 length((df_include_Q2Q3 %>% filter(diagnosis == "More than one other diangois"))$user_id), 
-#                 length((df_include_Q2Q3 %>% filter(group == "ID"))$user_id))
-# 
-# 
-# diagnosis.df <- data.frame(diangosis_names, N_diagnois)
-# 
-# apa_table(
-#   diagnosis.df
-#   , caption = "Diagnoses in the ID group"
-# #  , col_spanners = list("ID" = c(2, 4), "MA" = c(5, 7)) # N.B. ignored in Word
-#   , col.names = c("Diagnoses ", "$n$")
-#   , row.names = TRUE
-#   , align = c('l', 'c')
-#   , font_size = c("small")
-# )
-
-```
 
 ## Instruction materials: ALL and Animega-is
 
@@ -250,59 +199,295 @@ The descriptive statistics for all variables on each assessment time can be seen
 
 ```{r descriptives-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
-# df_include_Q2Q3 <- df_include_Q2Q3 %>% dplyr::mutate(years_old = days_old/365)
-# desc_data <- df_include_Q2Q3 %>% dplyr::select(group, years_old, MA, duration = duration2, clicks_minFirst, clicks_minLast, improvrate_L1_change, improvrate_L2_change, improvrate_L3_change)
-# desc_data$group <- as.factor(desc_data$group)
-# desc_data <- desc_data %>% mutate_all(as.numeric)
+mlm_data <- mlm_data %>% dplyr::mutate(years_old = age_in_days/365)
+
+desc_data <- mlm_data %>% dplyr::select(group, time, years_old, IQ, tot_train_time)
+
+desc_data$group <- as.numeric(desc_data$group)
+
+descriptives_time <- desc_data  %>% filter(time == 1) %>% group_by(group) %>%
+   summarize_all(list(Mean=~mean(., na.rm = T),  SD=~sd(., na.rm = T), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+ 
+#descriptives[, -1] <- printnum(descriptives[, -1])
+desc_time <- as.data.frame(t(descriptives_time))
+ 
+descriptives_cont <- dplyr::select(desc_time, "V1")
+descriptives_all <- dplyr::select(desc_time, "V2")
+descriptives_animega <- dplyr::select(desc_time, "V3")
+descriptives_combi <- dplyr::select(desc_time, "V4")
+
+Means_cont <- slice(descriptives_cont, 3:5) 
+SDs_cont <- slice(descriptives_cont, 7:9) 
+Range_cont <- slice(descriptives_cont, 11:13) 
+
+Means_all <- slice(descriptives_all, 3:5) 
+SDs_all <- slice(descriptives_all, 7:9) 
+Range_all <- slice(descriptives_all, 11:13) 
+
+Means_animega <- slice(descriptives_animega, 3:5) 
+SDs_animega <- slice(descriptives_animega, 7:9) 
+Range_animega <- slice(descriptives_animega, 11:13) 
+
+Means_combi <- slice(descriptives_combi, 3:5) 
+SDs_combi <- slice(descriptives_combi, 7:9) 
+Range_combi <- slice(descriptives_combi, 11:13) 
+ 
+var_names <- as.data.frame(c( "Age", "IQ","Trained time"))
+ 
+descTable <- bind_cols(var_names, Means_cont, SDs_cont, Range_cont, Means_all, SDs_all, Range_all, Means_animega, SDs_animega, Range_animega, Means_combi, SDs_combi, Range_combi)
+
+col.names = c(" ", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$")
+
+#TODO Cannot get table to print two decimals.
+apa_table(
+  descTable
+  , caption = "Descriptive statistics of included variables presented by group"
+  , note = "Mental age and chronological age are presented in years. *p*-values are corrected for multiple comparison."
+  , col_spanners = list("Control" = c(2, 4), "ALL" = c(5, 7), "Animega" = c(8, 10), "Combi" = c(11, 13)) # N.B. ignored in Word
+  , col.names = col.names
+  , row.names = FALSE
+  , align = c('l', 'c')
+  , font_size = c("small")
+)
+
+```
+
+
+```{r desc-read-control-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 # 
-# descriptives <- desc_data %>% group_by(group) %>%
-#   summarize_all(list(Mean=~mean(., na.rm = T),  SD=~sd(., na.rm = T), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+# mlm_data <- mlm_data %>% dplyr::mutate(years_old = age_in_days/365)
 # 
+# desc_data <- mlm_data %>% dplyr::select(-id, -days, - age_in_days, -IQ_scale, -tot_train_time_scale, -contrast_1vs234, -contrast_1vs2, -contrast_1vs3, -contrast_4vs23)
+# 
+# desc_data$group <- as.numeric(desc_data$group)
+# 
+# descriptives_control <- desc_data  %>% filter(group == 1) %>% group_by(time) %>%
+#    summarize_all(list(Mean=~mean(., na.rm = T),  SD=~sd(., na.rm = T), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+#  
 # #descriptives[, -1] <- printnum(descriptives[, -1])
-# descriptives2 <- as.data.frame(t(descriptives))
+# descriptives_control2 <- as.data.frame(t(descriptives_control))
+#  
+# descriptives_t1 <- dplyr::select(descriptives_control2, "V1")
+# descriptives_t2 <- dplyr::select(descriptives_control2, "V2")
+# descriptives_t3 <- dplyr::select(descriptives_control2, "V3")
+# descriptives_t4 <- dplyr::select(descriptives_control2, "V4")
 # 
-# descriptivesID <- dplyr::select(descriptives2, "V1")
-# descriptivesTD <- dplyr::select(descriptives2, "V2")
+# Means_t1 <- slice(descriptives_t1, 3:9) 
+# SDs_t1 <- slice(descriptives_t1, 11:17) 
+# Range_t1 <- slice(descriptives_t1, 19:25) 
 # 
-# MeansTD <- slice(descriptivesTD, 2:9) 
-# SDsTD <- slice(descriptivesTD, 10:17) 
-# RangeTD <- slice(descriptivesTD, 18:25) 
+# Means_t2 <- slice(descriptives_t2, 3:9) 
+# SDs_t2 <- slice(descriptives_t2, 11:17) 
+# Range_t2 <- slice(descriptives_t2, 19:25) 
 # 
-# MeansID <- slice(descriptivesID, 2:9) 
-# SDsID <- slice(descriptivesID, 10:17)
-# RangeID <- slice(descriptivesID, 18:25) 
+# Means_t3 <- slice(descriptives_t3, 3:9) 
+# SDs_t3 <- slice(descriptives_t3, 11:17) 
+# Range_t3 <- slice(descriptives_t3, 19:25) 
 # 
-# var_names <- as.data.frame(c( "Age", "Mental age","Usage-time", "Activity-level beginning", "Activity-level end", "Improvement-rate Level 1", "Improvement-rate Level 2", "Improvement-rate Level 3"))
+# Means_t4 <- slice(descriptives_t4, 3:9) 
+# SDs_t4 <- slice(descriptives_t4, 11:17) 
+# Range_t4 <- slice(descriptives_t4, 19:25) 
+#  
+# var_names <- as.data.frame(c( "Letter", "Word","Sentence", "IQ", "Training time", "PA", "Age"))
+#  
+# descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 # 
-# ttest <- c((t.test(years_old ~ group, data = desc_data, var.equal = F)$p.value), #variances not equal
-#             t.test(MA ~ group, data = desc_data, var.equal = T)$p.value, #variances equal
-#             t.test(duration ~ group, data = desc_data, var.equal = T)$p.value,  #variances equal
-#             t.test(clicks_minFirst ~ group, data = desc_data, var.equal = T)$p.value,#variances equal
-#             t.test(clicks_minLast ~ group, data = desc_data, var.equal = T)$p.value,#variances equal
-#             t.test(improvrate_L1_change ~ group, data = desc_data, var.equal = T)$p.value,#variances equal
-#             t.test(improvrate_L2_change ~ group, data = desc_data, var.equal = T)$p.value, #variances equal
-#             t.test(improvrate_L3_change ~ group, data = desc_data, var.equal = T)$p.value #variances equal
-#            )
-# 
-# bon_t <- p.adjust(ttest, method = "holm", n = length(ttest))
-# ttest <- bon_t
-# ttest <- as.data.frame(gsub("0.",".",format.pval(ttest, digits = 1, eps = 0.001, nsmall = 3), fixed = TRUE))
-# 
-# descTable <- bind_cols(var_names, MeansID, SDsID, RangeID, MeansTD, SDsTD, RangeTD, ttest)
+# col.names = c(" ", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$")
 # 
 # #TODO Cannot get table to print two decimals.
 # apa_table(
 #   descTable
-#   , caption = "Descriptive statistics of included variables presented by group. Groups are compared using *t*-tests. "
+#   , caption = "Descriptive statistics of included variables presented by group"
 #   , note = "Mental age and chronological age are presented in years. *p*-values are corrected for multiple comparison."
-#   , col_spanners = list("ID ($n$ = 17)" = c(2, 4), "MA ($n$ = 21)" = c(5, 7)) # N.B. ignored in Word
-#   , col.names = c(" ", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$p$")
-#   , row.names = TRUE
+#   , col_spanners = list("T1" = c(2, 4), "T2" = c(5, 7), "T3" = c(8, 10), "T4" = c(11, 13)) # N.B. ignored in Word
+#   , col.names = col.names
+#   , row.names = FALSE
 #   , align = c('l', 'c')
 #   , font_size = c("small")
 # )
 
 ```
+
+```{r desc-read-ALL-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+# 
+# mlm_data <- mlm_data %>% dplyr::mutate(years_old = age_in_days/365)
+# 
+# desc_data <- mlm_data %>% dplyr::select(-id, -days, - age_in_days, -IQ_scale, -tot_train_time_scale, -contrast_1vs234, -contrast_1vs2, -contrast_1vs3, -contrast_4vs23)
+# 
+# desc_data$group <- as.numeric(desc_data$group)
+# 
+# descriptives_control <- desc_data  %>% filter(group == 1) %>% group_by(time) %>%
+#    summarize_all(list(Mean=~mean(., na.rm = T),  SD=~sd(., na.rm = T), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+#  
+# #descriptives[, -1] <- printnum(descriptives[, -1])
+# descriptives_control2 <- as.data.frame(t(descriptives_control))
+#  
+# descriptives_t1 <- dplyr::select(descriptives_control2, "V1")
+# descriptives_t2 <- dplyr::select(descriptives_control2, "V2")
+# descriptives_t3 <- dplyr::select(descriptives_control2, "V3")
+# descriptives_t4 <- dplyr::select(descriptives_control2, "V4")
+# 
+# Means_t1 <- slice(descriptives_t1, 3:9) 
+# SDs_t1 <- slice(descriptives_t1, 11:17) 
+# Range_t1 <- slice(descriptives_t1, 19:25) 
+# 
+# Means_t2 <- slice(descriptives_t2, 3:9) 
+# SDs_t2 <- slice(descriptives_t2, 11:17) 
+# Range_t2 <- slice(descriptives_t2, 19:25) 
+# 
+# Means_t3 <- slice(descriptives_t3, 3:9) 
+# SDs_t3 <- slice(descriptives_t3, 11:17) 
+# Range_t3 <- slice(descriptives_t3, 19:25) 
+# 
+# Means_t4 <- slice(descriptives_t4, 3:9) 
+# SDs_t4 <- slice(descriptives_t4, 11:17) 
+# Range_t4 <- slice(descriptives_t4, 19:25) 
+#  
+# var_names <- as.data.frame(c( "Letter", "Word","Sentence", "IQ", "Training time", "PA", "Age"))
+#  
+# descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
+# 
+# col.names = c(" ", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$")
+# 
+# #TODO Cannot get table to print two decimals.
+# apa_table(
+#   descTable
+#   , caption = "Descriptive statistics of included variables presented by group"
+#   , note = "Mental age and chronological age are presented in years. *p*-values are corrected for multiple comparison."
+#   , col_spanners = list("T1" = c(2, 4), "T2" = c(5, 7), "T3" = c(8, 10), "T4" = c(11, 13)) # N.B. ignored in Word
+#   , col.names = col.names
+#   , row.names = FALSE
+#   , align = c('l', 'c')
+#   , font_size = c("small")
+# )
+
+```
+
+
+```{r desc-read-animega-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+# 
+# mlm_data <- mlm_data %>% dplyr::mutate(years_old = age_in_days/365)
+# 
+# desc_data <- mlm_data %>% dplyr::select(-id, -days, - age_in_days, -IQ_scale, -tot_train_time_scale, -contrast_1vs234, -contrast_1vs2, -contrast_1vs3, -contrast_4vs23)
+# 
+# desc_data$group <- as.numeric(desc_data$group)
+# 
+# descriptives_control <- desc_data  %>% filter(group == 1) %>% group_by(time) %>%
+#    summarize_all(list(Mean=~mean(., na.rm = T),  SD=~sd(., na.rm = T), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+#  
+# #descriptives[, -1] <- printnum(descriptives[, -1])
+# descriptives_control2 <- as.data.frame(t(descriptives_control))
+#  
+# descriptives_t1 <- dplyr::select(descriptives_control2, "V1")
+# descriptives_t2 <- dplyr::select(descriptives_control2, "V2")
+# descriptives_t3 <- dplyr::select(descriptives_control2, "V3")
+# descriptives_t4 <- dplyr::select(descriptives_control2, "V4")
+# 
+# Means_t1 <- slice(descriptives_t1, 3:9) 
+# SDs_t1 <- slice(descriptives_t1, 11:17) 
+# Range_t1 <- slice(descriptives_t1, 19:25) 
+# 
+# Means_t2 <- slice(descriptives_t2, 3:9) 
+# SDs_t2 <- slice(descriptives_t2, 11:17) 
+# Range_t2 <- slice(descriptives_t2, 19:25) 
+# 
+# Means_t3 <- slice(descriptives_t3, 3:9) 
+# SDs_t3 <- slice(descriptives_t3, 11:17) 
+# Range_t3 <- slice(descriptives_t3, 19:25) 
+# 
+# Means_t4 <- slice(descriptives_t4, 3:9) 
+# SDs_t4 <- slice(descriptives_t4, 11:17) 
+# Range_t4 <- slice(descriptives_t4, 19:25) 
+#  
+# var_names <- as.data.frame(c( "Letter", "Word","Sentence", "IQ", "Training time", "PA", "Age"))
+#  
+# descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
+# 
+# col.names = c(" ", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$")
+# 
+# #TODO Cannot get table to print two decimals.
+# apa_table(
+#   descTable
+#   , caption = "Descriptive statistics of included variables presented by group"
+#   , note = "Mental age and chronological age are presented in years. *p*-values are corrected for multiple comparison."
+#   , col_spanners = list("T1" = c(2, 4), "T2" = c(5, 7), "T3" = c(8, 10), "T4" = c(11, 13)) # N.B. ignored in Word
+#   , col.names = col.names
+#   , row.names = FALSE
+#   , align = c('l', 'c')
+#   , font_size = c("small")
+# )
+
+```
+
+```{r desc-read-combi-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+# 
+# mlm_data <- mlm_data %>% dplyr::mutate(years_old = age_in_days/365)
+# 
+# desc_data <- mlm_data %>% dplyr::select(-id, -days, - age_in_days, -IQ_scale, -tot_train_time_scale, -contrast_1vs234, -contrast_1vs2, -contrast_1vs3, -contrast_4vs23)
+# 
+# desc_data$group <- as.numeric(desc_data$group)
+# 
+# descriptives_control <- desc_data  %>% filter(group == 1) %>% group_by(time) %>%
+#    summarize_all(list(Mean=~mean(., na.rm = T),  SD=~sd(., na.rm = T), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+#  
+# #descriptives[, -1] <- printnum(descriptives[, -1])
+# descriptives_control2 <- as.data.frame(t(descriptives_control))
+#  
+# descriptives_t1 <- dplyr::select(descriptives_control2, "V1")
+# descriptives_t2 <- dplyr::select(descriptives_control2, "V2")
+# descriptives_t3 <- dplyr::select(descriptives_control2, "V3")
+# descriptives_t4 <- dplyr::select(descriptives_control2, "V4")
+# 
+# Means_t1 <- slice(descriptives_t1, 3:9) 
+# SDs_t1 <- slice(descriptives_t1, 11:17) 
+# Range_t1 <- slice(descriptives_t1, 19:25) 
+# 
+# Means_t2 <- slice(descriptives_t2, 3:9) 
+# SDs_t2 <- slice(descriptives_t2, 11:17) 
+# Range_t2 <- slice(descriptives_t2, 19:25) 
+# 
+# Means_t3 <- slice(descriptives_t3, 3:9) 
+# SDs_t3 <- slice(descriptives_t3, 11:17) 
+# Range_t3 <- slice(descriptives_t3, 19:25) 
+# 
+# Means_t4 <- slice(descriptives_t4, 3:9) 
+# SDs_t4 <- slice(descriptives_t4, 11:17) 
+# Range_t4 <- slice(descriptives_t4, 19:25) 
+#  
+# var_names <- as.data.frame(c( "Letter", "Word","Sentence", "IQ", "Training time", "PA", "Age"))
+#  
+# descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
+# 
+# col.names = c(" ", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$")
+# 
+# #TODO Cannot get table to print two decimals.
+# apa_table(
+#   descTable
+#   , caption = "Descriptive statistics of included variables presented by group"
+#   , note = "Mental age and chronological age are presented in years. *p*-values are corrected for multiple comparison."
+#   , col_spanners = list("T1" = c(2, 4), "T2" = c(5, 7), "T3" = c(8, 10), "T4" = c(11, 13)) # N.B. ignored in Word
+#   , col.names = col.names
+#   , row.names = FALSE
+#   , align = c('l', 'c')
+#   , font_size = c("small")
+# )
+
+```
+
+## IQ
+
+
+```{r IQ in different groups}
+kruskal_test_IQ <- kruskal.test(IQ~group, data = mlm_data)
+DT_IQ = dunnTest(IQ ~ group, data=mlm_data, method="bh") 
+
+# mean((mlm_data %>% filter(time == 1)%>% filter(group == "Control"))$IQ, na.rm = TRUE)
+# mean((mlm_data %>% filter(time == 1)%>% filter(group == "ALL"))$IQ)
+# mean((mlm_data %>% filter(time == 1)%>% filter(group == "Animega-is"))$IQ)
+# mean((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$IQ)
+
+```
+
 
 The participants were randomly selected on school level to different intervention groups. This was done to try to match the groups on IQ. Nevertheless, the IQ in the groups differed significantly, *H*(`r kruskal_test_IQ[["parameter"]]`) = `r kruskal_test_IQ[["statistic"]]`, *p* `r p_small(kruskal_test_IQ[["p.value"]])`. 
 @Facon2011 proposed groups be equated with an α-level of *p* > 0.50. The Animega-is group had a significantly higher IQ (
@@ -318,13 +503,26 @@ The participants were randomly selected on school level to different interventio
 *sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$IQ) `), 
 *p* `r p_small(DT_IQ[["res"]][["P.adj"]][3]) `. Thus, IQ was used as a control variable in all outcome variables. 
 
+```{r  IQ-plot, include = TRUE, results='asis'}
+# ggboxplot(data = mlm_data%>% filter(time == 1), x = "group", y = "IQ",
+#                 color = "group", palette =c("springgreen4","#00AFBB", "#E7B800", "#FC4E07"),
+#                 add = "jitter")
+```
+
 ## Training time
 
 ```{r train time in different groups}
 kruskal_test_TT <- kruskal.test(tot_train_time~group, data = mlm_data%>% filter(time == 1)%>% filter(group != "Control"))
+
 ```
 
 The participants were instructed to train for a total of 18 hours (36 sessions for 30 minutes, three days a week for a 12-week period). The teachers were instructed to adapt the length of the training sessions after the need of the student. That is, if the student could not sit for a full 30 minute session the teacher was encouraged to have shorter sessions but more often than three times a week. On average the participants trained for `r mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE) ` (*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE) `) minutes (`r mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60 ` (*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60 `) hours). There was no difference on training time between the three intervention groups (*H*(`r kruskal_test_TT[["parameter"]]`) = `r kruskal_test_TT[["statistic"]]`, *p* `r p_small(kruskal_test_TT[["p.value"]])` ).
+
+```{r  tottraintime-plot, include = TRUE, results='asis'}
+# ggboxplot(data = mlm_data%>% filter(time == 1)%>% filter(group != "Control"), x = "group", y #= "tot_train_time",
+#                 color = "group", palette =c("#00AFBB", "#E7B800", "#FC4E07"),
+#                 add = "jitter")
+```
 
 ## Phonological awareness
 
@@ -339,14 +537,37 @@ There was no significant interaction between time and intervention for the compr
 
 There was a significant interaction between the combined group and the other two intervention groups, (`r apa_print(model_PA_3)$full_result$days_contrast_4vs23`), the combined training improved PA over time more than the other two intervention groups.
 
-### Effect on IQ
-There was a significant main effect on IQ (`r apa_print(model_PA_4)$full_result$IQ_scale`), indicating that higher IQ results in higher PA at T1. Moreover, there was a significant interaction between time and IQ (`r apa_print(model_PA_4)$full_result$days_IQ_scale`), indicating that the participants with the highest IQ benefited the most from the intervention. However, the benefit of the combined training over the two other intervention types remained (`r apa_print(model_PA_4)$full_result$days_contrast_4vs23`)
+```{r  PA-plot, include = TRUE, results='asis'}
 
+#Plot data for PA
+ggplot(data      = mlm_data,
+       aes(x     = days,
+           y     = PA,
+           col   = group,
+           group = group))+ #to add the colours for different classes
+  geom_smooth(method   = lm,
+              se       = T,
+              size     = 1,
+              linetype = 1,
+              alpha    = .2)+
+  theme_minimal()+
+  labs(title    = "Phonological awareness",
+       subtitle = "change over time")+
+  scale_color_manual(name   =" Group",
+                     labels = c("Control", "ALL", "Animega-is", "Combo"),
+                     values = c("blue", "red", "green", "yellow"))
+```
+
+
+## Exploratory analyses
+
+### Effect of IQ
+There was a significant main effect on IQ (`r apa_print(model_PA_4)$full_result$IQ_scale`), indicating that higher IQ results in higher PA at T1. Moreover, there was a significant interaction between time and IQ (`r apa_print(model_PA_4)$full_result$days_IQ_scale`), indicating that the participants with the highest IQ benefited the most from the intervention. However, the benefit of the combined training over the two other intervention types remained (`r apa_print(model_PA_4)$full_result$days_contrast_4vs23`)
 
 The results from the PA models can be seen in Table\ \@ref(tab:PA-table).
 
-```{r PA-table, include=TRUE, results='asis'}
-tab_model(model_PA_3, model_PA_4)
+```{r PA-table, include = TRUE, results='asis'}
+tab_model(model_PA_3, model_PA_4, show.df = TRUE)
 ```
 
 ## Word reading
@@ -360,100 +581,146 @@ There was no significant interaction between time and intervention for the compr
 
 ### Hypothesis 3: The combined training is more effective than either intervention on its own.
 
-There was a not significant interaction between the combined group and the other two intervention groups, (`r apa_print(model_PA_3)$full_result$scaledays_center___FALSE_contrast_4vs23`).
+There was a not significant interaction between the combined group and the other two intervention groups, (`r apa_print(model_word_3)$full_result$scaledays_center___FALSE_contrast_4vs23`).
 
-### Effect on IQ
-There was a significant main effect on IQ (`r apa_print(model_word_4)$full_result$IQ_scale`), indicating that higher IQ results in higher word reading at T1. Moreover, there was a significant interaction between time and IQ (`r apa_print(model_word_4)$full_result$scaledays_center___FALSE_IQ_scale`), indicating that the participants with the highest IQ improved  most over the training period regardless of intervention condition (inlcuding control). 
+```{r  word-plot, include = TRUE, results='asis'}
 
+#Plot data for word
+ggplot(data      = mlm_data,
+       aes(x     = days,
+           y     = word,
+           col   = group,
+           group = group))+ #to add the colours for different classes
+  geom_smooth(method   = lm,
+              se       = T,
+              size     = 1,
+              linetype = 1,
+              alpha    = .2)+
+  theme_minimal()+
+  labs(title    = "word reading over days",
+       subtitle = "change in word reading over time in the different groups")+
+  scale_color_manual(name   =" Group",
+                     labels = c("Control", "ALL", "Animega-is", "Combo"),
+                     values = c("blue", "red", "green", "yellow"))
+
+```
+
+## Exploratory analyses
+
+### Effect of IQ
+There was a significant main effect on IQ (`r apa_print(model_word_4)$full_result$IQ_scale`), indicating that higher IQ results in higher word reading at T1. Moreover, there was a significant interaction between time and IQ (`r apa_print(model_word_4)$full_result$scaledays_center___FALSE_IQ_scale`), indicating that the participants with the highest IQ improved  most over the training period regardless of intervention condition (including control). 
+
+### Effect of PA
+There was a significant main effect on PA (`r apa_print(model_PA_word)$full_result$scalePA_center___TRUE`), indicating that higher PA resulted in higher word reading at T1. Moreover, there was a significant interaction between time and PA (`r apa_print(model_PA_word)$full_result$days_scalePA_center___TRUE`), indicating that the participants with the highest PA improved  most over the training period regardless of intervention condition (including control). 
 
 The results from the word models can be seen in Table\ \@ref(tab:word-table).
 
 ```{r word-table, include=TRUE, results='asis'}
-tab_model(model_word_3, model_word_4)
+tab_model(model_word_3, model_word_4, model_PA_word, show.df = TRUE)
+
 ```
 
 # Sentence reading
 
 ### Hypothesis 1a: Training phonemic reading strategies improves sentence reading. 
 
-There was not a significant interaction between time and the intervention on phonemic reading (`r apa_print(DLS_poisson_3)$full_result$scaledays_center___FALSE_contrast_1vs2`). 
+There was not a significant interaction between time and the intervention on phonemic training on sentence reading (`r apa_print(DLS_poisson_3)$full_result$scaledays_center___FALSE_contrast_1vs2`). 
 
 ### Hypothesis 1b: Training comprehension-based reading strategies improves sentence awareness. 
-There was no significant interaction between time and intervention for the comprehension-based reading strategy on word reading (`r apa_print(model_word_3)$full_result$scaledays_center___FALSE_contrast_1vs3`). 
+There was no significant interaction between time and intervention for the comprehension-based reading strategy on sentence reading (`r apa_print(DLS_poisson_3)$full_result$scaledays_center___FALSE_contrast_1vs3`). 
 
 ### Hypothesis 3: The combined training is more effective than either intervention on its own.
 
-There was a not significant interaction between the combined group and the other two intervention groups, (`r apa_print(model_PA_3)$full_result$scaledays_center___FALSE_contrast_4vs23`).
+There was a not significant interaction between the combined group and the other two intervention groups, (`r apa_print(DLS_poisson_3)$full_result$scaledays_center___FALSE_contrast_4vs23`).
 
-### Effect on IQ
-There was a significant main effect on IQ (`r apa_print(model_word_4)$full_result$IQ_scale`), indicating that higher IQ results in higher word reading at T1. Moreover, there was a significant interaction between time and IQ (`r apa_print(model_word_4)$full_result$scaledays_center___FALSE_IQ_scale`), indicating that the participants with the highest IQ improved  most over the training period regardless of intervention condition (inlcuding control). 
+```{r  DLS-plot, include = TRUE, results='asis'}
 
+#Plot data for DLS
+ggplot(data      = mlm_data,
+       aes(x     = days,
+           y     = DLS,
+           col   = group,
+           group = group))+ #to add the colours for different classes
+  geom_smooth(method   = lm,
+              se       = T,
+              size     = 1,
+              linetype = 1,
+              alpha    = .2)+
+  theme_minimal()+
+  labs(title    = "DLS over days",
+       subtitle = "change in sentence reading over time in the different groups")+
+  scale_color_manual(name   =" Group",
+                     labels = c("Control", "ALL", "Animega-is", "Combo"),
+                     values = c("blue", "red", "green", "yellow"))
+
+```
+
+## Exploratory analyses
+
+### Effect of IQ
+There was a significant main effect on IQ (`r apa_print(DLS_poisson_4)$full_result$IQ_scale`), indicating that higher IQ results in higher sentence reading at T1. Moreover, there was a significant interaction between time and IQ (`r apa_print(DLS_poisson_4)$full_result$IQ_scale_scaledays_center___FALSE`), indicating that the participants with the highest IQ improved  most over the training period regardless of intervention condition (including control). 
+
+### Effect of PA
+There was a significant main effect on PA (`r apa_print(model_PA_DLS)$full_result$scalePA_center___TRUE`), indicating that higher PA resulted in higher word reading at T1. However, there was not a significant interaction between time and PA (`r apa_print(model_PA_DLS)$full_result$scaledays_center___FALSE_scalePA_center___TRUE`), indicating that the participants' PA did not affect the improvement rate over the training period. 
 
 The results from the word models can be seen in Table\ \@ref(tab:DLS-table).
 
 ```{r DLS-table, include=TRUE, results='asis'}
-tab_model(DLS_poisson_3, DLS_poisson_4)
+tab_model(DLS_poisson_3, DLS_poisson_4, model_PA_DLS)
 ```
-
-
-### Hypotesis 2: Training phonemic or comprehension-based reading strategies improves reading ability. 
-
-There was no significant interaction between time and intervention, the intervention groups did not improve more than the comparison group on sentence reading (est =`r  summary(DLS_poisson_3)[10]$coefficients[4,][1] `, SE =`r  summary(DLS_poisson_3)[10]$coefficients[4,][2] `, *z* =`r  summary(DLS_poisson_3)[10]$coefficients[4,][3] `, *p*`r  p_small(summary(DLS_poisson_3)[10]$coefficients[4,][4]) `). 
-
-### Effect on IQ
-There was an almost significant main effect on IQ (est =`r  summary(DLS_poisson_4)[10]$coefficients[3,][1] `, SE =`r  summary(DLS_poisson_4)[10]$coefficients[3,][2] `, *z* =`r  summary(DLS_poisson_4)[10]$coefficients[3,][3] `, *p*`r  p_small(summary(DLS_poisson_4)[10]$coefficients[3,][4]) `), indicating that higher IQ results in higher word reading at the pretesting. Moreover, there was a significant interaction between time and IQ (est =`r  summary(DLS_poisson_4)[10]$coefficients[4,][1] `, SE =`r  summary(DLS_poisson_4)[10]$coefficients[4,][2] `, *z* =`r  summary(DLS_poisson_4)[10]$coefficients[4,][3] `, *p* =`r  summary(DLS_poisson_4)[10]$coefficients[4,][4] `, indicating that the participants with the highest IQ improved the most over time regardless of intervention. 
-
-### Hypothesis 3: The combined training is more effective than either intervention on its own.
-
-There was no significant interaction between the combined group and the other two intervention groups 
- (est =`r  summary(DLS_poisson_4)[10]$coefficients[4,][1] `, SE =`r  summary(DLS_poisson_4)[10]$coefficients[4,][2] `, *z* =`r  summary(DLS_poisson_4)[10]$coefficients[4,][3] `, *p*`r  p_small(summary(DLS_poisson_4)[10]$coefficients[4,][4]) `), the combined training did not improve sentence reading over time more than the other two intervention groups.
 
 # Explorative analyses
 ## Letter-sound recognition
+
+### Hypothesis 1a: Training phonemic reading strategies improves letter-sound recognition. 
+
+There was a significant interaction between time and the intervention on phonemic training on sentence reading (`r apa_print(model_letter_3)$full_result$scaledays_center___FALSE_contrast_1vs2`). 
+
+### Hypothesis 1b: Training comprehension-based reading strategies improves sletter-sound recognition. 
+There was no significant interaction between time and intervention for the comprehension-based reading strategy on sentence reading (`r apa_print(model_letter_3)$full_result$scaledays_center___FALSE_contrast_1vs3`). 
+
+### Hypothesis 3: The combined training is more effective than either intervention on its own.
+There was a not significant interaction between the combined group and the other two intervention groups, (`r apa_print(model_letter_3)$full_result$scaledays_center___FALSE_contrast_4vs23`).
+
+```{r  letter-plot, include = TRUE, results='asis'}
+
+#Plot data for letter
+ggplot(data      = mlm_data,
+       aes(x     = days,
+           y     = letter,
+           col   = group,
+           group = group))+ #to add the colours for different classes
+  geom_smooth(method   = lm,
+              se       = T,
+              size     = 1,
+              linetype = 1,
+              alpha    = .2)+
+  theme_minimal()+
+  labs(title    = "word reading over days",
+       subtitle = "change in letter-sound regognition over time in the different groups")+
+  scale_color_manual(name   =" Group",
+                     labels = c("Control", "ALL", "Animega-is", "Combo"),
+                     values = c("blue", "red", "green", "yellow"))
+```
+
+### Effect of IQ
+There was a significant main effect on IQ (`r apa_print(model_letter_4)$full_result$IQ_scale`), indicating that higher IQ results in higher sentence reading at T1. However, there was not a significant interaction between time and IQ (`r apa_print(model_letter_4)$full_result$scaledays_center___FALSE_IQ_scale`), indicating that the participants' IQ did not affect the improvement rate over the training period. 
+
+### Effect of PA
+There was a significant main effect on PA (`r apa_print(model_PA_letter)$full_result$scalePA_center___TRUE`), indicating that higher PA resulted in higher word reading at T1. Moreover, there was a significant interaction between time and PA (`r apa_print(model_PA_letter)$full_result$days_scalePA_center___TRUE`), indicating that the participants with the highest PA improved most over the training period regardless of intervention condition (including control). 
+
+The results from the word models can be seen in Table\ \@ref(tab:letter-table).
+
+```{r letter-table, include=TRUE, results='asis'}
+tab_model(model_letter_3, model_letter_4, model_PA_letter, show.df = TRUE)
+```
+
 
 # marginal and conditional R2  
 A marginal R2 close to zero tells us that the fixed effects aren’t explaining much variation, and a conditional R2 close to 1 tells us that most of that unexplained variation is between groups (people) rather than between observations within groups (people). So, for example, if the context was a longitudinal cohort study, we wouldn’t expect to improve our model much by collecting more data on characteristics/measures that mainly vary within people, but instead should find characteristics that mainly vary between people.
 
 
-
-### Prediction 1: Training phonemic or comprehension-based reading strategies improves lettter-sound recognition. 
-
-There was a significant interaction between time and intervention, the intervention groups improved more than the comparison group (`r apa_print(model_letter_3)$full_result$scaledays_center___FALSE_intervention_y_n`). 
-
-
-### Effect on IQ
-There was a significant main effect on IQ (est =`r  summary(model_letter_4)[10]$coefficients[4,][1] `, SE =`r  summary(model_letter_4)[10]$coefficients[4,][2] `, df =`r  summary(model_letter_4)[10]$coefficients[4,][3] `, *t* =`r  summary(model_letter_4)[10]$coefficients[4,][4] `, *p*`r  p_small(summary(model_letter_4)[10]$coefficients[4,][5]) `), indicating that higher IQ results in higher letter-sound recognition at the pretesting. However, there was no significant interaction between time and IQ (est =`r  summary(model_letter_4)[10]$coefficients[6,][1] `, SE =`r  summary(model_letter_4)[10]$coefficients[6,][2] `, df =`r  summary(model_letter_4)[10]$coefficients[6,][3] `, *t* =`r  summary(model_letter_4)[10]$coefficients[6,][4] `, *p*`r  p_small(summary(model_letter_4)[10]$coefficients[6,][5]) `), indicating that the participants benefited equally regardless of IQ of the intervention. 
-
-
-```{r letter-table, include=TRUE, results='asis'}
-tab_model(model_letter_3, model_letter_4)
-```
-
-
-```{r tra7in timeee in ddif3ferent groups}
-kruskal_test_TT <- kruskal.test(tot_train_time~group, data = mlm_data%>% filter(time == 1)%>% filter(group != "Control"))
-```
-
-### Prediction 2: The combined training is more effective than either intervention on its own.
-
-There was not a significant interaction between the combined group and the other two intervention groups  (est =`r  summary(model_letter_4)[10]$coefficients[4,][1] `, SE =`r  summary(model_letter_4)[10]$coefficients[4,][2] `, df =`r  summary(model_letter_4)[10]$coefficients[4,][3] `, *t* =`r  summary(model_letter_4)[10]$coefficients[4,][4] `, *p*`r  p_small(summary(model_letter_4)[10]$coefficients[4,][5]) `), the combined training did not improve letter-sound recognition over time more than the other two intervention groups.
-
-```{r trai5n timeee in ddif3ferent groups}
-kruskal_test_TT <- kruskal.test(tot_train_time~group, data = mlm_data%>% filter(time == 1)%>% filter(group != "Control"))
-```
-
-### Prediction 3: The PA training is more effective than either intervention on its own.
-
-There was a significant interaction between the ALL group and the other two intervention groups  (est =`r  summary(model_letter_4)[10]$coefficients[4,][1] `, SE =`r  summary(model_letter_4)[10]$coefficients[4,][2] `, df =`r  summary(model_letter_4)[10]$coefficients[4,][3] `, *t* =`r  summary(model_letter_4)[10]$coefficients[4,][4] `, *p*`r  p_small(summary(model_letter_4)[10]$coefficients[4,][5]) `), the ALL training improved letter-sound recognition over time more than the other two intervention groups.
-
 #Ska vi även redovisa om Animega-is var bättre än de andra grupperna på letter-sound recognition? - De var de inte.
-
-## Phonological awareness and predicting outcome of letter-sound recognition, word reading and sencente reading
-
-There was a significant interaction between PA, intervention and time (est =`r  summary(model_PA_letter)[10]$coefficients[8,][1] `, SE =`r  summary(model_PA_letter)[10]$coefficients[8,][2] `, df =`r  summary(model_PA_letter)[10]$coefficients[8,][3] `, *t* =`r  summary(model_PA_letter)[10]$coefficients[8,][4] `, *p*`r  p_small(summary(model_PA_letter)[10]$coefficients[8,][5]) `), indicating that PA ability at the beginning of the intervention predicts how much the participant will improve on letter-sound recognition. 
-
-There was almost a significant interaction between PA, intervention and time on neither word reading (est =`r  summary(model_PA_word)[10]$coefficients[8,][1] `, SE =`r  summary(model_PA_word)[10]$coefficients[8,][2] `, df =`r  summary(model_PA_word)[10]$coefficients[8,][3] `, *t* =`r  summary(model_PA_word)[10]$coefficients[8,][4] `, *p*`r  p_small(summary(model_PA_word)[10]$coefficients[8,][5]) `) and no significant interaction on sentence reading   (est =`r  summary(model_PA_DLS)[10]$coefficients[8,][1] `, SE =`r  summary(model_PA_DLS)[10]$coefficients[8,][2] `, df =`r  summary(model_PA_DLS)[10]$coefficients[8,][3] `, *t* =`r  summary(model_PA_DLS)[10]$coefficients[8,][4] `, *p*`r  p_small(summary(model_PA_DLS)[10]$coefficients[8,][5]) `) 
-
 
 # Results summary
 
