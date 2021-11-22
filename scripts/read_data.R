@@ -96,6 +96,8 @@ data_df <- full_join(data_df, student_survey, by = c("id"))
 
 #remove 403 due to testning not being done correctly 
 data_df <- data_df %>% filter(id != 403)
+#remove IQ over 90
+#data_df <- data_df %>% filter(is.na(IQ)|IQ<90)
 
 
 # teacher_rating <- data_df %>% select(id, synthesis,	segmentation,	sound_letter_connection,	understand_rhyme, decode_short_words, decode_complex_words, sight_word_reading,

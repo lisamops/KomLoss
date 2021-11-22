@@ -111,6 +111,8 @@ model_PA_word <- lmer(word ~ scale(days, center = FALSE)*contrast_1vs2 + scale(d
 
 #anova(DLS_poisson_2, DLS_poisson_2b)  #not sig.
 
+#anova(DLS_poisson, DLS_poisson_2)  # sig.
+
 DLS_poisson_3 <- glmer(DLS ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + (1+scale(days, center = FALSE)||id), data = mlm_data,family=poisson)
 #anova(DLS_poisson_2, DLS_poisson_3)  #not sig.
 

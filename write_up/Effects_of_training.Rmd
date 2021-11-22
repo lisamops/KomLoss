@@ -12,12 +12,9 @@ author:
     telephone number         : "+46-13281789"
   - name          : "Emil Holmer"
     affiliation   : "1,2"
-  - name          : "Jenny Samuelsson"
-    affiliation   : "3,4"
-  - name          : "Gunilla Thunberg"
-    affiliation   : "3,4"
-  - name          : "Mikael Heimann"
-    affiliation   : "1"
+  - name          : "More authors to be added"
+    affiliation   : "1, 2, 3,4"
+
 
 affiliation:
   - id            : "1"
@@ -147,20 +144,22 @@ In Sweden, special schools are open for children with an ID diagnosis^1. The rec
 
 [^1]:In Sweden, the diagnosis Intellectual Disability is made after a thorough assessment by a licensed psychologist according to criteria from the DSM-5 [@APA2013].
 
-##Behavioral measures 
+##Behavioral measures   
 Non-verbal intelligence and reading measures were collected. 
 
-###Non-verbal intelligence
-
+###Non-verbal intelligence  
 The participants’ IQ were calculated based on The Raven’s 2 Progressive Matrices Clinical Edition (Raven’s 2; *Raven, Rust, Chan, & Zhou, 2018*). 
 
-###Phonological awareness
-Three subtests from MiniDUVAN (Wolff, 2013) were used to assess phonological awareness skills: A2 Rhyme identification, A3 Phoneme identification, and B4 Phoneme synthesis. The dependent measure was total number of correct answers across all subtests (max = 45). 
-###Letter-sound knowledge
-...
-###Word reading
-OS64 (Nielsen et al., 1997) and OLAF (Magnusson & Naucler, 2010) were used to assess word reading skills. However, the presentation of tasks, and response modes, were adapted to suit the participants in this project. In OS64, ... matched a written word to a widgit symbol. In OLAF, written words were matched to pictures. The dependent measure was the total number of correct answers (max = 15 for OS64, and max = 20 for OLAF). 
-###Sentence reading 
+###Phonological awareness  
+Three subtests from MiniDUVAN (Wolff, 2013) were used to assess phonological awareness skills: A2 Rhyme identification, A3 Phoneme identification, and B4 Phoneme synthesis. The dependent measure was total number of correct answers across all subtests (max = 45).  
+
+###Letter-sound knowledge  
+To be added...
+
+###Word reading  
+OS64 (Nielsen et al., 1997) and OLAF (Magnusson & Naucler, 2010) were used to assess word reading skills. However, the presentation of tasks, and response modes, were adapted to suit the participants in this project. In OS64, ... matched a written word to a widgit symbol. In OLAF, written words were matched to pictures. The dependent measure was the total number of correct answers (max = 15 for OS64, and max = 20 for OLAF).  
+
+###Sentence reading  
 In DLS Bas (Järpsten, 2004) the participants read short sentences and match these to their corresponding pictures. The dependent measure was the total number of correct answers (max = 20).
 
 ## Instruction materials: ALL and Animega-is
@@ -237,14 +236,14 @@ var_names <- as.data.frame(c( "Age", "IQ","Trained time"))
  
 descTable <- bind_cols(var_names, Means_cont, SDs_cont, Range_cont, Means_all, SDs_all, Range_all, Means_animega, SDs_animega, Range_animega, Means_combi, SDs_combi, Range_combi)
 
-col.names = c(" ", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$")
+col.names = c(" ", "$M_{control}$", "$SD_{control}$", "$(Range)_{control}$", "$M_{all}$", "$SD_{all}$", "$(Range)_{all}$", "$M_{animega-is}$", "$SD_{animega-is}$", "$(Range)_{animega-is}$", "$M_{combi}$", "$SD_{combi}$", "$(Range)_{combi}$")
 
 #TODO Cannot get table to print two decimals.
 apa_table(
   descTable
   , caption = "Descriptive statistics of included variables presented by group"
   , note = "Chronological is are presented in years."
-  , col_spanners = list("Control" = c(2, 4), "ALL" = c(5, 7), "Animega" = c(8, 10), "Combi" = c(11, 13)) # N.B. ignored in Word
+  , col_spanners = list("Control" = c(2, 4), "ALL" = c(5, 7), "Animega-ia" = c(8, 10), "Combi" = c(11, 13)) # N.B. ignored in Word
   , col.names = col.names
   , row.names = FALSE
   , align = c('l', 'c')
@@ -252,7 +251,6 @@ apa_table(
 )
 
 ```
-
 
 ```{r desc-read-control-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
@@ -291,7 +289,7 @@ var_names <- as.data.frame(c( "Letter", "Word","Sentence", "PA"))
 
 descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
-col.names = c(" ", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$")
+col.names = c(" ", "$M_{T1}$", "$SD_{T1}$", "$(Range)_{T1}$", "$M_{T2}$", "$SD_{T2}$", "$(Range)_{T2}$", "$M_{T3}$", "$SD_{T3}$", "$(Range)_{T3}$", "$M_{T4}$", "$SD_{T4}$", "$(Range)_{T4}$")
 
 #TODO Cannot get table to print two decimals.
 apa_table(
@@ -340,7 +338,7 @@ var_names <- as.data.frame(c( "Letter", "Word","Sentence", "PA"))
 
 descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
-col.names = c(" ", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$")
+col.names = c(" ", "$M_{T1}$", "$SD_{T1}$", "$(Range)_{T1}$", "$M_{T2}$", "$SD_{T2}$", "$(Range)_{T2}$", "$M_{T3}$", "$SD_{T3}$", "$(Range)_{T3}$", "$M_{T4}$", "$SD_{T4}$", "$(Range)_{T4}$")
 
 #TODO Cannot get table to print two decimals.
 apa_table(
@@ -355,7 +353,6 @@ apa_table(
 )
 
 ```
-
 
 ```{r desc-read-animega-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
@@ -390,7 +387,7 @@ var_names <- as.data.frame(c( "Letter", "Word","Sentence", "PA"))
 
 descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
-col.names = c(" ", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$")
+col.names = c(" ", "$M_{T1}$", "$SD_{T1}$", "$(Range)_{T1}$", "$M_{T2}$", "$SD_{T2}$", "$(Range)_{T2}$", "$M_{T3}$", "$SD_{T3}$", "$(Range)_{T3}$", "$M_{T4}$", "$SD_{T4}$", "$(Range)_{T4}$")
 
 #TODO Cannot get table to print two decimals.
 apa_table(
@@ -439,7 +436,7 @@ var_names <- as.data.frame(c( "Letter", "Word","Sentence", "PA"))
 
 descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
-col.names = c(" ", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$", "$M$", "$SD$", "$(Range)$")
+col.names = c(" ", "$M_{T1}$", "$SD_{T1}$", "$(Range)_{T1}$", "$M_{T2}$", "$SD_{T2}$", "$(Range)_{T2}$", "$M_{T3}$", "$SD_{T3}$", "$(Range)_{T3}$", "$M_{T4}$", "$SD_{T4}$", "$(Range)_{T4}$")
 
 #TODO Cannot get table to print two decimals.
 apa_table(
@@ -701,11 +698,9 @@ tab_model(model_letter_3, model_letter_4, model_PA_letter, show.df = TRUE)
 A marginal R2 close to zero tells us that the fixed effects aren’t explaining much variation, and a conditional R2 close to 1 tells us that most of that unexplained variation is between groups (people) rather than between observations within groups (people). So, for example, if the context was a longitudinal cohort study, we wouldn’t expect to improve our model much by collecting more data on characteristics/measures that mainly vary within people, but instead should find characteristics that mainly vary between people.
 
 
-#Ska vi även redovisa om Animega-is var bättre än de andra grupperna på letter-sound recognition? - De var de inte.
-
 # Results summary
 
-Combination group improves more on PA compared to the other intervention groups. PA intervention improves letter-sound recognition more than other intervention groups. IQ influences improvement over time on many outcome measures (sammanfatta vilka här). PA interacts with time on letter-sound recognition, word reading and sentence reading, suggesting that PA predicts improvement in those outcome variables. 
+Combination group improves more on PA compared to the other intervention groups. ALL intervention improves letter-sound recognition more than other intervention groups. IQ influences improvement over time on many outcome measures (sammanfatta vilka här). PA interacts with time on letter-sound recognition, word reading and sentence reading, suggesting that PA predicts improvement in those outcome variables. 
 
 # Discussion
 Blablablablalba
