@@ -62,7 +62,7 @@ model_PA_3 <- lmer(PA ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_
 model_PA_4 <- lmer(PA ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_4vs23 + days*IQ_scale + (1|id), data = mlm_data, REML = FALSE)
 
 #Conclusion: Combi groups improves more than other intervention groups. IQ can explain how well the participants are developing over time 
-#(higher IQ = better improvement). Thus, might underestimate the effect of the combigroup due to Animega-is group having higher IQ.
+#(higher IQ = better improvement). Thus, might underestimate the effect of the combi group due to Animega-is group having higher IQ.
 
 # WORD ####
 
@@ -93,7 +93,7 @@ model_word_4 <- lmer(word ~ scale(days, center = FALSE)*contrast_1vs2 + scale(da
 # Explorativ analys: Kan PA predicera utvecklingen av letter sound, ordläsining och meningsläsning över tid? nja! ####
 model_PA_word <- lmer(word ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23  + IQ_scale*scale(days, center = FALSE) + scale(days, center = FALSE)*scale(PA, center = TRUE) + (1|id), data = mlm_data, REML = FALSE)
 
-#summary(model_PA_word)
+summary(model_PA_word)
 
 # DLS ####
 
