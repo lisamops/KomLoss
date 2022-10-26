@@ -652,10 +652,10 @@ tab_model(DLS_poisson_3, DLS_poisson_4, model_PA_DLS)
 
 ### Hypothesis 1a: Training phonemic reading strategies improves letter-sound recognition. 
 
-There was a significant interaction between time and the intervention on phonemic training on sentence reading (`r apa_print(model_letter_3)$full_result$scaledays_center___FALSE_contrast_1vs2`). 
+There was a significant interaction between time and the intervention on phonemic training on letter-sound recognition (`r apa_print(model_letter_3)$full_result$scaledays_center___FALSE_contrast_1vs2`). 
 
 ### Hypothesis 1b: Training comprehension-based reading strategies improves sletter-sound recognition. 
-There was no significant interaction between time and intervention for the comprehension-based reading strategy on sentence reading (`r apa_print(model_letter_3)$full_result$scaledays_center___FALSE_contrast_1vs3`). 
+There was no significant interaction between time and intervention for the comprehension-based reading strategy on letter-sound recognition (`r apa_print(model_letter_3)$full_result$scaledays_center___FALSE_contrast_1vs3`). 
 
 ### Hypothesis 3: The combined training is more effective than either intervention on its own.
 There was a not significant interaction between the combined group and the other two intervention groups, (`r apa_print(model_letter_3)$full_result$scaledays_center___FALSE_contrast_4vs23`).
