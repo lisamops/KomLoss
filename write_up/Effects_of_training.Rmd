@@ -1,70 +1,49 @@
 ---
-title             : "Digital media supporting literacy learning in children with communicative and cognitive disabilities"
-
-shorttitle        : "Digital media supporting literacy learning"
-
-author: 
-  - name          : "Lisa Palmqvist"
-    affiliation   : "1,2"
-    corresponding : yes    # Define only one corresponding author
-    address       : "IBL, Linköping University, 581 83 Linköping, Sweden"
-    email         : "lisa.palmqvist@liu.se"
-    telephone number         : "+46-13281789"
-  - name          : "Emil Holmer"
-    affiliation   : "1,2"
-  - name          : "More authors to be added"
-    affiliation   : "1, 2, 3,4"
-
-
-affiliation:
-  - id            : "1"
-    institution   : "Department of Behavioural Sciences and Learning, Linköping University"
-  - id            : "2"
-    institution   : "The Swedish Institute of Disability Research"
-  - id            : "3"
-    institution   : "DART"
-  - id            : "4"
-    institution   : "GU"
-
-    
-date              : "`r format(Sys.time(), '%d %B, %Y')`"
-
+title: Digital media supporting literacy learning in children with communicative and
+  cognitive disabilities
+author:
+- name: Lisa Palmqvist
+  affiliation: '1,2'
+  corresponding: yes
+  address: IBL, Linköping University, 581 83 Linköping, Sweden
+  email: lisa.palmqvist@liu.se
+  telephone number: "+46-13281789"
+- name: Emil Holmer
+  affiliation: '1,2'
+- name: More authors to be added
+  affiliation: 1, 2, 3,4
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: word_document
+shorttitle: Digital media supporting literacy learning
 abstract: |
   (ref:abstract)
-  
-  
-keywords          : "Intellectual disability, litteracy learning, phonological awareness,  phonemic reading strategy, comprehension-based reading, intervention."
-wordcount         : " "
-bibliography      : ["library.bib"]
-
-figsintext        : no
-figurelist        : no
-tablelist         : no
-footnotelist      : no
-lineno            : yes
-
+keywords: "Intellectual disability, litteracy learning, phonological awareness,  phonemic
+  reading strategy, comprehension-based reading, intervention."
+wordcount: ' '
+bibliography: library.bib
+figsintext: no
+figurelist: no
+tablelist: no
+footnotelist: no
+lineno: yes
 header-includes:
-  - \usepackage{setspace}
-  - \AtBeginEnvironment{tabular}{\singlespacing}
-  - \AtBeginEnvironment{lltable}{\singlespacing}
-  - \AtBeginEnvironment{tablenotes}{\doublespacing}
-  - \captionsetup[table]{font={stretch=1.5}}
-  - \captionsetup[figure]{font={stretch=1.5}}
-
-lang              : "english"
-class             : "man"
-#output            : papaja::apa6_pdf
-#output            : papaja::apa6_word
-# output:
-#   html_document:
-#     theme         : "spacelab"
-#     df_print      : "kable"
-#     code_folding  : "show"
-#     toc           : true
-#     toc_float     : true
-
-
-
+- \usepackage{setspace}
+- \AtBeginEnvironment{tabular}{\singlespacing}
+- \AtBeginEnvironment{lltable}{\singlespacing}
+- \AtBeginEnvironment{tablenotes}{\doublespacing}
+- \captionsetup[table]{font={stretch=1.5}}
+- \captionsetup[figure]{font={stretch=1.5}}
+lang: english
+class: man
+affiliation:
+- id: '1'
+  institution: Department of Behavioural Sciences and Learning, Linköping University
+- id: '2'
+  institution: The Swedish Institute of Disability Research
+- id: '3'
+  institution: DART
+- id: '4'
+  institution: GU
 ---
 
 ```{r setup, include=FALSE}
