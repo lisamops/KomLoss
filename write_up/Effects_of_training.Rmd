@@ -14,6 +14,7 @@ author:
   affiliation: 1, 2, 3,4
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 #output: word_document
+#output: pdf_document
 shorttitle: Digital media supporting literacy learning
 abstract: |
   (ref:abstract)
