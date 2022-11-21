@@ -7,19 +7,20 @@ author:
   corresponding: yes
   address: IBL, Linköping University, 581 83 Linköping, Sweden
   email: lisa.palmqvist@liu.se
-  telephone number: "+46-13281789"
+  telephone number: +46-13281789
 - name: Emil Holmer
   affiliation: '1,2'
 - name: More authors to be added
   affiliation: 1, 2, 3,4
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-#output: word_document
-#output: pdf_document
-shorttitle: Digital media supporting literacy learning
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
 abstract: |
   (ref:abstract)
-keywords: "Intellectual disability, litteracy learning, phonological awareness,  phonemic
-  reading strategy, comprehension-based reading, intervention."
+keywords: Intellectual disability, litteracy learning, phonological awareness,  phonemic
+  reading strategy, comprehension-based reading, intervention.
 wordcount: ' '
 bibliography: library.bib
 figsintext: no
@@ -45,6 +46,7 @@ affiliation:
   institution: DART
 - id: '4'
   institution: GU
+shorttitle: Digital media supporting literacy learning
 ---
 
 ```{r setup, include=FALSE}
@@ -100,10 +102,7 @@ p_small <- function(value){
 
 # Introduction
 
-Children with intellectual and communicative disabilities may be among the most socially disadvantaged student categories. Failing in acquiring literacy skills is a serious and common problem. The purpose of this project is to investigate the effects of two specific digital literacy learning tools (apps) on the acquisition of literacy skills in children with intellectual disability and who are reliant on augmentative and alternative communication, AAC. This means that they need aids such as manual signing, symbols/pictures, speech-generating devices, etc. to understand and/or express themselves. 
-
-We will recruit children with intellectual disability of different etiologies from special needs schools. The age range will be broad. The children will be assigned to one of three interventions or to a comparison group that will receive teaching-as-usual (TaU). The three interventions are: 1) the ALL-Accessible Literacy Learning app (phonemic strategies); the Animega-is app (comprehension-based strategies); 3) a combination of both ALL and Animega-is. The children’s literacy development during a 12-week intervention period will be compared across the four different groups. In line with a previous study targeting children in reading difficulties (Gustafson et al., 2011), we expect a positive effect on reading and phonological awareness across all intervention groups, with the largest effect in the group receiving the combined intervention.
-Hypotheses
+to be added...  
 
 ## Hypotheses
 
@@ -117,66 +116,69 @@ The hypotheses will be tested on these outcome variables: phonological awareness
 
 # Methods
 
-## Participants
-Participants were recruited from special needs schools in southern Sweden, after consent of the school’s principal. Participating children  gave oral consent at the beginning of the first test session and  prior to the study, caregivers signed an informed consent, regarding the confidentiality of data and group-level analysis. The study follows the Ethical principles for medical research involving human subjects from the WMA Declaration of Helsinki [@WorldMedicalAssociation2013]. The study was reviewed and approved by the Ethical Review Board, Sweden (*insert dr no*).
+Data presented in this paper is collected in a larger project. Parts of the data has been used for this paper, for the purpose of this paper we have excluded for speech sound production which have been published in Samuelsson et al., (under revision). For a full description of collected data see (Palmqvist, Samuelsson, et al., 2020).
 
-In Sweden, special schools are open for children with an ID diagnosis^1. The recruitment process resulted in `r printnum(length(background_raven$id), numerals = T) ` participants ($n_{girls}$ = `r length((background_raven %>% filter(gender == "Girl"))$id) `, $n_{boys}$ = `r length((background_raven %>% filter(gender == "Boy"))$id)`). However, one participant was excluded from the study due to testing not being followed as per protocol, and the final sample thus included `r printnum(length((mlm_data %>% filter(time == 1))$id), numerals = T) ` participants (for demographics, see Table ...). Data on diagnoses were collected using parental surveys. The diagnoses in the ID group can be seen in Table\ \@ref(tab:diagnosis-table).
+## Participants  
+Inclusion criteria was to attend to a Swedish special needs school, to benefit from AAC, and to be a beginner at reading. To attend the Swedish special needs curriculum, the student has received an ID diagnosis after an assessment led by a licensed psychologist. The teachers were instructed to identify students that would benefit from AAC and could not read more than approx. 20 words. No exclusion criteria were set for age or aetiology of the ID.  
+The participants were requited via email to teachers at special needs schools in Sweden. To reduce the risk of having unbalanced groups, the teachers were asked to, together with their notification of interest, specify how many students in their class that fulfilled the inclusion criteria and what level of ID the students had. Thereafter, the plan was for a researcher to allocate the participants on school level to the different intervention groups. However, only 60 participants were requited, and data collection had to start due to time constraints. Thus, the participants could only be assigned to two groups, namely the comparison and the ALL group. The remainder of the participants were recruited after the data collection of the comparison and ALL group had started. The participants to the Animega-is and Combination group was recruited and allocated in the same way as described above. This resulted in the groups not being equated on level of ID, see the result section.  
+Caregivers signed an informed consent regarding the confidentiality of data and group-level analysis. The participating children gave oral consent at the beginning of the first test session. The study follows the Ethical principles for medical research involving human subjects from the WMA Declaration of Helsinki (World Medical Association 2013). The study was reviewed and approved by the Ethical Review Board, Sweden (2020-06215).   
 
-[^1]:In Sweden, the diagnosis Intellectual Disability is made after a thorough assessment by a licensed psychologist according to criteria from the DSM-5 [@APA2013].
+## Design  
+The study is a longitudinal between-group study, with four time points (before, during, after the intervention and a follow-up). Three intervention groups: one applying a phonics-based reading strategy (using ALL), one applying a comprehension-based strategy (using Animega-is), and the third applying both strategies (using ALL and Animega-is), and a comparison group who received regular teaching, not focusing one specific reading instruction strategy. Due to practical reasons, students were allocated to intervention groups on school-level, i.e., all participants at one school received the same intervention. 
 
-##Behavioral measures   
-Non-verbal intelligence and reading measures were collected. 
+## Procedure  
+Testing took place in a silent environment at the participants’ school. The students were offered to have a teacher or an assistant present during the assessment. The students’ reading ability were assessed at four times, before (t1), during (t2; approx. at half-time), and after the intervention (t3) as well as at a 12-week follow-up (t4). For most of the test situations, t1 and t3 were administered by researchers, t2 and t4 were administered by a special need teacher or a school-based speech and language pathologist. Data was collected during the Covid19-pandemic, January 2020 to June 2021, thus, the test administrators were interchanged as schools introduced restrictions for visitors. Test administrators practiced the test procedure before data collection began. Test order was fixed over sessions and students. The test session lasted ~45-75 minutes, including short breaks. During breaks, students were offered a small snack, water, or to move around in the room for a few minutes.   
+The literacy training took place in the participants’ school. The teachers were instructed to allow the students to train for 300 minutes (20 sessions for 15 min, five days a week for four weeks). The teachers were asked to not assist in solving the tasks for the children. The teacher was asked to administer the training as they saw fit for each student, meaning that they were able to split the training sessions into smaller sessions or train individually, or in group.  
 
-###Non-verbal intelligence  
-The participants’ IQ were calculated based on The Raven’s 2 Progressive Matrices Clinical Edition (Raven’s 2; *Raven, Rust, Chan, & Zhou, 2018*). 
-
-###Phonological awareness  
-Three subtests from MiniDUVAN (Wolff, 2013) were used to assess phonological awareness skills: A2 Rhyme identification, A3 Phoneme identification, and B4 Phoneme synthesis. The dependent measure was total number of correct answers across all subtests (max = 45).  
-
-###Letter-sound knowledge  
-To be added...
-
-###Word reading  
-OS64 (Nielsen et al., 1997) and OLAF (Magnusson & Naucler, 2010) were used to assess word reading skills. However, the presentation of tasks, and response modes, were adapted to suit the participants in this project. In OS64, ... matched a written word to a widgit symbol. In OLAF, written words were matched to pictures. The dependent measure was the total number of correct answers (max = 15 for OS64, and max = 20 for OLAF).  
-
-###Sentence reading  
-In DLS Bas (Järpsten, 2004) the participants read short sentences and match these to their corresponding pictures. The dependent measure was the total number of correct answers (max = 20).
-
-## Instruction materials: ALL and Animega-is
-
-
-## Procedure
-The training took place in the participants’ school. The participants trained in a group in schools and the teachers were instructed to allow the students to train for 300 minutes (20 sessions for 15 min, five days a week for four weeks). The teachers were asked to let the participants train by themselves and to not assist in solving the tasks for the children. No verbal or written instructions were given to the participants. A research group member attended the first training session to instruct how to operate the tablet and program. All included participants that attended the same class also trained in the same room. However, in some cases only one student in the class participated in the study. Thus, sometimes the participants trained in a group and sometimes the participant sat by themselves, but the participant always trained on their own.
-
-### Time
+## Time  
 The children were tested on four occasions, before the intervention, half way through the intervention, right after the intervention, and at a six week follow-up after the intervention had stopped. Due to practical and external reasons (e.g. restrictions and sick leave due to the COVID-19 pandemic), the testing could not be done with the same intervals for all children. Thus, time was coded as an interval variable rather than a categorical, using days and the first testing time set to 0. 
 
-### Training time
+## Training time  
 Training time was extracted from time spent training in the program and was measured in minutes. 
 
-## Data analysis
-The $\alpha$-value was set to 0.05.
+## Behavioral measures   
+The participants were assessed on non-verbal intelligence, letter-sound-knowledge, phonological awareness, word reading, and sentence reading (in that order). All tests started with two practice items, except letter-sound knowledge. All tests were adapted so that the student was able to give a non-verbal response option if preferred. All instructions were presented verbally in combination with complementary manual signs and pictures. A test was terminated if the student gave three consecutive incorrect responses, except for Raven’s where the test was terminated after six consecutive incorrect responses.
 
-For all our analyses, we used `r cite_r("r-references.bib")`. DETTA MÅSTE KOMPLETTERAS SÅ ATT RÄTT REFERENSER KOMMER MED.
+### Non-verbal intelligence  
+To estimate the participants’ IQ level, the Raven’s 2 Progressive Matrices Clinical Edition (Raven’s 2; Raven, Rust, Chan, & Zhou, 2018) was used. The three first modules (A, B, and C) were used, with a total of 36 items. IQ was calculated following the standardized procedure of the test and this was used as the dependent measure (with a minimum score of 40). 
 
+### Letter-sound knowledge
+The letter-sound knowledge task contained eight target letters. Four consonants and four vowels. Four were presented as capital letters (L, D, A, and Ö), and four as lowercase letters (g, o, k, and å). The letters were selected based on both production place, manners, and graphic representation. Each target letter was presented with three lures on a white A4-sheet in black font Arial, size 130. The student was instructed to point to the letter corresponding to a sound (e.g., /l/, /d/) uttered by the test administrator. The dependent variable was total number correctly identified letters (0-8).
 
-### Statistical analysis
-In the preregistration, it was stated that mixed ANOVAs was going to be used. However, due to the children not being tested with the same time intervals, missing data, and the groups not being matched on IQ, linear mixed-effects models with repeated measures was used to analyze the effects of the interventions. Linear mixed-effects models are superior to ANOVA when dealing with missing data, and the difference in IQ and time intervals for testing (@kalla). Models were fitted with the lme4 package (@kalla) in R using using maximum likelihood and missing data was handled under the less restrictive assumption of missing at random. The assumption of linearity was tested by plotting the model-predicted values to the observed ones, homogeneity of variance was tested by plotting the residuals vs. fitted values. To check that the residuals of the model were normally distributed using a QQ plot. For the sentence reading, the residuals were non-normally distributed, thus a Generalized linear mixed-model with a Poisson distribution was used rather than a Gaussian distribution.
+### Phonological awareness  
+To assess phonological awareness skills the subtests Phoneme synthesis, Phoneme identification, and Rhyme identification from MiniDUVAN (Wolff, 2013) were administered.  Each subtest constituted of two practice items followed by nine test items. In the subtest Phoneme synthesis, the test leader pronounced a word segmented by three to five sounds. The participant was asked to identify the correct word by choosing between three pictures, one representing the correct word and two lures. For example, the test leader said “can you point at /s/ /u/ /n/”, with a break between each sound on approximately one second. In the subtest Phoneme identification, the participant was presented with a picture of the sun and asked to point to another picture with an object with the same initial phoneme in its name (e.g., “This is a sun. Sun starts with /s/. Point to the picture that start with the same sound /s/.”). The target phoneme was the same for all items. Three pictures were presented, one target and three lures. In the last subtest, Rhyme identification, the participant was asked to say whether two spoken words rhymed or not (e.g., “does hat – cat rhyme?”). The participant could choose to respond verbally, by pointing to pictures representing “yes” or “no”, or using a personal AAC mode. The dependent variable was total number of correct answers across all subtests (0-27).  
 
-### Procedure modelling building
-The effects of the interventions were evaluated on the four different outcome measures separately. The outcome measures were phonological awareness (PA), word reading, sentence reading, and letter-sound recognition. To evaluate the effects of the interventions, we first build an unconditional model (Model 1) with time as a fixed effect and participants as a random intercept. Thereafter, we added time as a random intercept (Model 2) and compared it to Model 1. If Model 2 were significantly better than Model 1, we included time as a random intercept, otherwise time was only included as a fixed effect. To test Hypothesis 1 and 2 respectively, we build a conditional model, Model 3, were we added intervention as a binary variable (0 = comparison group, 1 = intervention groups). Thereafter, we added IQ as a control variable in Model 4 to see if it interacted with the effect of the intervention. Only Model 3 and Model 4 will be presented in the result section, the other models can be found in the supplements. Thereafter, we investigated Hypothesis 3, if the combined training was more effective than the ALL and Animega-is on their own. The same procedure of model building was repeated for this hypothesis testing. 
+### Word recognition  
+Two tests were used to assess word recognition skill; OS64 (Magnusson & Naucler, 2010) and OLAF (Magnusson & Naucler, 2010). In both tests, the student was asked to match a written word to a picture. Widget symbols were added to OS64 to enable non-verbal response. As the test had different number of maximum scores (OS64: 0-15, OLAF: 0-13), z-values were calculated based on the number of correct responses and a mean z-score was used as a dependent variable.  
 
-### Covariance structure
-Random effects were fitted with both no covariance structure (variance components) and an unstructured variance-covariance matrix. The unstructured covariance-matrix was used if it significantly improved the model, otherwise the less complex (?), no covariance structure was used.
+### Reading comprehension   
+In DLS Bas (Järpsten, 2004) the participant read short sentences and matched them to their corresponding picture. The degree of difficulty increased with each sentence, starting with a two-word sentence, and ending with a task consisting of two sentences with a total of 11 words. The dependent measure was total number of correct answers (max = 20).
 
+## Materials: ALL and Animega-is  
 
-### Model comparison
-Models were compared using an ANOVA (or loglikelihoodtest och chi2, tror det är samma måste jämföra med Emil) when the same amount of parameters were estimated in the models and by using AIC scores when different parameters were used (ELLER HUR SKA VI GÖRA?). 
+### A digital comprehension-based app: Animega-is  
+Animega-is has two different learning modes and both are adapted for use with AAC. In the create mode, the learner creates events with the help of text buttons, which are then followed by a animation corresponding to the event that was created. In the test mode, the learner can test his or her proficiency by first viewing the event, then choosing words and creating the sentence that best represents what he or she has just viewed. The app provides several levels of complexity as well as in-built comprehension tests. 
+The  app provides several  levels  of complexity  as  well  as in-built  comprehension  tests. The  language  matter  of  the  program  is meant to be explored by the learner with help from -and in interaction with –a teacher. The language material and the appended animations not only offer motivational literacy training but also give room for conversations where the learner can express his or her imagination and thoughts. The goal is to achieve an errorless co-construction of meaning from text through multimedia and supportive interaction. There is also an editing possibility for the teacher to use. Here, the animations can be individualized by adding photos relevant to the child’s environment.
 
-# Results
+### A digital phonic-based app: Accessible Literacy Learning  
+The Accessible Literacy Learning (ALL) program is a program for literacy instruction for children with complex communication needs especially children with AAC (Light et al., 2008; Light & McNaughton, 2012, 2014). Only the modules using phonic training was used. The reading instruction includes: sound blending, phoneme segmentation, letter-sound correspondences, and phonological decoding. The exercises were accompanied by pictorial material/images to enable participation without speech. 
+
+## Statistical analysis  
+Linear mixed-effects models were used to evaluate the effects of the intervention. In the pre-registration, we stated that mixed ANOVA was going to be used. However, due to the children not being tested with the same time intervals (due to logistic reasons), missing data, and the groups differing on IQ, linear mixed-effects models with repeated measures were used to analyze the effects of the interventions. Linear mixed-effects models are better suited compared to ANOVA when dealing with missing data and varying time intervals (källa). Models were fitted using the lme4 package (källa) in R. Maximum likelihood estimation was applied and missing data was handled under the assumption of missing at random. The assumption of linearity was tested by plotting the model-predicted values to the observed ones and homogeneity of variance was tested by plotting the residuals vs. fitted values. To check that the residuals of the model were normally distributed, Q-Q plots were investigated with an ocular inspection. The α-value was set to 0.05.
+
+### Model building  
+The four different outcome measures (PA, word reading, sentence reading, and letter-sound recognition) were analyzed separately. Days were used as the time variable, starting day 1 at the date of t1. Model fit was assessed using ANOVA. The model with the best fit, indicated with Chi2, was chosen. For the model on sentence reading, residuals were non-normally distributed. Therefore, a Poisson distribution was used. The two models were compared, and the model with Poisson distribution was much better in terms of AIC and loglikelihood compared to a model with Gaussian distribution.
+Model 1, with an unconditional model including a fixed effect of time was built first. Random effects were thereafter fitted with both no covariance structure (variance components) (Model 2a), and an unstructured variance-covariance matrix (Model 2b). The unstructured covariance-matrix was used if it significantly improved the model, otherwise the less complex (?) no covariance structure was used. Random slope was used in the succeeding models when investigating the effects of the intervention if Models 2a or b had a better fit than Model 1, otherwise no random slope was used. This procedure was repeated for each outcome measure. As a result, random slopes were included in the models for the variables word reading, sentence reading, and letter-sound knowledge. No random slope was used in the PA model.  
+After fitting the unconditional models, a conditional model (Model 3) was built using contrasts to test the Hypotheses. There were three contrasts performed: comparison group versus phonic-based (Hypothesis 1), comparison versus comprehension-based (Hypothesis 2), combination versus phonic-based and comprehension-based (Hypothesis 3). As the groups differed in terms of IQ, we added IQ as a covariate in Model 4 for each outcome measure, to see if this variable could explain the observed differences. To test this, a fixed effect of IQ, and an interaction between IQ and the fixed effect of time, was added in Model 4. Only Model 4 is presented in the result section, the other models can be found in the supplements. For sentence reading, the model with IQ did not converge, thus one model with the group contrasts and one model with IQ but without group contrasts are presented.
+
+# Results  
+The recruitment process resulted in `r printnum(length(background_raven$id), numerals = T) ` participants ($n_{girls}$ = `r length((background_raven %>% filter(gender == "Girl"))$id) `, $n_{boys}$ = `r length((background_raven %>% filter(gender == "Boy"))$id)`). However, one participant was excluded from the study due to testing not being followed as per protocol, and the final sample thus included `r printnum(length((mlm_data %>% filter(time == 1))$id), numerals = T) ` participants (for demographics, see Table ...). Data on diagnoses were collected using parental surveys. The diagnoses in the ID group can be seen in Table\ \@ref(tab:diagnosis-table).
 The descriptive statistics for all variables on each assessment time can be seen in Table\ \@ref(tab:descriptives-table).
 
+
 ```{r descriptives-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+
+#FUNKAR INTE!
 
 mlm_data <- mlm_data %>% dplyr::mutate(years_old = age_in_days/365)
 
@@ -186,7 +188,18 @@ desc_data$group <- as.numeric(desc_data$group)
 desc_data$years_old <- as.numeric(desc_data$years_old)
 
 descriptives_time <- desc_data  %>% filter(time == 1) %>% group_by(group) %>%
-   summarize_all(list(Mean=~mean(., na.rm = T),  SD=~sd(., na.rm = T), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+   summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+
+# Skapar en tabell med n i vaje grupp för varje variabel. Osäker på om den behövs, kanske räcker med att skriva i löptext när vi säger vilka data som saknas. 
+# not.na = function(x) {sum(!is.na(x))}
+# stats = c('not.na')
+# n_table = desc_data %>%
+#  filter(time == 1) %>%
+#   group_by(group) %>% summarise_all(.funs = stats)
+
+kruskal_test_IQ <- kruskal.test(IQ~group, data = mlm_data %>% filter(time == 1)) 
+kruskal_test_years_old <- kruskal.test(years_old~group, data = mlm_data %>% filter(time == 1)) 
+kruskal_test_TT <- kruskal.test(tot_train_time~group, data = mlm_data%>% filter(time == 1)%>% filter(group != "Control"))
  
 #descriptives[, -1] <- printnum(descriptives[, -1])
 desc_time <- as.data.frame(t(descriptives_time))
@@ -195,6 +208,8 @@ descriptives_cont <- dplyr::select(desc_time, "V1")
 descriptives_all <- dplyr::select(desc_time, "V2")
 descriptives_animega <- dplyr::select(desc_time, "V3")
 descriptives_combi <- dplyr::select(desc_time, "V4")
+
+N_group <- slice(descriptives_cont, 3:5) 
 
 Means_cont <- slice(descriptives_cont, 3:5) 
 SDs_cont <- slice(descriptives_cont, 7:9) 
@@ -213,16 +228,29 @@ SDs_combi <- slice(descriptives_combi, 7:9)
 Range_combi <- slice(descriptives_combi, 11:13) 
  
 var_names <- as.data.frame(c( "Age", "IQ","Trained time"))
- 
-descTable <- bind_cols(var_names, Means_cont, SDs_cont, Range_cont, Means_all, SDs_all, Range_all, Means_animega, SDs_animega, Range_animega, Means_combi, SDs_combi, Range_combi)
 
-col.names = c(" ", "$M_{control}$", "$SD_{control}$", "$(Range)_{control}$", "$M_{all}$", "$SD_{all}$", "$(Range)_{all}$", "$M_{animega-is}$", "$SD_{animega-is}$", "$(Range)_{animega-is}$", "$M_{combi}$", "$SD_{combi}$", "$(Range)_{combi}$")
+kruskal_test_IQ <- kruskal.test(IQ~group, data = mlm_data) 
+DT_IQ = dunnTest(IQ ~ group, data=mlm_data, method="bh")  #Follow up test for Kruskal Wallis
+
+KW_test <- c(kruskal.test(years_old~group, data = mlm_data %>% filter(time == 1))$p.value, #variances not equal
+            kruskal.test(IQ~group, data = mlm_data %>% filter(time == 1))$p.value, #variances equal
+            kruskal.test(tot_train_time~group, data = mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$p.value  #variances equal
+           )
+
+bon_t <- p.adjust(KW_test, method = "holm", n = length(KW_test)) #korrigerar för multiple comparisons, är det vettigt att göra det här?
+KW_test <- bon_t
+KW_test <- as.data.frame(gsub("0.",".",format.pval(KW_test, digits = 1, eps = 0.001, nsmall = 3), fixed = TRUE))
+
+ 
+descTable <- bind_cols(var_names, Means_cont, SDs_cont, Range_cont, Means_all, SDs_all, Range_all, Means_animega, SDs_animega, Range_animega, Means_combi, SDs_combi, Range_combi, KW_test)
+
+col.names = c(" ", "$M_{control}$", "$SD_{control}$", "$(Range)_{control}$", "$M_{all}$", "$SD_{all}$", "$(Range)_{all}$", "$M_{animega-is}$", "$SD_{animega-is}$", "$(Range)_{animega-is}$", "$M_{combi}$", "$SD_{combi}$", "$(Range)_{combi}$", "$p$")
 
 #TODO Cannot get table to print two decimals.
 apa_table(
   descTable
   , caption = "Descriptive statistics of included variables presented by group"
-  , note = "Chronological is are presented in years."
+  , note = "Chronological age is  presented in years."
   , col_spanners = list("Control" = c(2, 4), "ALL" = c(5, 7), "Animega-ia" = c(8, 10), "Combi" = c(11, 13)) # N.B. ignored in Word
   , col.names = col.names
   , row.names = FALSE
@@ -288,15 +316,15 @@ apa_table(
 ```{r desc-read-ALL-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
 descriptives_all <- desc_data2  %>% filter(group == 2) %>% group_by(time) %>%
-   summarize_all(list(Mean=~mean(., na.rm = T),  SD=~sd(., na.rm = T), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+   summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
 
 #descriptives[, -1] <- printnum(descriptives[, -1])
 descriptives_all2 <- as.data.frame(t(descriptives_all))
 
 descriptives_t1 <- dplyr::select(descriptives_all2, "V1")
 descriptives_t2 <- dplyr::select(descriptives_all2, "V2")
-descriptives_t3 <- dplyr::select(descriptives_all2, "V3")
 descriptives_t4 <- dplyr::select(descriptives_all2, "V4")
+descriptives_t3 <- dplyr::select(descriptives_all2, "V3")
 
 Means_t1 <- slice(descriptives_t1, 3:6)
 SDs_t1 <- slice(descriptives_t1, 8:11)
@@ -432,12 +460,24 @@ apa_table(
 
 ```
 
+Mean age: 
+*m* =`r mean(mlm_data$years_old) `; 
+*sd* =`r sd(mlm_data$years_old) `) 
+*range* = `r range(mlm_data$years_old) `)   
+
+Training time:
+mean
+
+*m* =`r mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE) `; 
+*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE) `;
+*range* = `r range((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE) `
+
 ## IQ
 
 
 ```{r IQ in different groups}
-kruskal_test_IQ <- kruskal.test(IQ~group, data = mlm_data)
-DT_IQ = dunnTest(IQ ~ group, data=mlm_data, method="bh") 
+kruskal_test_IQ <- kruskal.test(IQ~group, data = mlm_data) 
+DT_IQ = dunnTest(IQ ~ group, data=mlm_data, method="bh")  #Follow up test for Kruskal Wallis
 
 # mean((mlm_data %>% filter(time == 1)%>% filter(group == "Control"))$IQ, na.rm = TRUE)
 # mean((mlm_data %>% filter(time == 1)%>% filter(group == "ALL"))$IQ)
@@ -496,6 +536,32 @@ There was no significant interaction between time and intervention for the compr
 There was a significant interaction between the combined group and the other two intervention groups, (`r apa_print(model_PA_4)$full_result$days_contrast_4vs23`), the combined training improved PA over time more than the other two intervention groups.
 
 ```{r  PA-plot, include = TRUE, results='asis'}
+
+#Plot data for PA
+ggplot(data      = mlm_data,
+       aes(x     = days,
+           y     = PA,
+           col   = group,
+           group = group))+ #to add the colours for different classes
+  geom_smooth(method   = lm,
+              se       = T,
+              size     = 1,
+              linetype = 1,
+              alpha    = .2)+
+  theme_minimal()+
+  labs(title    = "Phonological awareness",
+       subtitle = "change over time")+
+  scale_color_manual(name   =" Group",
+                     labels = c("Control", "ALL", "Animega-is", "Combo"),
+                     values = c("blue", "red", "green", "yellow"))
+```
+
+
+```{r  mlm-PA-plot, include = TRUE, results='asis'}
+
+#To plot data controlled for IQ - not working
+#mlm_data$model_PA_4.coef.predic <- predict(model_PA_4)
+
 
 #Plot data for PA
 ggplot(data      = mlm_data,
@@ -579,14 +645,14 @@ tab_model(model_word_4, show.df = TRUE)
 
 ### Hypothesis 1a: Training phonemic reading strategies improves sentence reading. 
 
-There was not a significant interaction between time and the intervention on phonemic training on sentence reading (`r apa_print(DLS_poisson_4)$full_result$scaledays_center___FALSE_contrast_1vs2`). 
+There was not a significant interaction between time and the intervention on phonemic training on sentence reading (`r apa_print(DLS_poisson_3)$full_result$scaledays_center___FALSE_contrast_1vs2`). 
 
 ### Hypothesis 1b: Training comprehension-based reading strategies improves sentence awareness. 
-There was no significant interaction between time and intervention for the comprehension-based reading strategy on sentence reading (`r apa_print(DLS_poisson_4)$full_result$scaledays_center___FALSE_contrast_1vs3`). 
+There was no significant interaction between time and intervention for the comprehension-based reading strategy on sentence reading (`r apa_print(DLS_poisson_3)$full_result$scaledays_center___FALSE_contrast_1vs3`). 
 
 ### Hypothesis 3: The combined training is more effective than either intervention on its own.
 
-There was a not significant interaction between the combined group and the other two intervention groups, (`r apa_print(DLS_poisson_4)$full_result$scaledays_center___FALSE_contrast_4vs23`).
+There was a not significant interaction between the combined group and the other two intervention groups, (`r apa_print(DLS_poisson_3)$full_result$scaledays_center___FALSE_contrast_4vs23`).
 
 ```{r  DLS-plot, include = TRUE, results='asis'}
 
@@ -619,7 +685,7 @@ There was a significant main effect on IQ (`r apa_print(DLS_poisson_4)$full_resu
 The results from the word models can be seen in Table\ \@ref(tab:DLS-table).
 
 ```{r DLS-table, include=TRUE, results='asis'}
-tab_model(DLS_poisson_4)
+tab_model(DLS_poisson_3, DLS_poisson_4)
 ```
 
 # Explorative analyses
