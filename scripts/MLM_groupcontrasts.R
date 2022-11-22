@@ -16,7 +16,7 @@ library(sjstats)
 #options(scipen=999)
 
 mlm_data <- data_df %>% 
-  select(id, group, time, days, age_in_days, letter = letter_sum, fonem_sum, fonemsynthesis_sum, rhyme_sum, word = word_reading_total, DLS = DLS_reading_comp_sum, IQ_scale, IQ, tot_train_time_scale, tot_train_time) %>%
+  select(id, group, time, days, gender, age_in_days, letter = letter_sum, fonem_sum, fonemsynthesis_sum, rhyme_sum, word = word_reading_total, DLS = DLS_reading_comp_sum, IQ_scale, IQ, tot_train_time_scale, tot_train_time) %>%
   mutate(PA= fonem_sum+fonemsynthesis_sum+rhyme_sum) %>%
   select(-fonem_sum, -fonemsynthesis_sum, -rhyme_sum) %>% 
   mutate(contrast_1vs234= ifelse(group == 1, (-1),  (1/3))) %>%  #control vs ALL,animega,combi
@@ -59,7 +59,7 @@ model_PA_3 <- lmer(PA ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_
 #anova(model_PA_2b, model_PA_3) # sig better model.
 
 #Adding IQ - model improves a lot. IQ can explain how well the participants are developing over time #Kan Emil testa detta sig. i excell?
-model_PA_4 <- lmer(PA ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_4vs23 + days*IQ_scale + (1|id), data = mlm_data, REML = FALSE)
+#model_PA_4 <- lmer(PA ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_4vs23 + days*IQ_scale + (1|id), data = mlm_data, REML = FALSE)
 
 #Conclusion: Combi groups improves more than other intervention groups. IQ can explain how well the participants are developing over time 
 #(higher IQ = better improvement). Thus, might underestimate the effect of the combi group due to Animega-is group having higher IQ.
@@ -84,16 +84,16 @@ model_word_3 <- lmer(word ~ scale(days, center = FALSE)*contrast_1vs2 + scale(da
 #anova(model_word_2b, model_word_3) # not  sig. improved
 
 #Adding IQ - model improves. IQ can explain how well the participants are developing over time (p = .070)
-model_word_4 <- lmer(word ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23  + IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
+#model_word_4 <- lmer(word ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23  + IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
 
 #Conclusion: Intervention groups does not improve more than control. IQ can explain how well the participants are developing over time (higher IQ = better improvement)
 #Conclusion: Combi groups does not improve more than other intervention groups. Tendency for IQ to explain how well the participants are developing over time 
 #(higher IQ = better improvement). Thus, might underestimate the effect of the combigroup due to Animega-is group having higher IQ
 
 # Explorativ analys: Kan PA predicera utvecklingen av letter sound, ordläsining och meningsläsning över tid? nja! ####
-model_PA_word <- lmer(word ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23  + IQ_scale*scale(days, center = FALSE) + scale(days, center = FALSE)*scale(PA, center = TRUE) + (1|id), data = mlm_data, REML = FALSE)
+#model_PA_word <- lmer(word ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23  + IQ_scale*scale(days, center = FALSE) + scale(days, center = FALSE)*scale(PA, center = TRUE) + (1|id), data = mlm_data, REML = FALSE)
 
-summary(model_PA_word)
+#summary(model_PA_word)
 
 # DLS ####
 
@@ -119,7 +119,7 @@ DLS_poisson_3 <- glmer(DLS ~ scale(days, center = FALSE)*contrast_1vs2 + scale(d
 #Adding IQ - model improves a lot. IQ can explain how well the participants are developing over time
 #DLS_poisson_4 <- glmer(DLS ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 
 #                       + IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)||id), data = mlm_data,family=poisson) #fails to converge
-DLS_poisson_4 <- glmer(DLS ~ IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data,family=poisson) #removes intervention variables
+#DLS_poisson_4 <- glmer(DLS ~ IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data,family=poisson) #removes intervention variables
 
 
 #Conclusion: Intervention groups does NOT improves more than control. IQ can explain how well the participants are developing over time (higher IQ = better improvement)
@@ -127,7 +127,7 @@ DLS_poisson_4 <- glmer(DLS ~ IQ_scale*scale(days, center = FALSE) + (1+scale(day
 #(higher IQ = better improvement). Thus, might underestimate the effect of the combigroup due to Animega-is group having higher IQ
 
 # Explorativ analys: Kan PA predicera utvecklingen av letter sound, ordläsining och meningsläsning över tid? nja! ####
-model_PA_DLS <- glmer(DLS ~ IQ_scale*scale(days, center = FALSE) + scale(days, center = FALSE)*scale(PA, center = TRUE) + (1|id), data = mlm_data,family=poisson) #removes intervention variables AND days as random slope due to convergence issues
+#model_PA_DLS <- glmer(DLS ~ IQ_scale*scale(days, center = FALSE) + scale(days, center = FALSE)*scale(PA, center = TRUE) + (1|id), data = mlm_data,family=poisson) #removes intervention variables AND days as random slope due to convergence issues
 
 # letter ####
 # letter CONTROLL VS INTERVENTION ####
@@ -147,13 +147,13 @@ model_PA_DLS <- glmer(DLS ~ IQ_scale*scale(days, center = FALSE) + scale(days, c
 
 #conditional model (e.g. including letter)
 #adding intervention (WITH random slope) improves model significantly 
-model_letter_3 <- lmer(letter ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
+#model_letter_3 <- lmer(letter ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
 #summary(model_letter_3)
 #anova(model_letter_2, model_letter_3) # sig.
 
 
 #Adding IQ - OBS! IQ does not interact with days. Only interaction between days and intervention! 
-model_letter_4 <- lmer(letter ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
+#model_letter_4 <- lmer(letter ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + IQ_scale*scale(days, center = FALSE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
 #summary(model_letter_4)
 
 #Conclusion: Intervention groups improves more than control. IQ CANNOT explain how well the participants are developing over time 
@@ -163,7 +163,7 @@ model_letter_4 <- lmer(letter ~ scale(days, center = FALSE)*contrast_1vs2 + scal
 #Conclusion ALL better on letter recognition!
 
 # Explorativ analys: Kan PA predicera utvecklingen av letter sound, ordläsining och meningsläsning över tid? nja! ####
-model_PA_letter <- lmer(letter ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + IQ_scale*scale(days, center = FALSE) + scale(days, center = FALSE)*scale(PA, center = TRUE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
+#model_PA_letter <- lmer(letter ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + IQ_scale*scale(days, center = FALSE) + scale(days, center = FALSE)*scale(PA, center = TRUE) + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
 
 #summary(model_PA_letter)
 

@@ -16,7 +16,7 @@
   #options(scipen=999)
   
   mlm_data <- data_df %>% 
-    select(id, group, time, days, letter = letter_sum, fonem_sum, fonemsynthesis_sum, rhyme_sum, word = word_reading_total, DLS = DLS_reading_comp_sum, IQ_scale, IQ, tot_train_time_scale, tot_train_time) %>%
+    select(id, group, time, days, gender, letter = letter_sum, fonem_sum, fonemsynthesis_sum, rhyme_sum, word = word_reading_total, DLS = DLS_reading_comp_sum, IQ_scale, IQ, tot_train_time_scale, tot_train_time, age_in_days) %>%
     mutate(PA= fonem_sum+fonemsynthesis_sum+rhyme_sum) %>%
     select(-fonem_sum, -fonemsynthesis_sum, -rhyme_sum) %>% 
     mutate(group_ALL= ifelse(group == 2, 1, 0)) %>% 
@@ -364,83 +364,83 @@ summary(model_PA_letter)
   #   ylab("Scores") 
   # 
   # 
-  
-  library(ggplot2)
-  
-   
-
-  #Plot data for PA
-  ggplot(data      = mlm_data,
-         aes(x     = days,
-             y     = PA,
-             col   = group,
-             group = group))+ #to add the colours for different classes
-    geom_smooth(method   = lm,
-                se       = T,
-                size     = 1,
-                linetype = 1,
-                alpha    = .2)+
-    theme_minimal()+
-    labs(title    = "Phonological awareness",
-         subtitle = "change over time")+
-    scale_color_manual(name   =" Group",
-                       labels = c("Control", "ALL", "Animega-is", "Combo"),
-                       values = c("blue", "red", "green", "yellow"))
-
-  #Plot data for DLS
-  ggplot(data      = mlm_data,
-         aes(x     = days,
-             y     = DLS,
-             col   = group,
-             group = group))+ #to add the colours for different classes
-    geom_smooth(method   = lm,
-                se       = T,
-                size     = 1,
-                linetype = 1,
-                alpha    = .2)+
-    theme_minimal()+
-    labs(title    = "DLS over days",
-         subtitle = "change in sentence readin over time in the different groups")+
-    scale_color_manual(name   =" Group",
-                       labels = c("Control", "ALL", "Animega-is", "Combo"),
-                       values = c("blue", "red", "green", "yellow"))
-
-
-  #Plot data for word
-  ggplot(data      = mlm_data,
-         aes(x     = days,
-             y     = word,
-             col   = group,
-             group = group))+ #to add the colours for different classes
-    geom_smooth(method   = lm,
-                se       = T,
-                size     = 1,
-                linetype = 1,
-                alpha    = .2)+
-    theme_minimal()+
-    labs(title    = "word reading over days",
-         subtitle = "change in word reading training over time in the different groups")+
-    scale_color_manual(name   =" Group",
-                       labels = c("Control", "ALL", "Animega-is", "Combo"),
-                       values = c("blue", "red", "green", "yellow"))
-  
-  
-  #Plot data for word
-  ggplot(data      = mlm_data,
-         aes(x     = days,
-             y     = letter,
-             col   = group,
-             group = group))+ #to add the colours for different classes
-    geom_smooth(method   = lm,
-                se       = T,
-                size     = 1,
-                linetype = 1,
-                alpha    = .2)+
-    theme_minimal()+
-    labs(title    = "word reading over days",
-         subtitle = "change in word reading training over time in the different groups")+
-    scale_color_manual(name   =" Group",
-                       labels = c("Control", "ALL", "Animega-is", "Combo"),
-                       values = c("blue", "red", "green", "yellow"))
+  # 
+  # library(ggplot2)
+  # 
+  #  
+  # 
+  # #Plot data for PA
+  # ggplot(data      = mlm_data,
+  #        aes(x     = days,
+  #            y     = PA,
+  #            col   = group,
+  #            group = group))+ #to add the colours for different classes
+  #   geom_smooth(method   = lm,
+  #               se       = T,
+  #               size     = 1,
+  #               linetype = 1,
+  #               alpha    = .2)+
+  #   theme_minimal()+
+  #   labs(title    = "Phonological awareness",
+  #        subtitle = "change over time")+
+  #   scale_color_manual(name   =" Group",
+  #                      labels = c("Control", "ALL", "Animega-is", "Combo"),
+  #                      values = c("blue", "red", "green", "yellow"))
+  # 
+  # #Plot data for DLS
+  # ggplot(data      = mlm_data,
+  #        aes(x     = days,
+  #            y     = DLS,
+  #            col   = group,
+  #            group = group))+ #to add the colours for different classes
+  #   geom_smooth(method   = lm,
+  #               se       = T,
+  #               size     = 1,
+  #               linetype = 1,
+  #               alpha    = .2)+
+  #   theme_minimal()+
+  #   labs(title    = "DLS over days",
+  #        subtitle = "change in sentence readin over time in the different groups")+
+  #   scale_color_manual(name   =" Group",
+  #                      labels = c("Control", "ALL", "Animega-is", "Combo"),
+  #                      values = c("blue", "red", "green", "yellow"))
+  # 
+  # 
+  # #Plot data for word
+  # ggplot(data      = mlm_data,
+  #        aes(x     = days,
+  #            y     = word,
+  #            col   = group,
+  #            group = group))+ #to add the colours for different classes
+  #   geom_smooth(method   = lm,
+  #               se       = T,
+  #               size     = 1,
+  #               linetype = 1,
+  #               alpha    = .2)+
+  #   theme_minimal()+
+  #   labs(title    = "word reading over days",
+  #        subtitle = "change in word reading training over time in the different groups")+
+  #   scale_color_manual(name   =" Group",
+  #                      labels = c("Control", "ALL", "Animega-is", "Combo"),
+  #                      values = c("blue", "red", "green", "yellow"))
+  # 
+  # 
+  # #Plot data for word
+  # ggplot(data      = mlm_data,
+  #        aes(x     = days,
+  #            y     = letter,
+  #            col   = group,
+  #            group = group))+ #to add the colours for different classes
+  #   geom_smooth(method   = lm,
+  #               se       = T,
+  #               size     = 1,
+  #               linetype = 1,
+  #               alpha    = .2)+
+  #   theme_minimal()+
+  #   labs(title    = "word reading over days",
+  #        subtitle = "change in word reading training over time in the different groups")+
+  #   scale_color_manual(name   =" Group",
+  #                      labels = c("Control", "ALL", "Animega-is", "Combo"),
+  #                      values = c("blue", "red", "green", "yellow"))
 
   
