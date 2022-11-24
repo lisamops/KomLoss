@@ -89,13 +89,27 @@ data_df <- data_df %>%
 student_survey <- import("data/student_survey.xlsx")
 student_survey <- student_survey %>% select(id = "student_code", before1_after2_intervention, synthesis,	segmentation,	
                                             sound_letter_connection,	understand_rhyme, decode_short_words, decode_complex_words, sight_word_reading)
-
 student_survey <- student_survey %>% filter(before1_after2_intervention == 1)
 student_survey <- student_survey %>% select(-before1_after2_intervention)
 data_df <- full_join(data_df, student_survey, by = c("id"))
 
+#Read speech data
+
+ppc <- import("data/Taldata PPC_PCC_PVC.xlsx")
+ppc <- ppc %>% filter(time == 1)
+ppc <- ppc %>% select(id = "ID", PPC = "PPC_only_BAF")
+ppc$PPC <- as.numeric(ppc$PPC)
+data_df <- full_join(data_df, ppc, by = c("id"))
+
+
 #remove 403 due to testning not being done correctly 
 data_df <- data_df %>% filter(id != 403)
+#remove 110 terminates participating  
+data_df <- data_df %>% filter(id != 110)
+#remove 439 not being in school
+data_df <- data_df %>% filter(id != 439)
+#remove 403 due to testning not being done correctly 
+data_df <- data_df %>% filter(id != 413)
 #remove IQ over 90
 #data_df <- data_df %>% filter(is.na(IQ)|IQ<90)
 

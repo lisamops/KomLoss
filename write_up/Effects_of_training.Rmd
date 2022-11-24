@@ -169,15 +169,14 @@ First an unconditional model including a fixed effect of time was built (Model 1
 After fitting the unconditional models, a conditional model (Model 3) was built using contrasts to test the Hypotheses. There were three contrasts performed: comparison group versus phonic-based intervention (Hypothesis 1), comparison versus comprehension-based intervention (Hypothesis 2), and combination versus phonic-based and comprehension-based intervention (Hypothesis 3). 
 
 # Results  
-The recruitment process resulted in `r printnum(length(background_raven$id), numerals = T) ` participants ($n_{girls}$ = `r length((background_raven %>% filter(gender == "Girl"))$id) `, $n_{boys}$ = `r length((background_raven %>% filter(gender == "Boy"))$id)`). However, `r printnum((length(background_raven$id))-(length((mlm_data %>% filter(time == 1))$id)), numerals = F) ` participant were excluded from the study. One due to testing not being followed as per protocol, two students not participating in the assessment, and one student not being present in the school. Thus,the final sample thus included `r printnum(length((mlm_data %>% filter(time == 1))$id), numerals = T) ` participants ($n_{girls}$ = `r length((mlm_data  %>% filter(time == 1) %>% filter(gender == "Girl"))$id) `, $n_{boys}$ = `r length((mlm_data  %>% filter(time == 1) %>% filter(gender == "Boy"))$id)`), for demographics, see Table .... Data on diagnoses were collected using parental surveys. The diagnoses in the ID group can be seen in Table\ \@ref(tab:diagnosis-table).
+The recruitment process resulted in `r printnum(length(background_raven$id), numerals = T) ` participants ($n_{girls}$ = `r length((background_raven %>% filter(gender == "Girl"))$id) `, $n_{boys}$ = `r length((background_raven %>% filter(gender == "Boy"))$id)`). However, `r printnum((length(background_raven$id))-(length((mlm_data %>% filter(time == 1))$id)), numerals = F) ` participant was excluded from the study, due to testing not being followed as per protocol. Thus,the final sample thus included `r printnum(length((mlm_data %>% filter(time == 1))$id), numerals = T) ` participants ($n_{girls}$ = `r length((mlm_data  %>% filter(time == 1) %>% filter(gender == "Girl"))$id) `, $n_{boys}$ = `r length((mlm_data  %>% filter(time == 1) %>% filter(gender == "Boy"))$id)`). The control group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Control"))$id), numerals = T) `, the phonic-based group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "ALL"))$id), numerals = T) `, the comprehension-based group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Animega-is"))$id), numerals = T) `, and the combination group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$id), numerals = T) `, for age, IQ, and instruction duration for each group, see Table X. Data on diagnoses were collected using parental surveys. The diagnoses in the ID group can be seen in Table\ \@ref(tab:diagnosis-table).
 The descriptive statistics for all variables on each assessment time can be seen in Table\ \@ref(tab:descriptives-table).
-
 
 ```{r descriptives-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
 mlm_data <- mlm_data %>% dplyr::mutate(years_old = age_in_days/365)
 
-desc_data <- mlm_data %>% dplyr::select(group, time, years_old, IQ, tot_train_time)
+desc_data <- mlm_data %>% dplyr::select(group, time, years_old, IQ, tot_train_time, PPC)
 
 desc_data$group <- as.numeric(desc_data$group)
 desc_data$years_old <- as.numeric(desc_data$years_old)
@@ -204,32 +203,31 @@ descriptives_all <- dplyr::select(desc_time, "V2")
 descriptives_animega <- dplyr::select(desc_time, "V3")
 descriptives_combi <- dplyr::select(desc_time, "V4")
 
-N_group <- slice(descriptives_cont, 3:5) 
+Means_cont <- slice(descriptives_cont, 3:6) 
+SDs_cont <- slice(descriptives_cont, 8:11) 
+Range_cont <- slice(descriptives_cont, 13:16) 
 
-Means_cont <- slice(descriptives_cont, 3:5) 
-SDs_cont <- slice(descriptives_cont, 7:9) 
-Range_cont <- slice(descriptives_cont, 11:13) 
+Means_all <- slice(descriptives_all, 3:6) 
+SDs_all <- slice(descriptives_all, 8:11) 
+Range_all <- slice(descriptives_all, 13:16) 
 
-Means_all <- slice(descriptives_all, 3:5) 
-SDs_all <- slice(descriptives_all, 7:9) 
-Range_all <- slice(descriptives_all, 11:13) 
+Means_animega <- slice(descriptives_animega, 3:6) 
+SDs_animega <- slice(descriptives_animega, 8:11) 
+Range_animega <- slice(descriptives_animega, 13:16) 
 
-Means_animega <- slice(descriptives_animega, 3:5) 
-SDs_animega <- slice(descriptives_animega, 7:9) 
-Range_animega <- slice(descriptives_animega, 11:13) 
-
-Means_combi <- slice(descriptives_combi, 3:5) 
-SDs_combi <- slice(descriptives_combi, 7:9) 
-Range_combi <- slice(descriptives_combi, 11:13) 
+Means_combi <- slice(descriptives_combi, 3:6) 
+SDs_combi <- slice(descriptives_combi, 8:11) 
+Range_combi <- slice(descriptives_combi, 13:16) 
  
-var_names <- as.data.frame(c( "Age", "IQ","Instruction duration"))
+var_names <- as.data.frame(c( "Age", "IQ","Instruction duration", "Communication"))
 
 kruskal_test_IQ <- kruskal.test(IQ~group, data = mlm_data) 
 DT_IQ = dunnTest(IQ ~ group, data=mlm_data, method="bh")  #Follow up test for Kruskal Wallis
 
 KW_test <- c(kruskal.test(years_old~group, data = mlm_data %>% filter(time == 1))$p.value, #variances not equal
             kruskal.test(IQ~group, data = mlm_data %>% filter(time == 1))$p.value, #variances equal
-            kruskal.test(tot_train_time~group, data = mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$p.value  #variances equal
+            kruskal.test(tot_train_time~group, data = mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$p.value,  #variances equal
+            kruskal.test(IQ~PPC, data = mlm_data %>% filter(time == 1))$p.value #variances equal
            )
 
 bon_t <- p.adjust(KW_test, method = "holm", n = length(KW_test)) #korrigerar för multiple comparisons, är det vettigt att göra det här?

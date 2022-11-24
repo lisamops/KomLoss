@@ -16,7 +16,7 @@ library(sjstats)
 #options(scipen=999)
 
 mlm_data <- data_df %>% 
-  select(id, group, time, days, gender, age_in_days, letter = letter_sum, fonem_sum, fonemsynthesis_sum, rhyme_sum, word = word_reading_total, DLS = DLS_reading_comp_sum, IQ_scale, IQ, tot_train_time_scale, tot_train_time) %>%
+  select(id, group, time, days, gender, age_in_days, letter = letter_sum, fonem_sum, fonemsynthesis_sum, rhyme_sum, word = word_reading_total, DLS = DLS_reading_comp_sum, IQ_scale, IQ, tot_train_time_scale, tot_train_time, PPC) %>%
   mutate(PA= fonem_sum+fonemsynthesis_sum+rhyme_sum) %>%
   select(-fonem_sum, -fonemsynthesis_sum, -rhyme_sum) %>% 
   mutate(contrast_1vs234= ifelse(group == 1, (-1),  (1/3))) %>%  #control vs ALL,animega,combi
