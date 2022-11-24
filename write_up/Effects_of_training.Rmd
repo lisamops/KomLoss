@@ -76,6 +76,10 @@ library(FSA)
 # Seed for random number generation
 set.seed(42)
 #knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+library(pander)
+#panderOptions('digits', 2)
+panderOptions('round', 2)
+panderOptions('keep.trailing.zeros', TRUE)
 ```
 
 ```{r formatting_p-values}
@@ -111,45 +115,57 @@ to be added...
 2: Training phonic-based or comprehension-based reading strategies improves reading ability. 
 3: The combined training is more effective than either intervention on its own.
 
-The hypotheses will be tested on these outcome variables: phonological awareness (1, 3), word comprehension (2, 3), and reading comprehension (2, 3).
+The hypotheses will be tested on these outcome variables: phonological awareness (1, 3), word recognition (2, 3), and reading comprehension (2, 3).
 
 
 
 # Methods
 
 Data presented in this paper is collected in a larger project. Parts of the data has been used for this paper, for the purpose of this paper we have excluded for speech sound production which have been published in Samuelsson et al., (under revision). For a full description of collected data see (Palmqvist, Samuelsson, et al., 2020).
-## Participants
+
+## Participants 
 Inclusion criteria was to attend to a Swedish special needs school, to benefit from AAC, and to be a beginner at reading. To attend the Swedish special needs curriculum, the student has received an ID diagnosis after an assessment led by a licensed psychologist. The teachers were instructed to identify students that would benefit from AAC and could not read more than approx. 20 words. No exclusion criteria were set for age or aetiology of the ID. 
 
 The participants were requited via email to teachers at special needs schools in Sweden. To reduce the risk of having unbalanced groups, the teachers were asked, together with their notification of interest, specify how many students in their class that fulfilled the inclusion criteria and what level of ID the students had. Thereafter, the plan was for a researcher to allocate the participants on school level to the different intervention groups. However, only 60 participants were requited, and data collection had to start due to time constraints. Thus, the participants could only be assigned to two groups, namely the comparison and the ALL group. The remainder 77 the participants were recruited after the data collection of the comparison and ALL group had started. The participants to the Animega-is and Combination group was recruited and allocated in the same way as described above. This resulted in the groups not being equated on level of ID, see the result section. 
 Caregivers signed an informed consent regarding the confidentiality of data and group-level analysis. The participating children gave oral consent at the beginning of the first test session. The study follows the Ethical principles for medical research involving human subjects from the WMA Declaration of Helsinki (World Medical Association 2013). The study was reviewed and approved by the Ethical Review Board, Sweden (2020-06215).
+
 ## Design
 The study is a longitudinal between-group study, with four time points (before, during, after the intervention and a follow-up). Three intervention groups: one applying a phonic-based reading strategy (using ALL), one applying a comprehension-based strategy (using Animega-is), and the third applying both strategies (using ALL and Animega-is), and a comparison group who received regular teaching, not focusing one specific reading instruction strategy. Due to practical reasons, students were allocated to intervention groups on school-level, i.e., all participants at one school received the same intervention. 
-## Procedure
+
+## Procedure  
 Testing took place in a silent environment at the participants’ school. The students were offered to have a teacher or an assistant present during the assessment. The students’ reading ability were assessed at four times, before (t1), during (t2; approx. at half-time), and after the intervention (t3) as well as at a 12-week follow-up (t4). For most of the test situations, t1 and t3 were administered by researchers, t2 and t4 were administered by a special need teacher or a school-based speech and language pathologist. Data was collected during the Covid19-pandemic, January 2020 to June 2021, thus, the test administrators were interchanged as schools introduced restrictions for visitors. Test administrators practiced the test procedure before data collection began. Test order was fixed over sessions and students. The test session lasted ~45-75 minutes, including short breaks. During breaks, students were offered a small snack, water, or to move around in the room for a few minutes.  
 The literacy training took place in the participants’ school. The teachers were instructed to allow the students to train for 300 minutes (20 sessions for 15 min, five days a week for four weeks). The teachers were asked to not assist in solving the tasks for the children. The teacher was asked to administer the training as they saw fit for each student, meaning that they were able to split the training sessions into smaller sessions or train individually, or in group. 
-## Behavioral measures 
-The participants were assessed on non-verbal intelligence, phonological awareness, word comprehension, and reading comprehension (in that order). All tests started with two practice items. All tests were adapted so that the student was able to give a non-verbal response option if preferred. All instructions were presented verbally in combination with complementary manual signs and pictures. A test was terminated if the student gave three consecutive incorrect responses, except for Raven’s where the test was terminated after six consecutive incorrect responses.
-### Non-verbal intelligence
+
+## Behavioral measures   
+The participants were assessed on non-verbal intelligence, phonological awareness, word recognition, and reading comprehension (in that order). All tests started with two practice items. All tests were adapted so that the student was able to give a non-verbal response option if preferred. All instructions were presented verbally in combination with complementary manual signs and pictures. A test was terminated if the student gave three consecutive incorrect responses, except for Raven’s where the test was terminated after six consecutive incorrect responses.
+
+### Non-verbal intelligence  
 To estimate the participants’ IQ level, the Raven’s 2 Progressive Matrices Clinical Edition (Raven’s 2; Raven, Rust, Chan, & Zhou, 2018) was used. The three first modules (A, B, and C) were used, with a total of 36 items. IQ was calculated following the standardized procedure of the test and this was used as the dependent measure (with a minimum score of 40). 
-### Phonological awareness
+
+### Phonological awareness  
 To assess phonological awareness skills the subtests Phoneme synthesis, Phoneme identification, and Rhyme identification from MiniDUVAN (Wolff, 2013) were administered.  Each subtest constituted of two practice items followed by nine test items. In the subtest Phoneme synthesis, the test leader pronounced a word segmented by three to five sounds. The participant was asked to identify the correct word by choosing between three pictures, one representing the correct word and two lures. For example, the test leader said “can you point at /s/ /u/ /n/”, with a break between each sound on approximately one second. In the subtest Phoneme identification, the participant was presented with a picture of the sun and asked to point to another picture with an object with the same initial phoneme in its name (e.g., “This is a sun. Sun starts with /s/. Point to the picture that start with the same sound /s/.”). The target phoneme was the same for all items. Three pictures were presented, one target and three lures. In the last subtest, Rhyme identification, the participant was asked to say whether two spoken words rhymed or not (e.g., “does hat – cat rhyme?”). The participant could choose to respond verbally, by pointing to pictures representing “yes” or “no”, or using a personal AAC mode. The dependent variable was total number of correct answers across all subtests (0-27).
-### Word recognition
+
+### Word recognition  
 Two tests were used to assess word recognition skill; OS64 (Magnusson & Naucler, 2010) and OLAF (Magnusson & Naucler, 2010). In both tests, the student was asked to match a written word to a picture. Widget symbols were added to OS64 to enable non-verbal response. As the test had different number of maximum scores (OS64: 0-15, OLAF: 0-13), z-values were calculated based on the number of correct responses and a mean z-score was used as a dependent variable.  
-### Reading comprehension 
+
+### Reading comprehension   
 In DLS Bas (Järpsten, 2004) the participant read short sentences and matched them to their corresponding picture. The degree of difficulty increased with each sentence, starting with a two-word sentence, and ending with a task consisting of two sentences with a total of 11 words. The dependent measure was total number of correct answers (max = 20).
 
 ## Materials: ALL and Animega-is
+
 ### A digital comprehension-based app: Animega-is
 Animega-is has two different learning modes and both are adapted for use with AAC. In the create mode, the learner creates events with the help of text buttons, which are then followed by a animation corresponding to the event that was created. In the test mode, the learner can test his or her proficiency by first viewing the event, then choosing words and creating the sentence that best represents what he or she has just viewed. The app provides several levels of complexity as well as in-built comprehension tests. 
 The  app provides several  levels  of complexity  as  well  as in-built  comprehension  tests. The  language  matter  of  the  program  is meant to be explored by the learner with help from -and in interaction with –a teacher. The language material and the appended animations not only offer motivational literacy training but also give room for conversations where the learner can express his or her imagination and thoughts. The goal is to achieve an errorless co-construction of meaning from text through multimedia and supportive interaction. There is also an editing possibility for the teacher to use. Here, the animations can be individualized by adding photos relevant to the child’s environment.
+
 ### A digital phonic-based app: Accessible Literacy Learning
 The Accessible Literacy Learning (ALL) program is a program for literacy instruction for children with complex communication needs especially children with AAC (Light et al., 2008; Light & McNaughton, 2012, 2014). Only the modules using phonic training was used. The reading instruction includes: sound blending, phoneme segmentation, letter-sound correspondences, and phonological decoding. The exercises were accompanied by pictorial material/images to enable participation without speech. 
+
 ## Statistical analysis
 Linear mixed-effects models were used to evaluate the effects of the intervention. In the pre-registration, we stated that mixed ANOVA was going to be used. However, due to the children not being tested with the same time intervals (due to logistic reasons), missing data, and the groups differing on IQ, linear mixed-effects models with repeated measures were used to analyze the effects of the interventions. Linear mixed-effects models are better suited compared to ANOVA when dealing with missing data and varying time intervals (källa). Models were fitted using the lme4 package (källa) in R. Maximum likelihood estimation was applied and missing data was handled under the assumption of missing at random. The assumption of linearity was tested by plotting the model-predicted values to the observed ones and homogeneity of variance was tested by plotting the residuals vs. fitted values. To check that the residuals of the model were normally distributed, Q-Q plots were investigated with an ocular inspection. The α-value was set to 0.05.
+
 ### Model building
-The three different outcome measures (PA, word comprehension, and reading comprehension) were analyzed separately. Days were used as the time variable, starting day 1 at the date of t1. Model fit was assessed using ANOVA. The model with the best fit, indicated with Chi2, was chosen. Normal distribution was used for all models besides reading comprehension, where the residuals were non-normally distributed. Therefore, a Poisson distribution was used. The two models were compared, and the model with Poisson distribution was much better in terms of AIC and loglikelihood compared to a model with Gaussian distribution.
-First an unconditional model including a fixed effect of time was built (Model 1). Random effects were thereafter fitted with both no covariance structure (variance components) (Model 2a), and an unstructured variance-covariance matrix (Model 2b). The unstructured covariance-matrix was used if it significantly improved the model, otherwise the less complex (?) no covariance structure was used. If the model with random effects had a better fit than Model 1, random slope was used in the succeeding models when investigating the effects of the intervention otherwise no random slope was used. This procedure was repeated for each outcome measure. As a result, random slopes were included in the models for the variables word comprehension, and reading comprehension. No random slope was used in the PA model.  
+The three different outcome measures (PA, word recognition, and reading comprehension) were analyzed separately. Days were used as the time variable, starting day 1 at the date of t1. Model fit was assessed using ANOVA. The model with the best fit, indicated with Chi2, was chosen. Normal distribution was used for all models besides reading comprehension, where the residuals were non-normally distributed. Therefore, a Poisson distribution was used. The two models were compared, and the model with Poisson distribution was much better in terms of AIC and loglikelihood compared to a model with Gaussian distribution.
+First an unconditional model including a fixed effect of time was built (Model 1). Random effects were thereafter fitted with both no covariance structure (variance components) (Model 2a), and an unstructured variance-covariance matrix (Model 2b). The unstructured covariance-matrix was used if it significantly improved the model, otherwise the less complex (?) no covariance structure was used. If the model with random effects had a better fit than Model 1, random slope was used in the succeeding models when investigating the effects of the intervention otherwise no random slope was used. This procedure was repeated for each outcome measure. As a result, random slopes were included in the models for the variables word recognition, and reading comprehension. No random slope was used in the PA model.  
 After fitting the unconditional models, a conditional model (Model 3) was built using contrasts to test the Hypotheses. There were three contrasts performed: comparison group versus phonic-based intervention (Hypothesis 1), comparison versus comprehension-based intervention (Hypothesis 2), and combination versus phonic-based and comprehension-based intervention (Hypothesis 3). 
 
 # Results  
@@ -206,7 +222,7 @@ Means_combi <- slice(descriptives_combi, 3:5)
 SDs_combi <- slice(descriptives_combi, 7:9) 
 Range_combi <- slice(descriptives_combi, 11:13) 
  
-var_names <- as.data.frame(c( "Age", "IQ","Trained time"))
+var_names <- as.data.frame(c( "Age", "IQ","Instruction duration"))
 
 kruskal_test_IQ <- kruskal.test(IQ~group, data = mlm_data) 
 DT_IQ = dunnTest(IQ ~ group, data=mlm_data, method="bh")  #Follow up test for Kruskal Wallis
@@ -223,14 +239,14 @@ KW_test <- as.data.frame(gsub("0.",".",format.pval(KW_test, digits = 1, eps = 0.
  
 descTable <- bind_cols(var_names, Means_cont, SDs_cont, Range_cont, Means_all, SDs_all, Range_all, Means_animega, SDs_animega, Range_animega, Means_combi, SDs_combi, Range_combi, KW_test)
 
-col.names = c(" ", "$M_{control}$", "$SD_{control}$", "$(Range)_{control}$", "$M_{all}$", "$SD_{all}$", "$(Range)_{all}$", "$M_{animega-is}$", "$SD_{animega-is}$", "$(Range)_{animega-is}$", "$M_{combi}$", "$SD_{combi}$", "$(Range)_{combi}$", "$p$")
+col.names = c(" ", "$M_{control}$", "$SD_{control}$", "$(Range)_{control}$", "$M_{PB}$", "$SD_{PB}$", "$(Range)_{PB}$", "$M_{CB}$", "$SD_{CB}$", "$(Range)_{CB}$", "$M_{combi}$", "$SD_{combi}$", "$(Range)_{combi}$", "$p$")
 
 #TODO Cannot get table to print two decimals.
 apa_table(
   descTable
   , caption = "Descriptive statistics of included variables presented by group"
   , note = "Chronological age is  presented in years."
-  , col_spanners = list("Control" = c(2, 4), "ALL" = c(5, 7), "Animega-ia" = c(8, 10), "Combi" = c(11, 13)) # N.B. ignored in Word
+  , col_spanners = list("Control" = c(2, 4), "PB" = c(5, 7), "Animega-ia" = c(8, 10), "Combi" = c(11, 13)) # N.B. ignored in Word
   , col.names = col.names
   , row.names = FALSE
   , align = c('l', 'c')
@@ -246,7 +262,8 @@ desc_data2 <- mlm_data %>% dplyr::select(-id, -days, - age_in_days, -IQ_scale, -
 desc_data2$group <- as.numeric(desc_data2$group)
 
 descriptives_control <- desc_data2  %>% filter(group == 1) %>% group_by(time) %>%
-   summarize_all(list(Mean=~mean(., na.rm = T),  SD=~sd(., na.rm = T), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+   summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+
 
 #descriptives[, -1] <- printnum(descriptives[, -1])
 descriptives_control2 <- as.data.frame(t(descriptives_control))
@@ -272,7 +289,7 @@ Means_t4 <- slice(descriptives_t4, 3:5)
 SDs_t4 <- slice(descriptives_t4, 7:9)
 Range_t4 <- slice(descriptives_t4, 11:13)
 
-var_names <- as.data.frame(c( "Word","Sentence", "PA"))
+var_names <- as.data.frame(c( "Word recognition","Sentence", "PA"))
 
 descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
@@ -292,7 +309,7 @@ apa_table(
 
 ```
 
-```{r desc-read-ALL-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+```{r desc-read-PB-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
 descriptives_all <- desc_data2  %>% filter(group == 2) %>% group_by(time) %>%
    summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
@@ -321,7 +338,7 @@ Means_t4 <- slice(descriptives_t4, 3:5)
 SDs_t4 <- slice(descriptives_t4, 7:9)
 Range_t4 <- slice(descriptives_t4, 11:13)
 
-var_names <- as.data.frame(c( "Word","Sentence", "PA"))
+var_names <- as.data.frame(c( "Word recognition","Sentence", "PA"))
 
 descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
@@ -330,7 +347,7 @@ col.names = c(" ", "$M_{T1}$", "$SD_{T1}$", "$(Range)_{T1}$", "$M_{T2}$", "$SD_{
 #TODO Cannot get table to print two decimals.
 apa_table(
   descTable
-  , caption = "Descriptive statistics for the ALL group of included variables presented by time"
+  , caption = "Descriptive statistics for the Phonic-based group of included variables presented by time"
   , note = "this is a note."
   , col_spanners = list("T1" = c(2, 4), "T2" = c(5, 7), "T3" = c(8, 10), "T4" = c(11, 13)) # N.B. ignored in Word
   , col.names = col.names
@@ -344,7 +361,7 @@ apa_table(
 ```{r desc-read-animega-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
 descriptives_animega <- desc_data2  %>% filter(group == 3) %>% group_by(time) %>%
-   summarize_all(list(Mean=~mean(., na.rm = T),  SD=~sd(., na.rm = T), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+   summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
 
 #descriptives[, -1] <- printnum(descriptives[, -1])
 descriptives_animega2 <- as.data.frame(t(descriptives_animega))
@@ -370,7 +387,7 @@ Means_t4 <- slice(descriptives_t4, 3:5)
 SDs_t4 <- slice(descriptives_t4, 7:9)
 Range_t4 <- slice(descriptives_t4, 11:13)
 
-var_names <- as.data.frame(c( "Word","Sentence", "PA"))
+var_names <- as.data.frame(c( "Word recognition","Sentence", "PA"))
 
 descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
@@ -379,7 +396,7 @@ col.names = c(" ", "$M_{T1}$", "$SD_{T1}$", "$(Range)_{T1}$", "$M_{T2}$", "$SD_{
 #TODO Cannot get table to print two decimals.
 apa_table(
   descTable
-  , caption = "Descriptive statistics for the Animega-is group of included variables presented by time"
+  , caption = "Descriptive statistics for the Comprehension-based group of included variables presented by time"
   , note = "this is a note."
   , col_spanners = list("T1" = c(2, 4), "T2" = c(5, 7), "T3" = c(8, 10), "T4" = c(11, 13)) # N.B. ignored in Word
   , col.names = col.names
@@ -393,7 +410,7 @@ apa_table(
 ```{r desc-read-combi-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
 descriptives_combi <- desc_data2  %>% filter(group == 4) %>% group_by(time) %>%
-   summarize_all(list(Mean=~mean(., na.rm = T),  SD=~sd(., na.rm = T), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+   summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
 
 #descriptives[, -1] <- printnum(descriptives[, -1])
 descriptives_combi2 <- as.data.frame(t(descriptives_combi))
@@ -419,7 +436,7 @@ Means_t4 <- slice(descriptives_t4, 3:5)
 SDs_t4 <- slice(descriptives_t4, 7:9)
 Range_t4 <- slice(descriptives_t4, 11:13)
 
-var_names <- as.data.frame(c( "Word","Sentence", "PA"))
+var_names <- as.data.frame(c( "Word recognition","Sentence", "PA"))
 
 descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
@@ -439,19 +456,32 @@ apa_table(
 
 ```
 
-## Training time
+## Instruction duration
 
 ```{r train time in different groups}
 kruskal_test_TT <- kruskal.test(tot_train_time~group, data = mlm_data%>% filter(time == 1)%>% filter(group != "Control"))
 
 ```
 
-The participants were instructed to train for a total of 18 hours (36 sessions for 30 minutes, three days a week for a 12-week period). The teachers were instructed to adapt the length of the training sessions after the need of the student. That is, if the student could not sit for a full 30 minute session the teacher was encouraged to have shorter sessions but more often than three times a week. On average the participants trained for `r mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE) ` (*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE) `) minutes (`r mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60 ` (*sd* =`r sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60 `) hours). There was no difference on training time between the three intervention groups (*H*(`r kruskal_test_TT[["parameter"]]`) = `r kruskal_test_TT[["statistic"]]`, *p* `r p_small(kruskal_test_TT[["p.value"]])` ).
+The participants were instructed to train for a total of 18 hours, 1080 minutes. However, the participants ended up with significantly less duration of the instruction. On average the participants trained for `r round(mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE), digits = 2) ` (*sd* =`r round(sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE), digits = 2) `) minutes (`r round(mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60, digits = 2) ` (*sd* =`r round(sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60, digits = 2) `) hours (*range* =  `r round(range((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE), digits = 0) `). There was no difference in instruction duration between the three intervention groups (*H*(`r kruskal_test_TT[["parameter"]]`) = `r kruskal_test_TT[["statistic"]]`, *p* `r p_small(kruskal_test_TT[["p.value"]])` ). The instruction duration for each group can be seen in Figure X.
 
 ```{r  tottraintime-plot, include = TRUE, results='asis'}
-ggboxplot(data = mlm_data%>% filter(time == 1)%>% filter(group != "Control"), x = "group", y= "tot_train_time",
-                color = "group", palette =c("#00AFBB", "#E7B800", "#FC4E07"),
-                add = "jitter")
+
+mlm_data_labels <- mlm_data                     # Duplicate data
+levels(mlm_data_labels$group) <- c("Control",  # Relevel factor labels
+                                       "PB",
+                                       "CB",
+                                   "Combi")
+ggboxplot(data = mlm_data_labels%>% filter(time == 1)%>% filter(group != "Control"), x = "group", y= "tot_train_time",
+          color = "group", palette =c("#00AFBB", "#E7B800", "#FC4E07"),
+          names = c("PB", "CB", "Combi"),
+          add = "jitter",
+          title = "Duration of instruction in each group",
+          xlab = F,
+          ylab = "Minutes",
+          legend = "none")
+
+
 ```
 
 ## Phonological awareness
@@ -485,21 +515,21 @@ ggplot(data      = mlm_data,
               linetype = 1,
               alpha    = .2)+
   theme_minimal()+
-  labs(title    = "Phonological awareness",
-       subtitle = "change over time")+
+  labs(title    = "Change in phonological awareness",
+       subtitle = "")+
   scale_color_manual(name   =" Group",
-                     labels = c("Control", "ALL", "Animega-is", "Combo"),
+                     labels = c("Control", "PB", "CB", "Combo"),
                      values = c("blue", "red", "green", "yellow"))
 ```
 
-## Word comprehension
+## Word recognition
 
-### Hypothesis 1: Training phonic-based reading strategies improves word comprehension. 
+### Hypothesis 1: Training phonic-based reading strategies improves word recognition 
 
 There was not a significant interaction between days and the intervention on phonic-based-based reading (`r apa_print(model_word_3)$full_result$scaledays_center___FALSE_contrast_1vs2`). 
 
-### Hypothesis 2: Training comprehension-based reading strategies improves word awareness. 
-There was no significant interaction between days and intervention for the comprehension-based reading strategy on word comprehension (`r apa_print(model_word_3)$full_result$scaledays_center___FALSE_contrast_1vs3`). 
+### Hypothesis 2: Training comprehension-based reading strategies improves word recognition 
+There was no significant interaction between days and intervention for the comprehension-based reading strategy on word recognition (`r apa_print(model_word_3)$full_result$scaledays_center___FALSE_contrast_1vs3`). 
 
 ### Hypothesis 3: The combined training is more effective than either intervention on its own.
 
@@ -525,10 +555,10 @@ ggplot(data      = mlm_data,
               linetype = 1,
               alpha    = .2)+
   theme_minimal()+
-  labs(title    = "word comprehension over days",
-       subtitle = "change in word comprehension over time in the different groups")+
+  labs(title    = "Change in word recognition",
+       subtitle = "")+
   scale_color_manual(name   =" Group",
-                     labels = c("Control", "ALL", "Animega-is", "Combo"),
+                     labels = c("Control", "PB", "CB", "Combo"),
                      values = c("blue", "red", "green", "yellow"))
 
 ```
@@ -554,7 +584,7 @@ tab_model(DLS_poisson_3)
 
 ```{r  DLS-plot, include = TRUE, results='asis'}
 
-#Plot data for DLS
+#Plot data for Reading comprehension
 ggplot(data      = mlm_data,
        aes(x     = days,
            y     = DLS,
@@ -566,10 +596,10 @@ ggplot(data      = mlm_data,
               linetype = 1,
               alpha    = .2)+
   theme_minimal()+
-  labs(title    = "DLS over days",
-       subtitle = "change in reading comprehension over time in the different groups")+
+  labs(title    = "Change in reading comprehension",
+       subtitle = "")+
   scale_color_manual(name   =" Group",
-                     labels = c("Control", "ALL", "Animega-is", "Combo"),
+                     labels = c("Control", "PB", "CB", "Combo"),
                      values = c("blue", "red", "green", "yellow"))
 
 ```
