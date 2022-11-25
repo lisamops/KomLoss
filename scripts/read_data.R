@@ -68,7 +68,7 @@ data_df <- full_join(data_df, app_data_df, by = c("id"))
 
 #Parent survey
 parent <- import("data/parent_survey.xlsx")
-parent <- parent %>% select(id = "Elevens kod:", education_mother = "education_mother_or_other",	education_father,	occupation_mother,	occupation_father, SES)
+parent <- parent %>% select(id = "Elevens kod:", education_mother = "education_mother_or_other",	education_father,	occupation_mother,	occupation_father, SES, `Only ID`, Autismspektrumtillstand, `Downs syndrom`, CP, `ADHD/ADD`, Other)
 parent$education_mother <- as.numeric(parent$education_mother)
 parent$education_father <- as.numeric(parent$education_father)
 parent$occupation_mother <- as.numeric(parent$occupation_mother)

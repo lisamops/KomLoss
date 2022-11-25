@@ -169,7 +169,7 @@ First an unconditional model including a fixed effect of time was built (Model 1
 After fitting the unconditional models, a conditional model (Model 3) was built using contrasts to test the Hypotheses. There were three contrasts performed: comparison group versus phonic-based intervention (Hypothesis 1), comparison versus comprehension-based intervention (Hypothesis 2), and combination versus phonic-based and comprehension-based intervention (Hypothesis 3). 
 
 # Results  
-The recruitment process resulted in `r printnum(length(background_raven$id), numerals = T) ` participants ($n_{girls}$ = `r length((background_raven %>% filter(gender == "Girl"))$id) `, $n_{boys}$ = `r length((background_raven %>% filter(gender == "Boy"))$id)`). However, `r printnum((length(background_raven$id))-(length((mlm_data %>% filter(time == 1))$id)), numerals = F) ` participant was excluded from the study, due to testing not being followed as per protocol. Thus,the final sample thus included `r printnum(length((mlm_data %>% filter(time == 1))$id), numerals = T) ` participants ($n_{girls}$ = `r length((mlm_data  %>% filter(time == 1) %>% filter(gender == "Girl"))$id) `, $n_{boys}$ = `r length((mlm_data  %>% filter(time == 1) %>% filter(gender == "Boy"))$id)`). The control group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Control"))$id), numerals = T) `, the phonic-based group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "ALL"))$id), numerals = T) `, the comprehension-based group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Animega-is"))$id), numerals = T) `, and the combination group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$id), numerals = T) `, for age, IQ, and instruction duration for each group, see Table X. Data on diagnoses were collected using parental surveys. The diagnoses in the ID group can be seen in Table\ \@ref(tab:diagnosis-table).
+The recruitment process resulted in `r printnum(length(background_raven$id), numerals = T) ` participants ($n_{girls}$ = `r length((background_raven %>% filter(gender == "Girl"))$id) `, $n_{boys}$ = `r length((background_raven %>% filter(gender == "Boy"))$id)`). However, `r printnum((length(background_raven$id))-(length((mlm_data %>% filter(time == 1))$id)), numerals = F) ` participants were excluded from the study, one due to testing not being followed as per protocol, and three that dropped out of the study after the first testing session. Thus,the final sample thus included `r printnum(length((mlm_data %>% filter(time == 1))$id), numerals = T) ` participants ($n_{girls}$ = `r length((mlm_data  %>% filter(time == 1) %>% filter(gender == "Girl"))$id) `, $n_{boys}$ = `r length((mlm_data  %>% filter(time == 1) %>% filter(gender == "Boy"))$id)`). The control group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Control"))$id), numerals = T) `, the phonic-based group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "ALL"))$id), numerals = T) `, the comprehension-based group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Animega-is"))$id), numerals = T) `, and the combination group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$id), numerals = T) `, for age, IQ, and instruction duration for each group, see Table X. Data on diagnoses were collected using parental surveys. The diagnoses in the ID group can be seen in Table\ \@ref(tab:diagnosis-table).
 The descriptive statistics for all variables on each assessment time can be seen in Table\ \@ref(tab:descriptives-table).
 
 ```{r descriptives-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
@@ -239,7 +239,6 @@ descTable <- bind_cols(var_names, Means_cont, SDs_cont, Range_cont, Means_all, S
 
 col.names = c(" ", "$M_{control}$", "$SD_{control}$", "$(Range)_{control}$", "$M_{PB}$", "$SD_{PB}$", "$(Range)_{PB}$", "$M_{CB}$", "$SD_{CB}$", "$(Range)_{CB}$", "$M_{combi}$", "$SD_{combi}$", "$(Range)_{combi}$", "$p$")
 
-#TODO Cannot get table to print two decimals.
 apa_table(
   descTable
   , caption = "Descriptive statistics of included variables presented by group"
@@ -250,8 +249,33 @@ apa_table(
   , align = c('l', 'c')
   , font_size = c("small")
 )
+```
+
+```{r ID-diagnosis, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+
+diagnosis_data <- mlm_data %>% filter(time == 1) %>% dplyr::select(`Only ID`, Autismspektrumtillstand, `Downs syndrom`, CP, `ADHD/ADD`, Other)
+
+diagnosis_data$`Only ID` <- as.integer(diagnosis_data$`Only ID`)
+diagnosis_data$Autismspektrumtillstand <- as.integer(diagnosis_data$Autismspektrumtillstand)
+diagnosis_data$`Downs syndrom` <- as.integer(diagnosis_data$`Downs syndrom`)
+diagnosis_data$CP <- as.integer(diagnosis_data$CP)
+diagnosis_data$`ADHD/ADD` <- as.integer(diagnosis_data$`ADHD/ADD`)
+diagnosis_data$Other <- as.integer(diagnosis_data$Other)
+
+diagnosis_table <- diagnosis_data  %>%
+   summarise_all(sum)
+
+apa_table(
+  diagnosis_table
+  , caption = "Diagnoses in sample"
+  , note = "Some participants can have more than one additional diagnosis"
+  , row.names = FALSE
+  , align = c('l', 'c')
+  , font_size = c("small")
+)
 
 ```
+
 
 ```{r desc-read-control-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
@@ -461,7 +485,7 @@ kruskal_test_TT <- kruskal.test(tot_train_time~group, data = mlm_data%>% filter(
 
 ```
 
-The participants were instructed to train for a total of 18 hours, 1080 minutes. However, the participants ended up with significantly less duration of the instruction. On average the participants trained for `r round(mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE), digits = 2) ` (*sd* =`r round(sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE), digits = 2) `) minutes (`r round(mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60, digits = 2) ` (*sd* =`r round(sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60, digits = 2) `) hours (*range* =  `r round(range((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE), digits = 0) `). There was no difference in instruction duration between the three intervention groups (*H*(`r kruskal_test_TT[["parameter"]]`) = `r kruskal_test_TT[["statistic"]]`, *p* `r p_small(kruskal_test_TT[["p.value"]])` ). The instruction duration for each group can be seen in Figure X.
+The participants were instructed to train for a total of 18 hours, 1080 minutes. However, the participants ended up with significantly less duration of the instructions. On average the participants trained for `r round(mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE), digits = 2) ` (*sd* =`r round(sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE), digits = 2) `) minutes (`r round(mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60, digits = 2) ` (*sd* =`r round(sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60, digits = 2) `) hours (*range* =  `r round(range((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE), digits = 0) `). There was no difference in instruction duration between the three intervention groups (*H*(`r kruskal_test_TT[["parameter"]]`) = `r kruskal_test_TT[["statistic"]]`, *p* `r p_small(kruskal_test_TT[["p.value"]])` ). The instruction duration for each group can be seen in Figure X.
 
 ```{r  tottraintime-plot, include = TRUE, results='asis'}
 
@@ -484,14 +508,14 @@ ggboxplot(data = mlm_data_labels%>% filter(time == 1)%>% filter(group != "Contro
 
 ## Phonological awareness
 
-### Hypothesis 1: Training phonic-based reading strategies improves phonological awareness. 
+### Hypothesis 1: A phonics-based reading strategy improves phonological awareness.
 
-There was almost a significant interaction between days and the intervention on phonic-based reading, the group training phonic-based strategies improved more than the comparison group (`r apa_print(model_PA_3)$full_result$days_contrast_1vs2`). 
+There was almost a significant interaction between days and the intervention on phonics-based reading, the group training phonic-based strategies improved more than the comparison group (`r apa_print(model_PA_3)$full_result$days_contrast_1vs2`). 
 
-### Hypothesis 2: Training comprehension-based reading strategies improves phonological awareness. 
+### Hypothesis 2: A comprehension-based reading strategy improves phonological awareness.
 There was no significant interaction between days and intervention for the comprehension-based reading strategy on PA (`r apa_print(model_PA_3)$full_result$days_contrast_1vs3`). 
 
-### Hypothesis 3: The combined training is more effective than either intervention on its own.
+### Hypothesis 3:  The combination of both reading strategies is more effective than either strategy on its own.
 
 There was a significant interaction between the combined group and the other two intervention groups, (`r apa_print(model_PA_3)$full_result$days_contrast_4vs23`), the combined training improved PA over time more than the other two intervention groups. The results from the PA models can be seen in Table\ \@ref(tab:PA-table).
 
@@ -522,14 +546,14 @@ ggplot(data      = mlm_data,
 
 ## Word recognition
 
-### Hypothesis 1: Training phonic-based reading strategies improves word recognition 
+### Hypothesis 1:  A phonics-based reading strategy improves word recognition.
 
 There was not a significant interaction between days and the intervention on phonic-based-based reading (`r apa_print(model_word_3)$full_result$scaledays_center___FALSE_contrast_1vs2`). 
 
-### Hypothesis 2: Training comprehension-based reading strategies improves word recognition 
+### Hypothesis 2:  A comprehension-based reading strategy improves word recognition.
 There was no significant interaction between days and intervention for the comprehension-based reading strategy on word recognition (`r apa_print(model_word_3)$full_result$scaledays_center___FALSE_contrast_1vs3`). 
 
-### Hypothesis 3: The combined training is more effective than either intervention on its own.
+### Hypothesis 3: The combination of both reading strategies is more effective than either strategy on its own.
 
 There was a not significant interaction between the combined group and the other two intervention groups, (`r apa_print(model_word_3)$full_result$scaledays_center___FALSE_contrast_4vs23`). The results from the word models can be seen in Table\ \@ref(tab:word-table).
 
@@ -563,14 +587,15 @@ ggplot(data      = mlm_data,
 
 # Reading comprehension
 
-### Hypothesis 1: Training phonic-based reading strategies improves reading comprehension. 
+### Hypothesis 1:  A phonics-based reading strategy improves word recognition.
 
 There was not a significant interaction between days and the intervention on phonic-based training on reading comprehension (`r apa_print(DLS_poisson_3)$full_result$scaledays_center___FALSE_contrast_1vs2`). 
 
-### Hypothesis 2: Training comprehension-based reading strategies improves sentence awareness. 
+### Hypothesis 2: A comprehension-based reading strategy improves reading comprehension.
+
 There was no significant interaction between days and intervention for the comprehension-based reading strategy on reading comprehension (`r apa_print(DLS_poisson_3)$full_result$scaledays_center___FALSE_contrast_1vs3`). 
 
-### Hypothesis 3: The combined training is more effective than either intervention on its own.
+### Hypothesis 3: The combination of both reading strategies is more effective than either strategy on its own.
 
 There was a not significant interaction between the combined group and the other two intervention groups, (`r apa_print(DLS_poisson_3)$full_result$scaledays_center___FALSE_contrast_4vs23`).
 
