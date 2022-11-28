@@ -123,7 +123,7 @@ model_word_3 <- lmer(word ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contr
 
 #anova(DLS_poisson, DLS_poisson_2)  # sig.
 
-DLS_poisson_3 <- glmer(DLS ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + (1+scale(days, center = FALSE)||id), data = mlm_data,family=poisson)
+DLS_poisson_3 <- glmer(DLS ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_4vs23 + (1+days||id), data = mlm_data,family=poisson)
 #anova(DLS_poisson_2, DLS_poisson_3)  #not sig.
 
 #Adding IQ - model improves a lot. IQ can explain how well the participants are developing over time

@@ -540,14 +540,14 @@ ggplot(data      = mlm_data,
 
 ### Hypothesis 1:  A phonics-based reading strategy improves word recognition.
 
-There was not a significant interaction between days and the intervention on phonic-based-based reading (`r apa_print(model_word_3)$full_result$scaledays_center___FALSE_contrast_1vs2`). 
+There was not a significant interaction between days and the intervention on phonic-based-based reading (`r apa_print(model_word_3)$full_result$days_contrast_1vs2`). 
 
 ### Hypothesis 2:  A comprehension-based reading strategy improves word recognition.
-There was no significant interaction between days and intervention for the comprehension-based reading strategy on word recognition (`r apa_print(model_word_3)$full_result$scaledays_center___FALSE_contrast_1vs3`). 
+There was no significant interaction between days and intervention for the comprehension-based reading strategy on word recognition (`r apa_print(model_word_3)$full_result$days_contrast_1vs3`). 
 
 ### Hypothesis 3: The combination of both reading strategies is more effective than either strategy on its own.
 
-There was a not significant interaction between the combined group and the other two intervention groups, (`r apa_print(model_word_3)$full_result$scaledays_center___FALSE_contrast_4vs23`). The results from the word models can be seen in Table\ \@ref(tab:word-table).
+There was a not significant interaction between the combined group and the other two intervention groups, (`r apa_print(model_word_3)$full_result$days_contrast_4vs23`). The results from the word models can be seen in Table\ \@ref(tab:word-table).
 
 
 ```{r word-table, include=TRUE, results='asis'}
@@ -584,15 +584,15 @@ ggplot(data      = mlm_data,
 
 ### Hypothesis 1:  A phonics-based reading strategy improves word recognition.
 
-There was not a significant interaction between days and the intervention on phonic-based training on reading comprehension (`r apa_print(DLS_poisson_3)$full_result$scaledays_center___FALSE_contrast_1vs2`). 
+There was not a significant interaction between days and the intervention on phonic-based training on reading comprehension (`r apa_print(DLS_poisson_3)$full_result$days_contrast_1vs2`). 
 
 ### Hypothesis 2: A comprehension-based reading strategy improves reading comprehension.
 
-There was no significant interaction between days and intervention for the comprehension-based reading strategy on reading comprehension (`r apa_print(DLS_poisson_3)$full_result$scaledays_center___FALSE_contrast_1vs3`). 
+There was no significant interaction between days and intervention for the comprehension-based reading strategy on reading comprehension (`r apa_print(DLS_poisson_3)$full_result$days_contrast_1vs3`). 
 
 ### Hypothesis 3: The combination of both reading strategies is more effective than either strategy on its own.
 
-There was a not significant interaction between the combined group and the other two intervention groups, (`r apa_print(DLS_poisson_3)$full_result$scaledays_center___FALSE_contrast_4vs23`).
+There was a not significant interaction between the combined group and the other two intervention groups, (`r apa_print(DLS_poisson_3)$full_result$days_contrast_4vs23`).
 
 The results from the word models can be seen in Table\ \@ref(tab:DLS-table).
 
