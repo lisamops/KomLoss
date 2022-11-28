@@ -14,9 +14,9 @@ author:
   affiliation: 1, 2, 3,4
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
   word_document: default
 abstract: |
   (ref:abstract)
@@ -290,30 +290,27 @@ descriptives_control <- desc_data2  %>% filter(group == 1) %>% group_by(time) %>
 #descriptives[, -1] <- printnum(descriptives[, -1])
 descriptives_control2 <- as.data.frame(t(descriptives_control))
 
-descriptives_t1 <- dplyr::select(descriptives_control2, "V1")
-descriptives_t2 <- dplyr::select(descriptives_control2, "V2")
-descriptives_t3 <- dplyr::select(descriptives_control2, "V3")
-descriptives_t4 <- dplyr::select(descriptives_control2, "V4")
+Response_variable <- c("PA", "Word recogniton", "Reading comprehension")
+#T1
+Means_t1 <- c(descriptives_control2['PA_Mean',"V1"], descriptives_control2['word_Mean',"V1"], descriptives_control2['DLS_Mean',"V1"])
+SDs_t1 <- c(descriptives_control2['PA_SD', "V1"], descriptives_control2['word_SD', "V1"], descriptives_control2['DLS_SD', "V1"])
+Range_t1 <- c(descriptives_control2['PA_Range', "V1"], descriptives_control2['word_Range', "V1"], descriptives_control2['DLS_Range', "V1"])
+#T2
+Means_t2 <- c(descriptives_control2['PA_Mean', "V2"], descriptives_control2['word_Mean', "V2"], descriptives_control2['DLS_Mean', "V2"])
+SDs_t2 <- c(descriptives_control2['PA_SD', "V2"], descriptives_control2['word_SD', "V2"], descriptives_control2['DLS_SD', "V2"])
+Range_t2 <- c(descriptives_control2['PA_Range', "V2"], descriptives_control2['word_Range', "V2"], descriptives_control2['DLS_Range', "V2"])
+#T3
+Means_t3 <- c(descriptives_control2['PA_Mean', "V3"], descriptives_control2['word_Mean', "V3"], descriptives_control2['DLS_Mean', "V3"])
+SDs_t3 <- c(descriptives_control2['PA_SD', "V3"], descriptives_control2['word_SD', "V3"], descriptives_control2['DLS_SD', "V3"])
+Range_t3 <- c(descriptives_control2['PA_Range', "V3"], descriptives_control2['word_Range', "V3"], descriptives_control2['DLS_Range', "V3"])
+#T4
+Means_t4 <- c(descriptives_control2['PA_Mean', "V4"], descriptives_control2['word_Mean', "V4"], descriptives_control2['DLS_Mean', "V4"])
+SDs_t4 <- c(descriptives_control2['PA_SD', "V4"], descriptives_control2['word_SD', "V4"], descriptives_control2['DLS_SD', "V4"])
+Range_t4 <- c(descriptives_control2['PA_Range', "V4"], descriptives_control2['word_Range', "V4"], descriptives_control2['DLS_Range', "V4"])
 
-Means_t1 <- slice(descriptives_t1, 3:5)
-SDs_t1 <- slice(descriptives_t1, 7:9)
-Range_t1 <- slice(descriptives_t1, 11:13)
-
-Means_t2 <- slice(descriptives_t2, 3:5)
-SDs_t2 <- slice(descriptives_t2, 7:9)
-Range_t2 <- slice(descriptives_t2, 11:13)
-
-Means_t3 <- slice(descriptives_t3, 3:5)
-SDs_t3 <- slice(descriptives_t3, 7:9)
-Range_t3 <- slice(descriptives_t3, 11:13)
-
-Means_t4 <- slice(descriptives_t4, 3:5)
-SDs_t4 <- slice(descriptives_t4, 7:9)
-Range_t4 <- slice(descriptives_t4, 11:13)
+descTable <- data.frame(Response_variable, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
 var_names <- as.data.frame(c( "Word recognition","Sentence", "PA"))
-
-descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
 col.names = c(" ", "$M_{T1}$", "$SD_{T1}$", "$(Range)_{T1}$", "$M_{T2}$", "$SD_{T2}$", "$(Range)_{T2}$", "$M_{T3}$", "$SD_{T3}$", "$(Range)_{T3}$", "$M_{T4}$", "$SD_{T4}$", "$(Range)_{T4}$")
 
@@ -339,30 +336,27 @@ descriptives_all <- desc_data2  %>% filter(group == 2) %>% group_by(time) %>%
 #descriptives[, -1] <- printnum(descriptives[, -1])
 descriptives_all2 <- as.data.frame(t(descriptives_all))
 
-descriptives_t1 <- dplyr::select(descriptives_all2, "V1")
-descriptives_t2 <- dplyr::select(descriptives_all2, "V2")
-descriptives_t4 <- dplyr::select(descriptives_all2, "V4")
-descriptives_t3 <- dplyr::select(descriptives_all2, "V3")
+Response_variable <- c("PA", "Word recogniton", "Reading comprehension")
+#T1
+Means_t1 <- c(descriptives_control2['PA_Mean',"V1"], descriptives_control2['word_Mean',"V1"], descriptives_control2['DLS_Mean',"V1"])
+SDs_t1 <- c(descriptives_control2['PA_SD', "V1"], descriptives_control2['word_SD', "V1"], descriptives_control2['DLS_SD', "V1"])
+Range_t1 <- c(descriptives_control2['PA_Range', "V1"], descriptives_control2['word_Range', "V1"], descriptives_control2['DLS_Range', "V1"])
+#T2
+Means_t2 <- c(descriptives_control2['PA_Mean', "V2"], descriptives_control2['word_Mean', "V2"], descriptives_control2['DLS_Mean', "V2"])
+SDs_t2 <- c(descriptives_control2['PA_SD', "V2"], descriptives_control2['word_SD', "V2"], descriptives_control2['DLS_SD', "V2"])
+Range_t2 <- c(descriptives_control2['PA_Range', "V2"], descriptives_control2['word_Range', "V2"], descriptives_control2['DLS_Range', "V2"])
+#T3
+Means_t3 <- c(descriptives_control2['PA_Mean', "V3"], descriptives_control2['word_Mean', "V3"], descriptives_control2['DLS_Mean', "V3"])
+SDs_t3 <- c(descriptives_control2['PA_SD', "V3"], descriptives_control2['word_SD', "V3"], descriptives_control2['DLS_SD', "V3"])
+Range_t3 <- c(descriptives_control2['PA_Range', "V3"], descriptives_control2['word_Range', "V3"], descriptives_control2['DLS_Range', "V3"])
+#T4
+Means_t4 <- c(descriptives_control2['PA_Mean', "V4"], descriptives_control2['word_Mean', "V4"], descriptives_control2['DLS_Mean', "V4"])
+SDs_t4 <- c(descriptives_control2['PA_SD', "V4"], descriptives_control2['word_SD', "V4"], descriptives_control2['DLS_SD', "V4"])
+Range_t4 <- c(descriptives_control2['PA_Range', "V4"], descriptives_control2['word_Range', "V4"], descriptives_control2['DLS_Range', "V4"])
 
-Means_t1 <- slice(descriptives_t1, 3:5)
-SDs_t1 <- slice(descriptives_t1, 7:9)
-Range_t1 <- slice(descriptives_t1, 11:13)
-
-Means_t2 <- slice(descriptives_t2, 3:5)
-SDs_t2 <- slice(descriptives_t2, 7:9)
-Range_t2 <- slice(descriptives_t2, 11:13)
-
-Means_t3 <- slice(descriptives_t3, 3:5)
-SDs_t3 <- slice(descriptives_t3, 7:9)
-Range_t3 <- slice(descriptives_t3, 11:13)
-
-Means_t4 <- slice(descriptives_t4, 3:5)
-SDs_t4 <- slice(descriptives_t4, 7:9)
-Range_t4 <- slice(descriptives_t4, 11:13)
+descTable <- data.frame(Response_variable, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
 var_names <- as.data.frame(c( "Word recognition","Sentence", "PA"))
-
-descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
 col.names = c(" ", "$M_{T1}$", "$SD_{T1}$", "$(Range)_{T1}$", "$M_{T2}$", "$SD_{T2}$", "$(Range)_{T2}$", "$M_{T3}$", "$SD_{T3}$", "$(Range)_{T3}$", "$M_{T4}$", "$SD_{T4}$", "$(Range)_{T4}$")
 
@@ -388,30 +382,27 @@ descriptives_animega <- desc_data2  %>% filter(group == 3) %>% group_by(time) %>
 #descriptives[, -1] <- printnum(descriptives[, -1])
 descriptives_animega2 <- as.data.frame(t(descriptives_animega))
 
-descriptives_t1 <- dplyr::select(descriptives_animega2, "V1")
-descriptives_t2 <- dplyr::select(descriptives_animega2, "V2")
-descriptives_t3 <- dplyr::select(descriptives_animega2, "V3")
-descriptives_t4 <- dplyr::select(descriptives_animega2, "V4")
+Response_variable <- c("PA", "Word recogniton", "Reading comprehension")
+#T1
+Means_t1 <- c(descriptives_control2['PA_Mean',"V1"], descriptives_control2['word_Mean',"V1"], descriptives_control2['DLS_Mean',"V1"])
+SDs_t1 <- c(descriptives_control2['PA_SD', "V1"], descriptives_control2['word_SD', "V1"], descriptives_control2['DLS_SD', "V1"])
+Range_t1 <- c(descriptives_control2['PA_Range', "V1"], descriptives_control2['word_Range', "V1"], descriptives_control2['DLS_Range', "V1"])
+#T2
+Means_t2 <- c(descriptives_control2['PA_Mean', "V2"], descriptives_control2['word_Mean', "V2"], descriptives_control2['DLS_Mean', "V2"])
+SDs_t2 <- c(descriptives_control2['PA_SD', "V2"], descriptives_control2['word_SD', "V2"], descriptives_control2['DLS_SD', "V2"])
+Range_t2 <- c(descriptives_control2['PA_Range', "V2"], descriptives_control2['word_Range', "V2"], descriptives_control2['DLS_Range', "V2"])
+#T3
+Means_t3 <- c(descriptives_control2['PA_Mean', "V3"], descriptives_control2['word_Mean', "V3"], descriptives_control2['DLS_Mean', "V3"])
+SDs_t3 <- c(descriptives_control2['PA_SD', "V3"], descriptives_control2['word_SD', "V3"], descriptives_control2['DLS_SD', "V3"])
+Range_t3 <- c(descriptives_control2['PA_Range', "V3"], descriptives_control2['word_Range', "V3"], descriptives_control2['DLS_Range', "V3"])
+#T4
+Means_t4 <- c(descriptives_control2['PA_Mean', "V4"], descriptives_control2['word_Mean', "V4"], descriptives_control2['DLS_Mean', "V4"])
+SDs_t4 <- c(descriptives_control2['PA_SD', "V4"], descriptives_control2['word_SD', "V4"], descriptives_control2['DLS_SD', "V4"])
+Range_t4 <- c(descriptives_control2['PA_Range', "V4"], descriptives_control2['word_Range', "V4"], descriptives_control2['DLS_Range', "V4"])
 
-Means_t1 <- slice(descriptives_t1, 3:5)
-SDs_t1 <- slice(descriptives_t1, 7:9)
-Range_t1 <- slice(descriptives_t1, 11:13)
-
-Means_t2 <- slice(descriptives_t2, 3:5)
-SDs_t2 <- slice(descriptives_t2, 7:9)
-Range_t2 <- slice(descriptives_t2, 11:13)
-
-Means_t3 <- slice(descriptives_t3, 3:5)
-SDs_t3 <- slice(descriptives_t3, 7:9)
-Range_t3 <- slice(descriptives_t3, 11:13)
-
-Means_t4 <- slice(descriptives_t4, 3:5)
-SDs_t4 <- slice(descriptives_t4, 7:9)
-Range_t4 <- slice(descriptives_t4, 11:13)
+descTable <- data.frame(Response_variable, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
 var_names <- as.data.frame(c( "Word recognition","Sentence", "PA"))
-
-descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
 col.names = c(" ", "$M_{T1}$", "$SD_{T1}$", "$(Range)_{T1}$", "$M_{T2}$", "$SD_{T2}$", "$(Range)_{T2}$", "$M_{T3}$", "$SD_{T3}$", "$(Range)_{T3}$", "$M_{T4}$", "$SD_{T4}$", "$(Range)_{T4}$")
 
@@ -437,30 +428,28 @@ descriptives_combi <- desc_data2  %>% filter(group == 4) %>% group_by(time) %>%
 #descriptives[, -1] <- printnum(descriptives[, -1])
 descriptives_combi2 <- as.data.frame(t(descriptives_combi))
 
-descriptives_t1 <- dplyr::select(descriptives_combi2, "V1")
-descriptives_t2 <- dplyr::select(descriptives_combi2, "V2")
-descriptives_t3 <- dplyr::select(descriptives_combi2, "V3")
-descriptives_t4 <- dplyr::select(descriptives_combi2, "V4")
+Response_variable <- c("PA", "Word recogniton", "Reading comprehension")
+#T1
+Means_t1 <- c(descriptives_control2['PA_Mean',"V1"], descriptives_control2['word_Mean',"V1"], descriptives_control2['DLS_Mean',"V1"])
+SDs_t1 <- c(descriptives_control2['PA_SD', "V1"], descriptives_control2['word_SD', "V1"], descriptives_control2['DLS_SD', "V1"])
+Range_t1 <- c(descriptives_control2['PA_Range', "V1"], descriptives_control2['word_Range', "V1"], descriptives_control2['DLS_Range', "V1"])
+#T2
+Means_t2 <- c(descriptives_control2['PA_Mean', "V2"], descriptives_control2['word_Mean', "V2"], descriptives_control2['DLS_Mean', "V2"])
+SDs_t2 <- c(descriptives_control2['PA_SD', "V2"], descriptives_control2['word_SD', "V2"], descriptives_control2['DLS_SD', "V2"])
+Range_t2 <- c(descriptives_control2['PA_Range', "V2"], descriptives_control2['word_Range', "V2"], descriptives_control2['DLS_Range', "V2"])
+#T3
+Means_t3 <- c(descriptives_control2['PA_Mean', "V3"], descriptives_control2['word_Mean', "V3"], descriptives_control2['DLS_Mean', "V3"])
+SDs_t3 <- c(descriptives_control2['PA_SD', "V3"], descriptives_control2['word_SD', "V3"], descriptives_control2['DLS_SD', "V3"])
+Range_t3 <- c(descriptives_control2['PA_Range', "V3"], descriptives_control2['word_Range', "V3"], descriptives_control2['DLS_Range', "V3"])
+#T4
+Means_t4 <- c(descriptives_control2['PA_Mean', "V4"], descriptives_control2['word_Mean', "V4"], descriptives_control2['DLS_Mean', "V4"])
+SDs_t4 <- c(descriptives_control2['PA_SD', "V4"], descriptives_control2['word_SD', "V4"], descriptives_control2['DLS_SD', "V4"])
+Range_t4 <- c(descriptives_control2['PA_Range', "V4"], descriptives_control2['word_Range', "V4"], descriptives_control2['DLS_Range', "V4"])
 
-Means_t1 <- slice(descriptives_t1, 3:5)
-SDs_t1 <- slice(descriptives_t1, 7:9)
-Range_t1 <- slice(descriptives_t1, 11:13)
+descTable <- data.frame(Response_variable, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
-Means_t2 <- slice(descriptives_t2, 3:5)
-SDs_t2 <- slice(descriptives_t2, 7:9)
-Range_t2 <- slice(descriptives_t2, 11:13)
-
-Means_t3 <- slice(descriptives_t3, 3:5)
-SDs_t3 <- slice(descriptives_t3, 7:9)
-Range_t3 <- slice(descriptives_t3, 11:13)
-
-Means_t4 <- slice(descriptives_t4, 3:5)
-SDs_t4 <- slice(descriptives_t4, 7:9)
-Range_t4 <- slice(descriptives_t4, 11:13)
 
 var_names <- as.data.frame(c( "Word recognition","Sentence", "PA"))
-
-descTable <- bind_cols(var_names, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
 col.names = c(" ", "$M_{T1}$", "$SD_{T1}$", "$(Range)_{T1}$", "$M_{T2}$", "$SD_{T2}$", "$(Range)_{T2}$", "$M_{T3}$", "$SD_{T3}$", "$(Range)_{T3}$", "$M_{T4}$", "$SD_{T4}$", "$(Range)_{T4}$")
 
@@ -611,7 +600,7 @@ The results from the word models can be seen in Table\ \@ref(tab:DLS-table).
 tab_model(DLS_poisson_3,
           show.re.var= T, 
                   pred.labels =c("(Intercept)", "Days", "Control vs PB", "Control vs CB", "PB and CB vs Combi", "Days*Control vs PB", "Days*Control vs CB", "Days*PB and CB vs Combi"),
-                  dv.labels= "Effects of Interventions on Phonological Awareness")
+                  dv.labels= "Effects of Interventions on Reading comprehension")
 ```
 
 ```{r  DLS-plot, include = TRUE, results='asis'}

@@ -85,7 +85,7 @@ data_df <- data_df %>%
   mutate(days_played_animega= ifelse(group == 1, 0, days_played_animega))%>% 
   mutate(tot_train_time= ifelse(group == 1, 0, tot_train_time))%>% 
   mutate(tot_train_time_scale= scale(tot_train_time))%>% 
-  mutate(phoneme= fonem_sum+fonemsynthesis_sum+rhyme_sum)   # create new phoneme variable
+  mutate(PA = fonem_sum+fonemsynthesis_sum+rhyme_sum)   # create new phoneme variable called PA
 
 #Read student survey
 student_survey <- import("data/student_survey.xlsx")
