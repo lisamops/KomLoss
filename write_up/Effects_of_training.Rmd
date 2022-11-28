@@ -14,9 +14,9 @@ author:
   affiliation: 1, 2, 3,4
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
   word_document: default
 abstract: |
   (ref:abstract)

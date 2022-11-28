@@ -23,7 +23,14 @@ mlm_data <- data_df %>%
   mutate(contrast_1vs2= ifelse(group == 1, (-1),  ifelse(group == 2, 1, 0))) %>%  #control vs ALL
   mutate(contrast_1vs3= ifelse(group == 1, (-1),  ifelse(group == 3, 1, 0))) #control vs animega
 
-#mlm_data$centred <- scale(mlm_data$days, center = TRUE)
+
+#All outcome variables are SCALED (not ce) to get standardized estimates in the model
+mlm_data$PA <- scale(mlm_data$PA, center = F)
+mlm_data$word <- scale(mlm_data$word, center = F)
+mlm_data$DLS <- scale(mlm_data$DLS, center = F)
+
+
+mlm_data$days <- scale(mlm_data$days, center = F)
 #mlm_data$days_not_centred <- scale(mlm_data$days, center = FALSE)
 
 #write.csv(mlm_data,'mlm_data.csv', na = "9999")
@@ -83,7 +90,7 @@ model_PA_3 <- lmer(PA ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_
 
 #conditional model (e.g. including word)
 #adding intervention (OBS! with random slope) # no sig interaction
-model_word_3 <- lmer(word ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 + (1+scale(days, center = FALSE)|id), data = mlm_data, REML = FALSE)
+model_word_3 <- lmer(word ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_4vs23 + (1+days|id), data = mlm_data, REML = FALSE)
 #anova(model_word_2b, model_word_3) # not  sig. improved
 
 #Adding IQ - model improves. IQ can explain how well the participants are developing over time (p = .070)

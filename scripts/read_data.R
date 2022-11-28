@@ -45,7 +45,7 @@ data_df$DLS_reading_comp_sum <- as.numeric(data_df$DLS_reading_comp_sum)
 data_df$DLS_listening_comp_sum <- as.numeric(data_df$DLS_listening_comp_sum)
 
 #create indices on OS64 and OLAF to create word_reading_total. z-transformation used.
-data_df$word_reading_total <- (scale(data_df$OS64_sum)+scale(data_df$OLAF_sum))/2
+data_df$word_reading_total <- (scale(data_df$OS64_sum, center = F)+scale(data_df$OLAF_sum, center = F))/2
 
 
 #Read Insamlad data alla grupper for extracting the dates for testing
