@@ -227,7 +227,7 @@ DT_IQ = dunnTest(IQ ~ group, data=mlm_data, method="bh")  #Follow up test for Kr
 KW_test <- c(kruskal.test(years_old~group, data = mlm_data %>% filter(time == 1))$p.value, #variances not equal
             kruskal.test(IQ~group, data = mlm_data %>% filter(time == 1))$p.value, #variances equal
             kruskal.test(tot_train_time~group, data = mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$p.value,  #variances equal
-            kruskal.test(IQ~PPC, data = mlm_data %>% filter(time == 1))$p.value #variances equal
+            kruskal.test(PPC~group, data = mlm_data %>% filter(time == 1))$p.value #variances equal
            )
 
 bon_t <- p.adjust(KW_test, method = "holm", n = length(KW_test)) #korrigerar för multiple comparisons, är det vettigt att göra det här?
@@ -520,7 +520,10 @@ There was no significant interaction between days and intervention for the compr
 There was a significant interaction between the combined group and the other two intervention groups, (`r apa_print(model_PA_3)$full_result$days_contrast_4vs23`), the combined training improved PA over time more than the other two intervention groups. The results from the PA models can be seen in Table\ \@ref(tab:PA-table).
 
 ```{r PA-table, include = TRUE, results='asis'}
-tab_model(model_PA_3, show.df = TRUE)
+tab_model(model_PA_3,
+          show.re.var= T, 
+                  pred.labels =c("(Intercept)", "Days", "Control vs PB", "Control vs CB", "PB and CB vs Combi", "Days*Control vs PB", "Days*Control vs CB", "Days*PB and CB vs Combi"),
+                  dv.labels= "Effects of Interventions on Phonological Awareness")
 ```
 
 ```{r  PA-plot, include = TRUE, results='asis'}
@@ -559,7 +562,10 @@ There was a not significant interaction between the combined group and the other
 
 
 ```{r word-table, include=TRUE, results='asis'}
-tab_model(model_word_3, show.df = TRUE)
+tab_model(model_word_3,
+          show.re.var= T, 
+                  pred.labels =c("(Intercept)", "Days", "Control vs PB", "Control vs CB", "PB and CB vs Combi", "Days*Control vs PB", "Days*Control vs CB", "Days*PB and CB vs Combi"),
+                  dv.labels= "Effects of Interventions on Word Recognition")
 
 ```
 
@@ -602,7 +608,10 @@ There was a not significant interaction between the combined group and the other
 The results from the word models can be seen in Table\ \@ref(tab:DLS-table).
 
 ```{r DLS-table, include=TRUE, results='asis'}
-tab_model(DLS_poisson_3)
+tab_model(DLS_poisson_3,
+          show.re.var= T, 
+                  pred.labels =c("(Intercept)", "Days", "Control vs PB", "Control vs CB", "PB and CB vs Combi", "Days*Control vs PB", "Days*Control vs CB", "Days*PB and CB vs Combi"),
+                  dv.labels= "Effects of Interventions on Phonological Awareness")
 ```
 
 ```{r  DLS-plot, include = TRUE, results='asis'}

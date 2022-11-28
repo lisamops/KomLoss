@@ -60,6 +60,8 @@ data_df <- full_join(data_df, dates_tested, by = c("id", "time"))
 background_raven <- import("data/bakgrundsdata_raven.xlsx")
 background_raven <- background_raven %>% select(id = ID, group, raven = score_total, gender, date_of_birth, date_t1, IQ = standard_score)
 background_raven <- background_raven %>% mutate(age_in_days = date_t1-date_of_birth)
+background_raven <- background_raven %>% mutate(age_scale = scale(age_in_days))
+
 background_raven$IQ <- as.numeric(background_raven$IQ)
 background_raven <- background_raven %>% mutate(IQ_scale = scale(IQ))
 

@@ -16,7 +16,7 @@ library(sjstats)
 #options(scipen=999)
 
 mlm_data <- data_df %>% 
-  select(id, group, time, days, gender, age_in_days, letter = letter_sum, fonem_sum, fonemsynthesis_sum, rhyme_sum, word = word_reading_total, DLS = DLS_reading_comp_sum, 
+  select(id, group, time, days, gender, age_in_days, age_scale, letter = letter_sum, fonem_sum, fonemsynthesis_sum, rhyme_sum, word = word_reading_total, DLS = DLS_reading_comp_sum, 
          IQ_scale, IQ, tot_train_time_scale, tot_train_time, PPC,	education_father,	occupation_mother,	occupation_father, SES, `Only ID`, Autismspektrumtillstand, `Downs syndrom`, CP, `ADHD/ADD`, Other) %>%
   mutate(PA= fonem_sum+fonemsynthesis_sum+rhyme_sum) %>%
   select(-fonem_sum, -fonemsynthesis_sum, -rhyme_sum) %>% 
@@ -59,8 +59,12 @@ IQ_group_anova <- aov(IQ_scale ~ group, mlm_data)
 model_PA_3 <- lmer(PA ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_4vs23 + (1|id), data = mlm_data, REML = FALSE)
 #anova(model_PA_2b, model_PA_3) # sig better model.
 
-#Adding IQ - model improves a lot. IQ can explain how well the participants are developing over time #Kan Emil testa detta sig. i excell?
+#Adding IQ - model improves a lot. IQ can explain how well the participants are developing over time 
 #model_PA_4 <- lmer(PA ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_4vs23 + days*IQ_scale + (1|id), data = mlm_data, REML = FALSE)
+
+#Adding age - model improves sig. age differs at t1, but does not interacts with time.
+#model_PA_4 <- lmer(PA ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_4vs23 + days*age_scale + (1|id), data = mlm_data, REML = FALSE)
+#anova(model_PA_3, model_PA_4) # sig better model
 
 #Conclusion: Combi groups improves more than other intervention groups. IQ can explain how well the participants are developing over time 
 #(higher IQ = better improvement). Thus, might underestimate the effect of the combi group due to Animega-is group having higher IQ.
@@ -169,7 +173,18 @@ DLS_poisson_3 <- glmer(DLS ~ scale(days, center = FALSE)*contrast_1vs2 + scale(d
 #summary(model_PA_letter)
 
 
-#anova(model_word_4, model_PA_word)
+#PLOT mlm model
+# effects_PA <- effects::effect(term= "days*contrast_4vs23", mod= model_PA_3)
+# # Save the effects values as a df:
+# x_PA <- as.data.frame(effects_PA)
+# ggplot() + 
+#   geom_point(data=mlm_data, aes(days*contrast_4vs23, log(days)), color="orange") + 
+#   geom_point(data=x_PA, aes(x=days*contrast_4vs23, y=fit), color="green") +
+#   geom_line(data=x_PA, aes(x=days*contrast_4vs23, y=fit), color="blue") +
+#   geom_ribbon(data= x_PA, aes(x=days*contrast_4vs23, ymin=lower, ymax=upper), alpha= 0.3, fill="red") +
+#   labs(x="Days", y="Phonological Awareness")
+
+
 
 # #Checking assumptions
 # require("lattice")
