@@ -60,10 +60,10 @@ data_df <- full_join(data_df, dates_tested, by = c("id", "time"))
 background_raven <- import("data/bakgrundsdata_raven.xlsx")
 background_raven <- background_raven %>% select(id = ID, group, raven = score_total, gender, date_of_birth, date_t1, IQ = standard_score)
 background_raven <- background_raven %>% mutate(age_in_days = date_t1-date_of_birth)
-background_raven <- background_raven %>% mutate(age_scale = scale(age_in_days, center = FALSE))
+background_raven <- background_raven %>% mutate(age_scale = scale(age_in_days))
 
 background_raven$IQ <- as.numeric(background_raven$IQ)
-background_raven <- background_raven %>% mutate(IQ_scale = scale(IQ, center = FALSE))
+background_raven <- background_raven %>% mutate(IQ_scale = scale(IQ))
 
 data_df <- full_join(data_df, background_raven, by = c("id", "group"))
 data_df <- full_join(data_df, app_data_df, by = c("id"))
@@ -84,9 +84,8 @@ data_df <- data_df %>%
   mutate(time_played_animega= ifelse(group == 1, 0, time_played_animega))%>% 
   mutate(days_played_animega= ifelse(group == 1, 0, days_played_animega))%>% 
   mutate(tot_train_time= ifelse(group == 1, 0, tot_train_time))%>% 
-  mutate(tot_train_time_scale= scale(tot_train_time, center = FALSE))%>% 
+  mutate(tot_train_time_scale= scale(tot_train_time))%>% 
   mutate(PA = fonem_sum+fonemsynthesis_sum+rhyme_sum)   # create new phoneme variable called PA
-
 
 #Read student survey
 student_survey <- import("data/student_survey.xlsx")
@@ -116,18 +115,6 @@ data_df <- data_df %>% filter(id != 413)
 #remove IQ over 90
 #data_df <- data_df %>% filter(is.na(IQ)|IQ<90)
 
-#remove due to teachers reporting students reading more than 20 words
-data_df <- data_df %>% filter(id != 123)
-data_df <- data_df %>% filter(id != 124)
-data_df <- data_df %>% filter(id != 127)
-data_df <- data_df %>% filter(id != 129)
-data_df <- data_df %>% filter(id != 209)
-data_df <- data_df %>% filter(id != 314)
-data_df <- data_df %>% filter(id != 329)
-data_df <- data_df %>% filter(id != 333)
-data_df <- data_df %>% filter(id != 431)
-
-
 
 # teacher_rating <- data_df %>% select(id, synthesis,	segmentation,	sound_letter_connection,	understand_rhyme, decode_short_words, decode_complex_words, sight_word_reading,
 #                                      letter_sum, fonem_sum, fonemsynthesis_sum, 
@@ -135,4 +122,5 @@ data_df <- data_df %>% filter(id != 431)
 # library("PerformanceAnalytics")
 # chart.Correlation(teacher_rating[ , -c(1)], histogram=TRUE, pch=19)
 # corrplot(cor(no_missing[ , -c(1)]), method = "number")
+
 

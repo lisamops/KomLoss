@@ -474,7 +474,17 @@ kruskal_test_TT <- kruskal.test(tot_train_time~group, data = mlm_data%>% filter(
 
 ```
 
-The participants were instructed to train for a total of 18 hours, 1080 minutes. However, the participants ended up with significantly less duration of the instructions. On average the participants trained for `r round(mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE), digits = 2) ` (*sd* =`r round(sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE), digits = 2) `) minutes (`r round(mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60, digits = 2) ` (*sd* =`r round(sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60, digits = 2) `) hours (*range* =  `r round(range((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE), digits = 0) `). There was no difference in instruction duration between the three intervention groups (*H*(`r kruskal_test_TT[["parameter"]]`) = `r kruskal_test_TT[["statistic"]]`, *p* `r p_small(kruskal_test_TT[["p.value"]])` ). The instruction duration for each group can be seen in Figure X.
+The participants were instructed to train for a total of 18 hours, 1080 minutes. However, the participants ended up with significantly less. On average, the participants trained for `r round(mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE), digits = 0) ` (*sd* =`r round(sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE), digits = 0) `, *range* =  [`r round(range((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE), digits = 0) `]) minutes, `r round(mean((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60, digits = 2) ` (*sd* =`r round(sd((mlm_data %>% filter(time == 1)%>% filter(group != "Control"))$tot_train_time, na.rm = TRUE)/60, digits = 2) `) hours. There was no difference in instruction duration between the three intervention groups (*H*(`r kruskal_test_TT[["parameter"]]`) = `r kruskal_test_TT[["statistic"]]`, *p* `r p_small(kruskal_test_TT[["p.value"]])` ). 
+The combination group trained the PB intervention for 
+`r round(mean((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$time_played_ALL_tot, na.rm = TRUE), digits = 0) ` 
+(*sd* = `r round(sd((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$time_played_ALL_tot, na.rm = TRUE), digits = 0) `; 
+*range* =  [`r round(range((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$time_played_ALL_tot, na.rm = TRUE), digits = 0) `]) minutes 
+and the CB intervention for 
+`r round(mean((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$time_played_animega, na.rm = TRUE), digits = 0) ` 
+(*sd* = `r round(sd((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$time_played_animega, na.rm = TRUE), digits = 0) `; 
+*range* =  [`r round(range((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$time_played_animega, na.rm = TRUE), digits = 0) `]) minutes. 
+
+The instruction duration for each group can be seen in Figure X.
 
 ```{r  tottraintime-plot, include = TRUE, results='asis'}
 
@@ -491,7 +501,6 @@ ggboxplot(data = mlm_data_labels%>% filter(time == 1)%>% filter(group != "Contro
           xlab = F,
           ylab = "Minutes",
           legend = "none")
-
 
 ```
 
@@ -624,7 +633,6 @@ ggplot(data      = mlm_data,
                      values = c("blue", "red", "green", "yellow"))
 
 ```
-
 
 
 # Results summary

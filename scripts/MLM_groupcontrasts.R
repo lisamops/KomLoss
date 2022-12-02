@@ -17,11 +17,12 @@ library(sjstats)
 
 mlm_data <- data_df %>% 
   select(id, group, time, days, gender, age_in_days, age_scale, letter = letter_sum, PA, word = word_reading_total, DLS = DLS_reading_comp_sum, 
-         IQ_scale, IQ, tot_train_time_scale, tot_train_time, PPC,	education_father,	occupation_mother,	occupation_father, SES, `Only ID`, Autismspektrumtillstand, `Downs syndrom`, CP, `ADHD/ADD`, Other) %>%
+         IQ_scale, IQ, tot_train_time_scale, tot_train_time, PPC,	education_father,	occupation_mother,	occupation_father, SES, `Only ID`, Autismspektrumtillstand, `Downs syndrom`, CP, `ADHD/ADD`, Other, time_played_ALL_tot, time_played_animega) %>%
   mutate(contrast_1vs234= ifelse(group == 1, (-1),  (1/3))) %>%  #control vs ALL,animega,combi
   mutate(contrast_4vs23= ifelse(group == 4, 1, ifelse(group == 1, 0, -1/2))) %>%  #combi vs ALL,animega
   mutate(contrast_1vs2= ifelse(group == 1, (-1),  ifelse(group == 2, 1, 0))) %>%  #control vs ALL
   mutate(contrast_1vs3= ifelse(group == 1, (-1),  ifelse(group == 3, 1, 0))) #control vs animega
+
 
 
 #mlm_data$tot_train_time_scale <- scale(mlm_data$tot_train_time, center = F)
@@ -139,7 +140,7 @@ DLS_poisson_2 <- glmer(DLS ~ days_scale + (1+days_scale||id), data = mlm_data,fa
 # adding random slope, unstructured covariance specified using single bar |
 DLS_poisson_2b <- glmer(DLS ~ days_scale + (1+days_scale|id), data = mlm_data,family=poisson)
 
-anova(DLS_poisson_2, DLS_poisson_2b)  #not sig.i.e use double bar ||
+#anova(DLS_poisson_2, DLS_poisson_2b)  #not sig.i.e use double bar ||
 
 #conditional model (e.g. including intervention)
 #adding intervention (OBS! with random slope) # no sig interaction
@@ -151,10 +152,10 @@ DLS_poisson_3_no_rand_slope <- glmer(DLS ~ days_scale*contrast_1vs2 + days_scale
 
 anova(DLS_poisson_2, DLS_poisson_3_no_rand_slope)  #not sig.
 
-summary(DLS_poisson_3)
-summary(DLS_poisson_3_no_rand_slope)
+#summary(DLS_poisson_3)
+#summary(DLS_poisson_3_no_rand_slope)
 
-tab_model(DLS_poisson_3_no_rand_slope)
+#tab_model(DLS_poisson_3_no_rand_slope)
 
 #Adding IQ - model improves a lot. IQ can explain how well the participants are developing over time
 #DLS_poisson_4 <- glmer(DLS ~ scale(days, center = FALSE)*contrast_1vs2 + scale(days, center = FALSE)*contrast_1vs3 + scale(days, center = FALSE)*contrast_4vs23 
@@ -247,4 +248,6 @@ tab_model(DLS_poisson_3_no_rand_slope)
 # plot(resid(model_DLS_4))#linearity  #PROBLEMATIC
 # plot(model_DLS_4)#homogeneity of variance #PROBLEMATIC
 # qqmath(model_DLS_4, id=0.05) #normally distributed residuals #PROBLEMATIC
+
+
 

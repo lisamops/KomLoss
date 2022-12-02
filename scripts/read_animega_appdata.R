@@ -37,7 +37,8 @@ rft_add_time_played_to_df <- function(file_create, file_test) {
   animega_sorted <- mutate(animega_sorted, Date = as.POSIXlt(as.Date(Datum)))
   
   
-  # F??r att rakna ut hur l??ng tid det ??r mellan tv?? klick. G??r en column d??r varje v??rde laggar en fr??n ovan f??r att sedan kunna r??kna ut differensen. Differensen r??knas sedan ut nedan i clicksdiff- OBS. Ett extremt h??gt clicksdiff beror p?? att det v??xlar mellan tv?? deltagare som har helt olika timestamp, ex. 1970 - 2016 
+  # To calculate time between two clicks. Makes a column where each value lags from one above to be able to calculate difference. 
+  #Difference is then calculated in clicksdiff. N.B. An extreme clicksdiff means that it changes to another participant with a complete different timestamp e.g. 1970 - 2016 
   animega_sorted2 <- animega_sorted %>% 
     group_by(Date) %>%
     mutate(lagclicks=lag(Datum))  %>% 
@@ -188,7 +189,7 @@ for (i in seq_along(all_id)) {
   createfile <- paste0("data/appdata/Animega-is/",all_id[i],"_create.txt")
   testfile <- paste0("data/appdata/Animega-is/",all_id[i],"_test.txt")
 
-  #Run different functiona depending on if both test and creat file exists or not
+  #Run different function depending on if both test and create file exists or not
   ifelse( find.file(testfile, dirs = NULL) == "" |find.file(createfile, dirs = NULL) == "", 
           ifelse(find.file(testfile, dirs = NULL) != "", 
                  animega_df <- TEST_add_time_played_to_df(testfile), 
