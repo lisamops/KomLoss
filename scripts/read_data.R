@@ -106,14 +106,23 @@ data_df <- full_join(data_df, ppc, by = c("id"))
 
 #remove 403 due to testning not being done correctly 
 data_df <- data_df %>% filter(id != 403)
-#remove 110 terminates participating  
+#remove 110 terminates participation  
 data_df <- data_df %>% filter(id != 110)
 #remove 439 not being in school
 data_df <- data_df %>% filter(id != 439)
-#remove 403 due to testning not being done correctly 
+#remove 413 terminates participation 
 data_df <- data_df %>% filter(id != 413)
 #remove IQ over 90
 #data_df <- data_df %>% filter(is.na(IQ)|IQ<90)
+#remove train time less than 300 min
+#data_df <- data_df %>% filter(tot_train_time>300|tot_train_time==0) 
+
+#Teacher reported child read more than 20 words
+exclude_read_too_much <- list(123, 124, 127, 129, 209, 314, 329, 333, 431)
+for (p in
+     seq_along(exclude_read_too_much)) {
+  data_df <- data_df %>% filter(id != exclude_read_too_much[p])
+}
 
 
 # teacher_rating <- data_df %>% select(id, synthesis,	segmentation,	sound_letter_connection,	understand_rhyme, decode_short_words, decode_complex_words, sight_word_reading,

@@ -70,6 +70,7 @@ library(sjPlot) #plot tables from lmer() mlm-models
 library(ggpubr)
 library(ggplot2)
 library(FSA)
+library(lubridate) #to convert age_in_days to years
 ```
 
 ```{r analysis_preferences}
@@ -124,10 +125,23 @@ The hypotheses will be tested on these outcome variables: phonological awareness
 Data presented in this paper is collected in a larger project. Parts of the data has been used for this paper, for the purpose of this paper we have excluded for speech sound production which have been published in Samuelsson et al., (under revision). For a full description of collected data see (Palmqvist, Samuelsson, et al., 2020).
 
 ## Participants 
-Inclusion criteria was to attend to a Swedish special needs school, to benefit from AAC, and to be a beginner at reading. To attend the Swedish special needs curriculum, the student has received an ID diagnosis after an assessment led by a licensed psychologist. The teachers were instructed to identify students that would benefit from AAC and could not read more than approx. 20 words. No exclusion criteria were set for age or aetiology of the ID. 
+Participants had to attend a Swedish special needs school, benefit from AAC, and  be a beginning reader. To be enrolled in the Swedish special needs curriculum, the student needs an ID diagnosis according to the ICD-10. The diagnosis is based on a thorough medical, psychosocial, and psychological assessment. The teachers were instructed to identify students that would benefit from AAC and could not read more than approximately 20 words, which was the operationalization of being a beginning reader. No exclusion criteria were set for additional diagnoses, aetiology of the ID, or age. 
+To reach the recruitment goal of at least 120 participants (see pre-registration, Palmqvist et al., 2020), recruitment included two waves, each consisting of two phases. In the first phase of each wave, teachers at special needs schools were contacted by email, asking whether they were interested in participating in the study. When giving a notification of interest, the teacher specified the number of students at their school that fulfilled the inclusion criteria. The teacher also provided information about the age and level of ID of those students, as well as estimated their adaptive and communication skill level. In the second phase of the recruitment process, teachers with an interest in participating in the study were asked to send information about the study to caregivers of potential participants, and for each student that were possible to include after caregivers had signed an informed consent, teachers provided an estimate of the number of words that the student could read. The information provided to the parents and students was written with easy-to-read language and supported with pictures. At the test session, the students preferred communication mode was used (i.e. if the students used AAC that AAC was used also in the test session). The testing was aborted at any sign of discomfort from the student. The study follows the Ethical principles for medical research involving human subjects from the WMA Declaration of Helsinki (World Medical Association, 2013), and approved by the Ethical Review Board, Sweden (2020-06215).  
+In the first wave, 62 participants were recruited, and in the second wave, 75 additional participants, with a final sample of 
+`r printnum(length(background_raven$id), numerals = T) ` participants 
+($n_{girls}$ = `r length((background_raven %>% filter(gender == "Girl"))$id) `, 
+$n_{boys}$ = `r length((background_raven %>% filter(gender == "Boy"))$id)`). 
+However, one participant was excluded due to testing not being followed as per protocol, and nine because their teacher-estimated level of word reading was higher than the cut-off applied (i.e., 20 words). Further, three participants dropped out of the study after the first testing session. The final sample thus included 
+`r printnum(length((mlm_data %>% filter(time == 1))$id), numerals = T) ` participants 
+($n_{girls}$ = `r length((mlm_data  %>% filter(time == 1) %>% filter(gender == "Girl"))$id) `, 
+$n_{boys}$ = `r length((mlm_data  %>% filter(time == 1) %>% filter(gender == "Boy"))$id)`), 
+with a mean age of `r round(mean(time_length(mlm_data$age_in_days, "years")), digits = 1)` 
+(SD = `r round(sd(time_length(mlm_data$age_in_days, "years")), digits = 1)` ) 
+and mean IQ of 
+`r round(mean((mlm_data  %>% filter(time == 1))$IQ, na.rm = T), digits = 0)` 
+(SD = `r round(sd((mlm_data  %>% filter(time == 1))$IQ, na.rm = T), digits = 0)` ). 
+Data on diagnoses were collected using parental surveys, see Table\ \ref(tab:diagnosisTable).   
 
-The participants were requited via email to teachers at special needs schools in Sweden. To reduce the risk of having unbalanced groups, the teachers were asked, together with their notification of interest, specify how many students in their class that fulfilled the inclusion criteria and what level of ID the students had. Thereafter, the plan was for a researcher to allocate the participants on school level to the different intervention groups. However, only 60 participants were requited, and data collection had to start due to time constraints. Thus, the participants could only be assigned to two groups, namely the comparison and the ALL group. The remainder 77 the participants were recruited after the data collection of the comparison and ALL group had started. The participants to the Animega-is and Combination group was recruited and allocated in the same way as described above. This resulted in the groups not being equated on level of ID, see the result section. 
-Caregivers signed an informed consent regarding the confidentiality of data and group-level analysis. The participating children gave oral consent at the beginning of the first test session. The study follows the Ethical principles for medical research involving human subjects from the WMA Declaration of Helsinki (World Medical Association 2013). The study was reviewed and approved by the Ethical Review Board, Sweden (2020-06215).
 
 ## Design
 The study is a longitudinal between-group study, with four time points (before, during, after the intervention and a follow-up). Three intervention groups: one applying a phonic-based reading strategy (using ALL), one applying a comprehension-based strategy (using Animega-is), and the third applying both strategies (using ALL and Animega-is), and a comparison group who received regular teaching, not focusing one specific reading instruction strategy. Due to practical reasons, students were allocated to intervention groups on school-level, i.e., all participants at one school received the same intervention. 
@@ -169,10 +183,9 @@ First an unconditional model including a fixed effect of time was built (Model 1
 After fitting the unconditional models, a conditional model (Model 3) was built using contrasts to test the Hypotheses. There were three contrasts performed: comparison group versus phonic-based intervention (Hypothesis 1), comparison versus comprehension-based intervention (Hypothesis 2), and combination versus phonic-based and comprehension-based intervention (Hypothesis 3). 
 
 # Results  
-The recruitment process resulted in `r printnum(length(background_raven$id), numerals = T) ` participants ($n_{girls}$ = `r length((background_raven %>% filter(gender == "Girl"))$id) `, $n_{boys}$ = `r length((background_raven %>% filter(gender == "Boy"))$id)`). However, `r printnum((length(background_raven$id))-(length((mlm_data %>% filter(time == 1))$id)), numerals = F) ` participants were excluded from the study, one due to testing not being followed as per protocol, and three that dropped out of the study after the first testing session. Thus,the final sample thus included `r printnum(length((mlm_data %>% filter(time == 1))$id), numerals = T) ` participants ($n_{girls}$ = `r length((mlm_data  %>% filter(time == 1) %>% filter(gender == "Girl"))$id) `, $n_{boys}$ = `r length((mlm_data  %>% filter(time == 1) %>% filter(gender == "Boy"))$id)`). The control group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Control"))$id), numerals = T) `, the phonic-based group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "ALL"))$id), numerals = T) `, the comprehension-based group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Animega-is"))$id), numerals = T) `, and the combination group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$id), numerals = T) `, for age, IQ, and instruction duration for each group, see Table X. Data on diagnoses were collected using parental surveys. The diagnoses in the ID group can be seen in Table\ \@ref(tab:diagnosis-table).
-The descriptive statistics for all variables on each assessment time can be seen in Table\ \@ref(tab:descriptives-table).
+The control group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Control"))$id), numerals = T) `, the phonic-based group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "ALL"))$id), numerals = T) `, the comprehension-based group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Animega-is"))$id), numerals = T) `, and the combination group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$id), numerals = T) `, for age, IQ, and instruction duration for each group, see Table X. The descriptive statistics for all variables on each assessment time can be seen in Table \ref{tab:descriptivesTable}
 
-```{r descriptives-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+```{r descriptivesTable, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
 mlm_data <- mlm_data %>% dplyr::mutate(years_old = age_in_days/365)
 
@@ -251,7 +264,9 @@ apa_table(
 )
 ```
 
-```{r ID-diagnosis, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+
+
+```{r diagnosisTable, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
 diagnosis_data <- mlm_data %>% filter(time == 1) %>% dplyr::select(`Only ID`, Autismspektrumtillstand, `Downs syndrom`, CP, `ADHD/ADD`, Other)
 
@@ -277,7 +292,7 @@ apa_table(
 ```
 
 
-```{r desc-read-control-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+```{r descReadControlTable, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
 desc_data2 <- mlm_data %>% dplyr::select(-id, -days, - age_in_days, -IQ_scale, -tot_train_time_scale, -contrast_1vs234, -contrast_1vs2, -contrast_1vs3, -contrast_4vs23, -years_old, -IQ, -tot_train_time, -gender, -letter)
 
@@ -328,7 +343,7 @@ apa_table(
 
 ```
 
-```{r desc-read-PB-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+```{r descReadPBTable, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
 descriptives_all <- desc_data2  %>% filter(group == 2) %>% group_by(time) %>%
    summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
@@ -374,7 +389,7 @@ apa_table(
 
 ```
 
-```{r desc-read-animega-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+```{r descReadAnimegaTable, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
 descriptives_animega <- desc_data2  %>% filter(group == 3) %>% group_by(time) %>%
    summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
@@ -420,7 +435,7 @@ apa_table(
 
 ```
 
-```{r desc-read-combi-table, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+```{r descReadCombiTable, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
 descriptives_combi <- desc_data2  %>% filter(group == 4) %>% group_by(time) %>%
    summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
@@ -506,12 +521,10 @@ ggboxplot(data = mlm_data_labels%>% filter(time == 1)%>% filter(group != "Contro
 
 ## Phonological awareness
 
-All groups improved in PA with time, `r apa_print(model_PA_3)$full_result$days_scale`, and the participants in the combination group improved more than the participants in the other groups, `r apa_print(model_PA_3)$full_result$days_scale_contrast_4vs23` (see Table\ \@ref(tab:PA-table)). The effect of the phonics-based reading instruction, compared to the comparison group, approached statistical significance, `r apa_print(model_PA_3)$full_result$days_scale_contrast_1vs2`. However, the comprehension-based reading instruction did not lead to better development than the TAU approach in the comparison group, `r apa_print(model_PA_3)$full_result$days_scale_contrast_1vs3` (see Table\ \@ref(tab:PA-table)). In sum, we found support for Hypothesis 3, but not for Hypotheses 1-2.   
+All groups improved in PA with time, `r apa_print(model_PA_3)$full_result$days_scale`, and the participants in the combination group improved more than the participants in the other groups, `r apa_print(model_PA_3)$full_result$days_scale_contrast_4vs23` (see Table\ \@ref(tab:PATable)). The effect of the phonics-based reading instruction, compared to the comparison group, approached statistical significance, `r apa_print(model_PA_3)$full_result$days_scale_contrast_1vs2`. However, the comprehension-based reading instruction did not lead to better development than the TAU approach in the comparison group, `r apa_print(model_PA_3)$full_result$days_scale_contrast_1vs3` (see Table\ \ref{tab:PATable} ). In sum, we found support for Hypothesis 3, but not for Hypotheses 1-2.   
 
 
-
-
-```{r PA-table, include = TRUE, results='asis'}
+```{r PATable, include = TRUE, results='asis'}
 tab_model(model_PA_3,
           show.re.var= T, 
                   pred.labels =c("(Intercept)", "Days", "Control vs PB", "Control vs CB", "PB and CB vs Combi", "Days*Control vs PB", "Days*Control vs CB", "Days*PB and CB vs Combi"),
@@ -540,10 +553,10 @@ ggplot(data      = mlm_data,
 ```
 
 ## Word recognition
-For word recognition, participants improved with time, `r apa_print(model_word_3)$full_result$days_scale`. This applied to all four groups, and neither PB (`r apa_print(model_word_3)$full_result$days_scale_contrast_1vs2`), CB (`r apa_print(model_word_3)$full_result$days_scale_contrast_1vs3`), nor the combination of the two instructions (`r apa_print(model_word_3)$full_result$days_scale_contrast_4vs23`) led to a stronger development than what was observed in the comparison group (see  Table\ \@ref(tab:word-table)). Thus, for word reading, we did not find support for Hypotheses 1-3.
+For word recognition, participants improved with time, `r apa_print(model_word_3)$full_result$days_scale`. This applied to all four groups, and neither PB (`r apa_print(model_word_3)$full_result$days_scale_contrast_1vs2`), CB (`r apa_print(model_word_3)$full_result$days_scale_contrast_1vs3`), nor the combination of the two instructions (`r apa_print(model_word_3)$full_result$days_scale_contrast_4vs23`) led to a stronger development than what was observed in the comparison group (see  Table\ \@ref(tab:wordTable)). Thus, for word reading, we did not find support for Hypotheses 1-3.
 
 
-```{r word-table, include=TRUE, results='asis'}
+```{r wordTable, include=TRUE, results='asis'}
 tab_model(model_word_3,
           show.re.var= T, 
                   pred.labels =c("(Intercept)", "Days", "Control vs PB", "Control vs CB", "PB and CB vs Combi", "Days*Control vs PB", "Days*Control vs CB", "Days*PB and CB vs Combi"),
@@ -575,11 +588,11 @@ ggplot(data      = mlm_data,
 
 # Reading comprehension
 
-There was a statistically significant effect of time, `r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale`, indicating that participants improved on reading comprehension, regardless of reading instruction condition. However, we did not see any effects of PB (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_1vs2`), CB (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_1vs3`), or the combination of the two instructions (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_4vs23`; Table\ \@ref(tab:DLS-table)). Thus, hypotheses 1-3 were not supported for reading comprehension. 
+There was a statistically significant effect of time, `r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale`, indicating that participants improved on reading comprehension, regardless of reading instruction condition. However, we did not see any effects of PB (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_1vs2`), CB (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_1vs3`), or the combination of the two instructions (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_4vs23`; Table\ \@ref(tab:DLSTable)). Thus, hypotheses 1-3 were not supported for reading comprehension. 
 
 
 
-```{r DLS-table, include=TRUE, results='asis'}
+```{r DLSTable, include=TRUE, results='asis'}
 tab_model(DLS_poisson_3_no_rand_slope,
           show.re.var= T, 
                   pred.labels =c("(Intercept)", "Days", "Control vs PB", "Control vs CB", "PB and CB vs Combi", "Days*Control vs PB", "Days*Control vs CB", "Days*PB and CB vs Combi"),
