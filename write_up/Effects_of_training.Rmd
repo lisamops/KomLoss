@@ -142,6 +142,9 @@ and mean IQ of
 (SD = `r round(sd((mlm_data  %>% filter(time == 1))$IQ, na.rm = T), digits = 0)` ). 
 Data on diagnoses were collected using parental surveys, see Table\ \ref(tab:diagnosisTable).   
 
+#Allocation of participants to reading instruction condition
+One unsystematic (teaching-as-usual) and three different systematic approaches to reading instructions were applied in the present study: one applying a phonics-based reading strategy (using ALL), one applying a comprehension-based strategy (using Animega-is), and the third applying both strategies, referred to as the combination group (using ALL and Animega-is). The students that received teaching-as-usual comprised a comparison group. Allocation to the comparison group and the phonics-based reading strategy began after the first wave of recruitment, assigning 29 participations to the former, and 31 to the latter condition. An additional three participants from the second wave were allocated to the phonics-based reading strategy. Thirty-five of the remaining participants from the second wave were allocated to the comprehension-based reading instruction, and 31 to the combination group. For practical reasons, allocation was done on a school-basis, , i.e., all participants at one school were in the same group. To make sure that participants assigned to the different groups did not differ on relevant background variables, the information on adaptive and communicative skill, level of ID, and age, provided from the teachers when leaving their notification of interest, was used.
+
 
 ## Design
 The study is a longitudinal between-group study, with four time points (before, during, after the intervention and a follow-up). Three intervention groups: one applying a phonic-based reading strategy (using ALL), one applying a comprehension-based strategy (using Animega-is), and the third applying both strategies (using ALL and Animega-is), and a comparison group who received regular teaching, not focusing one specific reading instruction strategy. Due to practical reasons, students were allocated to intervention groups on school-level, i.e., all participants at one school received the same intervention. 
@@ -353,21 +356,21 @@ descriptives_all2 <- as.data.frame(t(descriptives_all))
 
 Response_variable <- c("PA", "Word recogniton", "Reading comprehension")
 #T1
-Means_t1 <- c(descriptives_control2['PA_Mean',"V1"], descriptives_control2['word_Mean',"V1"], descriptives_control2['DLS_Mean',"V1"])
-SDs_t1 <- c(descriptives_control2['PA_SD', "V1"], descriptives_control2['word_SD', "V1"], descriptives_control2['DLS_SD', "V1"])
-Range_t1 <- c(descriptives_control2['PA_Range', "V1"], descriptives_control2['word_Range', "V1"], descriptives_control2['DLS_Range', "V1"])
+Means_t1 <- c(descriptives_all2['PA_Mean',"V1"], descriptives_all2['word_Mean',"V1"], descriptives_all2['DLS_Mean',"V1"])
+SDs_t1 <- c(descriptives_all2['PA_SD', "V1"], descriptives_all2['word_SD', "V1"], descriptives_all2['DLS_SD', "V1"])
+Range_t1 <- c(descriptives_all2['PA_Range', "V1"], descriptives_all2['word_Range', "V1"], descriptives_all2['DLS_Range', "V1"])
 #T2
-Means_t2 <- c(descriptives_control2['PA_Mean', "V2"], descriptives_control2['word_Mean', "V2"], descriptives_control2['DLS_Mean', "V2"])
-SDs_t2 <- c(descriptives_control2['PA_SD', "V2"], descriptives_control2['word_SD', "V2"], descriptives_control2['DLS_SD', "V2"])
-Range_t2 <- c(descriptives_control2['PA_Range', "V2"], descriptives_control2['word_Range', "V2"], descriptives_control2['DLS_Range', "V2"])
+Means_t2 <- c(descriptives_all2['PA_Mean', "V2"], descriptives_all2['word_Mean', "V2"], descriptives_all2['DLS_Mean', "V2"])
+SDs_t2 <- c(descriptives_all2['PA_SD', "V2"], descriptives_all2['word_SD', "V2"], descriptives_all2['DLS_SD', "V2"])
+Range_t2 <- c(descriptives_all2['PA_Range', "V2"], descriptives_all2['word_Range', "V2"], descriptives_all2['DLS_Range', "V2"])
 #T3
-Means_t3 <- c(descriptives_control2['PA_Mean', "V3"], descriptives_control2['word_Mean', "V3"], descriptives_control2['DLS_Mean', "V3"])
-SDs_t3 <- c(descriptives_control2['PA_SD', "V3"], descriptives_control2['word_SD', "V3"], descriptives_control2['DLS_SD', "V3"])
-Range_t3 <- c(descriptives_control2['PA_Range', "V3"], descriptives_control2['word_Range', "V3"], descriptives_control2['DLS_Range', "V3"])
+Means_t3 <- c(descriptives_all2['PA_Mean', "V3"], descriptives_all2['word_Mean', "V3"], descriptives_all2['DLS_Mean', "V3"])
+SDs_t3 <- c(descriptives_all2['PA_SD', "V3"], descriptives_all2['word_SD', "V3"], descriptives_all2['DLS_SD', "V3"])
+Range_t3 <- c(descriptives_all2['PA_Range', "V3"], descriptives_all2['word_Range', "V3"], descriptives_all2['DLS_Range', "V3"])
 #T4
-Means_t4 <- c(descriptives_control2['PA_Mean', "V4"], descriptives_control2['word_Mean', "V4"], descriptives_control2['DLS_Mean', "V4"])
-SDs_t4 <- c(descriptives_control2['PA_SD', "V4"], descriptives_control2['word_SD', "V4"], descriptives_control2['DLS_SD', "V4"])
-Range_t4 <- c(descriptives_control2['PA_Range', "V4"], descriptives_control2['word_Range', "V4"], descriptives_control2['DLS_Range', "V4"])
+Means_t4 <- c(descriptives_all2['PA_Mean', "V4"], descriptives_all2['word_Mean', "V4"], descriptives_all2['DLS_Mean', "V4"])
+SDs_t4 <- c(descriptives_all2['PA_SD', "V4"], descriptives_all2['word_SD', "V4"], descriptives_all2['DLS_SD', "V4"])
+Range_t4 <- c(descriptives_all2['PA_Range', "V4"], descriptives_all2['word_Range', "V4"], descriptives_all2['DLS_Range', "V4"])
 
 descTable <- data.frame(Response_variable, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
@@ -399,21 +402,21 @@ descriptives_animega2 <- as.data.frame(t(descriptives_animega))
 
 Response_variable <- c("PA", "Word recogniton", "Reading comprehension")
 #T1
-Means_t1 <- c(descriptives_control2['PA_Mean',"V1"], descriptives_control2['word_Mean',"V1"], descriptives_control2['DLS_Mean',"V1"])
-SDs_t1 <- c(descriptives_control2['PA_SD', "V1"], descriptives_control2['word_SD', "V1"], descriptives_control2['DLS_SD', "V1"])
-Range_t1 <- c(descriptives_control2['PA_Range', "V1"], descriptives_control2['word_Range', "V1"], descriptives_control2['DLS_Range', "V1"])
+Means_t1 <- c(descriptives_animega2['PA_Mean',"V1"], descriptives_animega2['word_Mean',"V1"], descriptives_animega2['DLS_Mean',"V1"])
+SDs_t1 <- c(descriptives_animega2['PA_SD', "V1"], descriptives_animega2['word_SD', "V1"], descriptives_animega2['DLS_SD', "V1"])
+Range_t1 <- c(descriptives_animega2['PA_Range', "V1"], descriptives_animega2['word_Range', "V1"], descriptives_animega2['DLS_Range', "V1"])
 #T2
-Means_t2 <- c(descriptives_control2['PA_Mean', "V2"], descriptives_control2['word_Mean', "V2"], descriptives_control2['DLS_Mean', "V2"])
-SDs_t2 <- c(descriptives_control2['PA_SD', "V2"], descriptives_control2['word_SD', "V2"], descriptives_control2['DLS_SD', "V2"])
-Range_t2 <- c(descriptives_control2['PA_Range', "V2"], descriptives_control2['word_Range', "V2"], descriptives_control2['DLS_Range', "V2"])
+Means_t2 <- c(descriptives_animega2['PA_Mean', "V2"], descriptives_animega2['word_Mean', "V2"], descriptives_animega2['DLS_Mean', "V2"])
+SDs_t2 <- c(descriptives_animega2['PA_SD', "V2"], descriptives_animega2['word_SD', "V2"], descriptives_animega2['DLS_SD', "V2"])
+Range_t2 <- c(descriptives_animega2['PA_Range', "V2"], descriptives_animega2['word_Range', "V2"], descriptives_animega2['DLS_Range', "V2"])
 #T3
-Means_t3 <- c(descriptives_control2['PA_Mean', "V3"], descriptives_control2['word_Mean', "V3"], descriptives_control2['DLS_Mean', "V3"])
-SDs_t3 <- c(descriptives_control2['PA_SD', "V3"], descriptives_control2['word_SD', "V3"], descriptives_control2['DLS_SD', "V3"])
-Range_t3 <- c(descriptives_control2['PA_Range', "V3"], descriptives_control2['word_Range', "V3"], descriptives_control2['DLS_Range', "V3"])
+Means_t3 <- c(descriptives_animega2['PA_Mean', "V3"], descriptives_animega2['word_Mean', "V3"], descriptives_animega2['DLS_Mean', "V3"])
+SDs_t3 <- c(descriptives_animega2['PA_SD', "V3"], descriptives_animega2['word_SD', "V3"], descriptives_animega2['DLS_SD', "V3"])
+Range_t3 <- c(descriptives_animega2['PA_Range', "V3"], descriptives_animega2['word_Range', "V3"], descriptives_animega2['DLS_Range', "V3"])
 #T4
-Means_t4 <- c(descriptives_control2['PA_Mean', "V4"], descriptives_control2['word_Mean', "V4"], descriptives_control2['DLS_Mean', "V4"])
-SDs_t4 <- c(descriptives_control2['PA_SD', "V4"], descriptives_control2['word_SD', "V4"], descriptives_control2['DLS_SD', "V4"])
-Range_t4 <- c(descriptives_control2['PA_Range', "V4"], descriptives_control2['word_Range', "V4"], descriptives_control2['DLS_Range', "V4"])
+Means_t4 <- c(descriptives_animega2['PA_Mean', "V4"], descriptives_animega2['word_Mean', "V4"], descriptives_animega2['DLS_Mean', "V4"])
+SDs_t4 <- c(descriptives_animega2['PA_SD', "V4"], descriptives_animega2['word_SD', "V4"], descriptives_animega2['DLS_SD', "V4"])
+Range_t4 <- c(descriptives_animega2['PA_Range', "V4"], descriptives_animega2['word_Range', "V4"], descriptives_animega2['DLS_Range', "V4"])
 
 descTable <- data.frame(Response_variable, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
@@ -445,21 +448,21 @@ descriptives_combi2 <- as.data.frame(t(descriptives_combi))
 
 Response_variable <- c("PA", "Word recogniton", "Reading comprehension")
 #T1
-Means_t1 <- c(descriptives_control2['PA_Mean',"V1"], descriptives_control2['word_Mean',"V1"], descriptives_control2['DLS_Mean',"V1"])
-SDs_t1 <- c(descriptives_control2['PA_SD', "V1"], descriptives_control2['word_SD', "V1"], descriptives_control2['DLS_SD', "V1"])
-Range_t1 <- c(descriptives_control2['PA_Range', "V1"], descriptives_control2['word_Range', "V1"], descriptives_control2['DLS_Range', "V1"])
+Means_t1 <- c(descriptives_combi2['PA_Mean',"V1"], descriptives_combi2['word_Mean',"V1"], descriptives_combi2['DLS_Mean',"V1"])
+SDs_t1 <- c(descriptives_combi2['PA_SD', "V1"], descriptives_combi2['word_SD', "V1"], descriptives_combi2['DLS_SD', "V1"])
+Range_t1 <- c(descriptives_combi2['PA_Range', "V1"], descriptives_combi2['word_Range', "V1"], descriptives_combi2['DLS_Range', "V1"])
 #T2
-Means_t2 <- c(descriptives_control2['PA_Mean', "V2"], descriptives_control2['word_Mean', "V2"], descriptives_control2['DLS_Mean', "V2"])
-SDs_t2 <- c(descriptives_control2['PA_SD', "V2"], descriptives_control2['word_SD', "V2"], descriptives_control2['DLS_SD', "V2"])
-Range_t2 <- c(descriptives_control2['PA_Range', "V2"], descriptives_control2['word_Range', "V2"], descriptives_control2['DLS_Range', "V2"])
+Means_t2 <- c(descriptives_combi2['PA_Mean', "V2"], descriptives_combi2['word_Mean', "V2"], descriptives_combi2['DLS_Mean', "V2"])
+SDs_t2 <- c(descriptives_combi2['PA_SD', "V2"], descriptives_combi2['word_SD', "V2"], descriptives_combi2['DLS_SD', "V2"])
+Range_t2 <- c(descriptives_combi2['PA_Range', "V2"], descriptives_combi2['word_Range', "V2"], descriptives_combi2['DLS_Range', "V2"])
 #T3
-Means_t3 <- c(descriptives_control2['PA_Mean', "V3"], descriptives_control2['word_Mean', "V3"], descriptives_control2['DLS_Mean', "V3"])
-SDs_t3 <- c(descriptives_control2['PA_SD', "V3"], descriptives_control2['word_SD', "V3"], descriptives_control2['DLS_SD', "V3"])
-Range_t3 <- c(descriptives_control2['PA_Range', "V3"], descriptives_control2['word_Range', "V3"], descriptives_control2['DLS_Range', "V3"])
+Means_t3 <- c(descriptives_combi2['PA_Mean', "V3"], descriptives_combi2['word_Mean', "V3"], descriptives_combi2['DLS_Mean', "V3"])
+SDs_t3 <- c(descriptives_combi2['PA_SD', "V3"], descriptives_combi2['word_SD', "V3"], descriptives_combi2['DLS_SD', "V3"])
+Range_t3 <- c(descriptives_combi2['PA_Range', "V3"], descriptives_combi2['word_Range', "V3"], descriptives_combi2['DLS_Range', "V3"])
 #T4
-Means_t4 <- c(descriptives_control2['PA_Mean', "V4"], descriptives_control2['word_Mean', "V4"], descriptives_control2['DLS_Mean', "V4"])
-SDs_t4 <- c(descriptives_control2['PA_SD', "V4"], descriptives_control2['word_SD', "V4"], descriptives_control2['DLS_SD', "V4"])
-Range_t4 <- c(descriptives_control2['PA_Range', "V4"], descriptives_control2['word_Range', "V4"], descriptives_control2['DLS_Range', "V4"])
+Means_t4 <- c(descriptives_combi2['PA_Mean', "V4"], descriptives_combi2['word_Mean', "V4"], descriptives_combi2['DLS_Mean', "V4"])
+SDs_t4 <- c(descriptives_combi2['PA_SD', "V4"], descriptives_combi2['word_SD', "V4"], descriptives_combi2['DLS_SD', "V4"])
+Range_t4 <- c(descriptives_combi2['PA_Range', "V4"], descriptives_combi2['word_Range', "V4"], descriptives_combi2['DLS_Range', "V4"])
 
 descTable <- data.frame(Response_variable, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
