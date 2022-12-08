@@ -62,7 +62,11 @@ mlm_data$PPC_scale <- scale(mlm_data$PPC, center = F)
 
 #conditional model (e.g. including PA)
 #adding control vs ALL, control vs Animega, and combi vs ALL+animega, improves model significantly (chi2 2*loglikelihood)
+#With scaled variables
 model_PA_3 <- lmer(PA_scale ~ days_scale*contrast_1vs2 + days_scale*contrast_1vs3 + days_scale*contrast_4vs23 + (1|id), data = mlm_data, REML = FALSE)
+#Without scaled variables
+#model_PA_3 <- lmer(PA ~ days*contrast_1vs2 + days*contrast_1vs3 + days*contrast_4vs23 + (1|id), data = mlm_data, REML = FALSE)
+
 
 #adding exploratory variables
 #model_PA_3_expl <- lmer(PA_scale ~ IQ_scale + age_scale + PPC_scale + days_scale*contrast_1vs2 + days_scale*contrast_1vs3 + days_scale*contrast_4vs23 + (1|id), data = mlm_data, REML = FALSE)
@@ -130,27 +134,66 @@ model_word_3 <- lmer(word ~ days_scale*contrast_1vs2 + days_scale*contrast_1vs3 
 # DLS has a strongly skewed distribution, thus a poisson distribution is used for fitting the models rather than a normal distribution
 #Unconditional model - only includes temporal predictor and not other explanatory variables (e.g. word)
 #model with random intercept with ID estimating DLS difference over time
-DLS_poisson <- glmer(DLS ~ days_scale + (1|id), data = mlm_data,family=poisson) #rescaling due to convergence issues
+#DLS_poisson <- glmer(DLS ~ days_scale + (1|id), data = mlm_data,family=poisson) #rescaling due to convergence issues
 #summary(DLS_poisson) #model is much better in terms of AIC and loglikelihood, using poisson dist. instead of normal dist. 
 
 # adding random slope, no covariance structure (variance components) (specified using double-bar ||)
-DLS_poisson_2 <- glmer(DLS ~ days_scale + (1+days_scale||id), data = mlm_data,family=poisson)
+#DLS_poisson_2 <- glmer(DLS ~ days_scale + (1+days_scale||id), data = mlm_data,family=poisson)
 #anova(DLS_poisson, DLS_poisson_2)  # sig.
 
 # adding random slope, unstructured covariance specified using single bar |
-DLS_poisson_2b <- glmer(DLS ~ days_scale + (1+days_scale|id), data = mlm_data,family=poisson)
+#DLS_poisson_2b <- glmer(DLS ~ days_scale + (1+days_scale|id), data = mlm_data,family=poisson)
 
 #anova(DLS_poisson_2, DLS_poisson_2b)  #not sig.i.e use double bar ||
 
 #conditional model (e.g. including intervention)
 #adding intervention (OBS! with random slope) # no sig interaction
-DLS_poisson_3 <- glmer(DLS ~ days_scale*contrast_1vs2 + days_scale*contrast_1vs3 + 
-                         days_scale*contrast_4vs23 + (1+days_scale||id), data = mlm_data,family=poisson) #does not converge
+#DLS_poisson_3 <- glmer(DLS ~ days_scale*contrast_1vs2 + days_scale*contrast_1vs3 + 
+#                         days_scale*contrast_4vs23 + (1+days_scale||id), data = mlm_data,family=poisson) #does not converge
 
 DLS_poisson_3_no_rand_slope <- glmer(DLS ~ days_scale*contrast_1vs2 + days_scale*contrast_1vs3 + 
                          days_scale*contrast_4vs23 + (1|id), data = mlm_data,family=poisson) #removes random slope
 
-anova(DLS_poisson_2, DLS_poisson_3_no_rand_slope)  #not sig.
+# 
+# anova(DLS_poisson_2, DLS_poisson_3_no_rand_slope)  #not sig.
+# 
+# #Not sure if the model is overdispersed. 
+# #Check for overdispersion ( when the observed variance is higher than the variance of a theoretical model.)
+# qqnorm(resid(DLS_poisson_3_no_rand_slope)) #not straight
+# hist(resid(DLS_poisson_3_no_rand_slope))
+# plot(fitted(DLS_poisson_3_no_rand_slope),resid(DLS_poisson_3_no_rand_slope))
+# library("blmeco") 
+# dispersion_glmer(DLS_poisson_3_no_rand_slope) #it should between 0.75 and 1.4. 0.91
+# 
+# 
+# #build a zero inflation poission model. Cannot plot with tab_model() thus use poission instead
+# #Explore proportion of 0´s in the data
+# data.hp.tab <- table(mlm_data$DLS == 0)
+# data.hp.tab/sum(data.hp.tab)
+# # proportion of 0's expected from a Poisson distribution
+# mu <- mean(mlm_data$DLS, na.rm = T)
+# s <- sd(mlm_data$DLS, na.rm = T)
+# cnts <- rpois(1000, mu)
+# data.hp.tab <- table(cnts == 0)
+# data.hp.tab/sum(data.hp.tab)
+# 
+# #Fit zero inflated poisson distribution
+# eq <- DLS ~ days_scale*contrast_1vs2 + days_scale*contrast_1vs3 + 
+#                   days_scale*contrast_4vs23 + (1|id)
+# library(glmmTMB)
+# zipoisson1 <- glmmTMB(eq,
+#                       data=mlm_data,
+#                       ziformula=~1,
+#                       family=poisson)
+# 
+# 
+# 
+# #Extract the IRR coefficients from the DLS model. If I want to replace in he DLS model when presenting the results in text. 
+# fixed <- fixef(DLS_poisson_3_no_rand_slope)
+# confnitfixed <- confint(DLS_poisson_3_no_rand_slope, parm = "beta_", method = "Wald") # Beware: The Wald method is less accurate but much, much faster.
+# # The exponentiated coefficients are also known as Incidence Rate Ratios (IRR)
+# IRR <- exp(cbind(fixed, confnitfixed))
+
 
 #summary(DLS_poisson_3)
 #summary(DLS_poisson_3_no_rand_slope)

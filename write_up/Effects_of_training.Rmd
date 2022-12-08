@@ -14,10 +14,10 @@ author:
   affiliation: 1, 2, 3,4
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
-  html_document:
-    df_print: paged
-  word_document: default
-  pdf_document: default
+  bookdown::html_document2:
+    number_sections: false
+#  bookdown::word_document2: default
+#  number_sections: false
 abstract: |
   (ref:abstract)
 keywords: Intellectual disability, litteracy learning, phonological awareness,  phonic-based
@@ -140,9 +140,35 @@ with a mean age of `r round(mean(time_length(mlm_data$age_in_days, "years")), di
 and mean IQ of 
 `r round(mean((mlm_data  %>% filter(time == 1))$IQ, na.rm = T), digits = 0)` 
 (SD = `r round(sd((mlm_data  %>% filter(time == 1))$IQ, na.rm = T), digits = 0)` ). 
-Data on diagnoses were collected using parental surveys, see Table\ \ref(tab:diagnosisTable).   
+Data on diagnoses were collected using parental surveys, see Table \@ref(tab:diagnosisTable).
 
-#Allocation of participants to reading instruction condition
+
+```{r diagnosisTable, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+
+diagnosis_data <- mlm_data %>% filter(time == 1) %>% dplyr::select(`Only ID`, Autismspektrumtillstand, `Downs syndrom`, CP, `ADHD/ADD`, Other)
+
+diagnosis_data$`Only ID` <- as.integer(diagnosis_data$`Only ID`)
+diagnosis_data$Autismspektrumtillstand <- as.integer(diagnosis_data$Autismspektrumtillstand)
+diagnosis_data$`Downs syndrom` <- as.integer(diagnosis_data$`Downs syndrom`)
+diagnosis_data$CP <- as.integer(diagnosis_data$CP)
+diagnosis_data$`ADHD/ADD` <- as.integer(diagnosis_data$`ADHD/ADD`)
+diagnosis_data$Other <- as.integer(diagnosis_data$Other)
+
+diagnosis_table <- diagnosis_data  %>%
+   summarise_all(sum)
+
+apa_table(
+  diagnosis_table
+  , caption = "Diagnoses in sample"
+  , note = "Some participants can have more than one additional diagnosis"
+  , row.names = FALSE
+  , align = c('l', 'c')
+  , font_size = c("small")
+)
+```
+
+
+# Allocation of participants to reading instruction condition  
 One unsystematic (teaching-as-usual) and three different systematic approaches to reading instructions were applied in the present study: one applying a phonics-based reading strategy (using ALL), one applying a comprehension-based strategy (using Animega-is), and the third applying both strategies, referred to as the combination group (using ALL and Animega-is). The students that received teaching-as-usual comprised a comparison group. Allocation to the comparison group and the phonics-based reading strategy began after the first wave of recruitment, assigning 29 participations to the former, and 31 to the latter condition. An additional three participants from the second wave were allocated to the phonics-based reading strategy. Thirty-five of the remaining participants from the second wave were allocated to the comprehension-based reading instruction, and 31 to the combination group. For practical reasons, allocation was done on a school-basis, , i.e., all participants at one school were in the same group. To make sure that participants assigned to the different groups did not differ on relevant background variables, the information on adaptive and communicative skill, level of ID, and age, provided from the teachers when leaving their notification of interest, was used.
 
 
@@ -178,7 +204,7 @@ The  app provides several  levels  of complexity  as  well  as in-built  compreh
 The Accessible Literacy Learning (ALL) program is a program for literacy instruction for children with complex communication needs especially children with AAC (Light et al., 2008; Light & McNaughton, 2012, 2014). Only the modules using phonic training was used. The reading instruction includes: sound blending, phoneme segmentation, letter-sound correspondences, and phonological decoding. The exercises were accompanied by pictorial material/images to enable participation without speech. 
 
 ## Statistical analysis
-Linear mixed-effects models were used to evaluate the effects of the intervention. In the pre-registration, we stated that mixed ANOVA was going to be used. However, due to the children not being tested with the same time intervals (due to logistic reasons), missing data, and the groups differing on IQ, linear mixed-effects models with repeated measures were used to analyze the effects of the interventions. Linear mixed-effects models are better suited compared to ANOVA when dealing with missing data and varying time intervals (källa). Models were fitted using the lme4 package (källa) in R. Maximum likelihood estimation was applied and missing data was handled under the assumption of missing at random. The assumption of linearity was tested by plotting the model-predicted values to the observed ones and homogeneity of variance was tested by plotting the residuals vs. fitted values. To check that the residuals of the model were normally distributed, Q-Q plots were investigated with an ocular inspection. The α-value was set to 0.05.
+Linear mixed-effects models were used to evaluate the effects of the intervention. In the pre-registration, we stated that mixed ANOVA was going to be used. However, due to the children not being tested with the same time intervals (due to logistic reasons), missing data, and the groups differing on IQ, linear mixed-effects models with repeated measures were used to analyze the effects of the interventions. Linear mixed-effects models are better suited compared to ANOVA when dealing with missing data and varying time intervals (källa). Models were fitted using the lme4 package (källa) in R. Maximum likelihood estimation was applied and missing data was handled under the assumption of missing at random. The assumption of linearity was tested by plotting the model-predicted values to the observed ones and homogeneity of variance was tested by plotting the residuals vs. fitted values. To check that the residuals of the model were normally distributed, Q-Q plots were investigated with an ocular inspection. The $\alpha$-value was set to 0.05.
 
 ### Model building
 The three different outcome measures (PA, word recognition, and reading comprehension) were analyzed separately. Days were used as the time variable, starting day 1 at the date of t1. Model fit was assessed using ANOVA. The model with the best fit, indicated with Chi2, was chosen. Normal distribution was used for all models besides reading comprehension, where the residuals were non-normally distributed. Therefore, a Poisson distribution was used. The two models were compared, and the model with Poisson distribution was much better in terms of AIC and loglikelihood compared to a model with Gaussian distribution.
@@ -186,7 +212,7 @@ First an unconditional model including a fixed effect of time was built (Model 1
 After fitting the unconditional models, a conditional model (Model 3) was built using contrasts to test the Hypotheses. There were three contrasts performed: comparison group versus phonic-based intervention (Hypothesis 1), comparison versus comprehension-based intervention (Hypothesis 2), and combination versus phonic-based and comprehension-based intervention (Hypothesis 3). 
 
 # Results  
-The control group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Control"))$id), numerals = T) `, the phonic-based group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "ALL"))$id), numerals = T) `, the comprehension-based group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Animega-is"))$id), numerals = T) `, and the combination group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$id), numerals = T) `, for age, IQ, and instruction duration for each group, see Table X. The descriptive statistics for all variables on each assessment time can be seen in Table \ref{tab:descriptivesTable}
+The control group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Control"))$id), numerals = T) `, the phonic-based group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "ALL"))$id), numerals = T) `, the comprehension-based group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Animega-is"))$id), numerals = T) `, and the combination group = `r printnum(length((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$id), numerals = T) `, for age, IQ, and instruction duration for each group. The descriptive statistics for all variables on each assessment time can be seen in Table \@ref(tab:descriptivesTable).  
 
 ```{r descriptivesTable, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
@@ -268,33 +294,6 @@ apa_table(
 ```
 
 
-
-```{r diagnosisTable, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
-
-diagnosis_data <- mlm_data %>% filter(time == 1) %>% dplyr::select(`Only ID`, Autismspektrumtillstand, `Downs syndrom`, CP, `ADHD/ADD`, Other)
-
-diagnosis_data$`Only ID` <- as.integer(diagnosis_data$`Only ID`)
-diagnosis_data$Autismspektrumtillstand <- as.integer(diagnosis_data$Autismspektrumtillstand)
-diagnosis_data$`Downs syndrom` <- as.integer(diagnosis_data$`Downs syndrom`)
-diagnosis_data$CP <- as.integer(diagnosis_data$CP)
-diagnosis_data$`ADHD/ADD` <- as.integer(diagnosis_data$`ADHD/ADD`)
-diagnosis_data$Other <- as.integer(diagnosis_data$Other)
-
-diagnosis_table <- diagnosis_data  %>%
-   summarise_all(sum)
-
-apa_table(
-  diagnosis_table
-  , caption = "Diagnoses in sample"
-  , note = "Some participants can have more than one additional diagnosis"
-  , row.names = FALSE
-  , align = c('l', 'c')
-  , font_size = c("small")
-)
-
-```
-
-
 ```{r descReadControlTable, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
 desc_data2 <- mlm_data %>% dplyr::select(-id, -days, - age_in_days, -IQ_scale, -tot_train_time_scale, -contrast_1vs234, -contrast_1vs2, -contrast_1vs3, -contrast_4vs23, -years_old, -IQ, -tot_train_time, -gender, -letter)
@@ -308,7 +307,7 @@ descriptives_control <- desc_data2  %>% filter(group == 1) %>% group_by(time) %>
 #descriptives[, -1] <- printnum(descriptives[, -1])
 descriptives_control2 <- as.data.frame(t(descriptives_control))
 
-Response_variable <- c("PA", "Word recogniton", "Reading comprehension")
+Response_variable <- c("PA", "Word recognition", "Reading comp")
 #T1
 Means_t1 <- c(descriptives_control2['PA_Mean',"V1"], descriptives_control2['word_Mean',"V1"], descriptives_control2['DLS_Mean',"V1"])
 SDs_t1 <- c(descriptives_control2['PA_SD', "V1"], descriptives_control2['word_SD', "V1"], descriptives_control2['DLS_SD', "V1"])
@@ -354,7 +353,7 @@ descriptives_all <- desc_data2  %>% filter(group == 2) %>% group_by(time) %>%
 #descriptives[, -1] <- printnum(descriptives[, -1])
 descriptives_all2 <- as.data.frame(t(descriptives_all))
 
-Response_variable <- c("PA", "Word recogniton", "Reading comprehension")
+Response_variable <- c("PA", "Word recognition", "Reading comp")
 #T1
 Means_t1 <- c(descriptives_all2['PA_Mean',"V1"], descriptives_all2['word_Mean',"V1"], descriptives_all2['DLS_Mean',"V1"])
 SDs_t1 <- c(descriptives_all2['PA_SD', "V1"], descriptives_all2['word_SD', "V1"], descriptives_all2['DLS_SD', "V1"])
@@ -400,7 +399,7 @@ descriptives_animega <- desc_data2  %>% filter(group == 3) %>% group_by(time) %>
 #descriptives[, -1] <- printnum(descriptives[, -1])
 descriptives_animega2 <- as.data.frame(t(descriptives_animega))
 
-Response_variable <- c("PA", "Word recogniton", "Reading comprehension")
+Response_variable <- c("PA", "Word recognition", "Reading comp")
 #T1
 Means_t1 <- c(descriptives_animega2['PA_Mean',"V1"], descriptives_animega2['word_Mean',"V1"], descriptives_animega2['DLS_Mean',"V1"])
 SDs_t1 <- c(descriptives_animega2['PA_SD', "V1"], descriptives_animega2['word_SD', "V1"], descriptives_animega2['DLS_SD', "V1"])
@@ -446,7 +445,7 @@ descriptives_combi <- desc_data2  %>% filter(group == 4) %>% group_by(time) %>%
 #descriptives[, -1] <- printnum(descriptives[, -1])
 descriptives_combi2 <- as.data.frame(t(descriptives_combi))
 
-Response_variable <- c("PA", "Word recogniton", "Reading comprehension")
+Response_variable <- c("PA", "Word recognition", "Reading comp")
 #T1
 Means_t1 <- c(descriptives_combi2['PA_Mean',"V1"], descriptives_combi2['word_Mean',"V1"], descriptives_combi2['DLS_Mean',"V1"])
 SDs_t1 <- c(descriptives_combi2['PA_SD', "V1"], descriptives_combi2['word_SD', "V1"], descriptives_combi2['DLS_SD', "V1"])
@@ -502,9 +501,9 @@ and the CB intervention for
 (*sd* = `r round(sd((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$time_played_animega, na.rm = TRUE), digits = 0) `; 
 *range* =  [`r round(range((mlm_data %>% filter(time == 1)%>% filter(group == "Combi"))$time_played_animega, na.rm = TRUE), digits = 0) `]) minutes. 
 
-The instruction duration for each group can be seen in Figure X.
+The instruction duration for each group can be seen in Figure \@ref(fig:chunk-name)).
 
-```{r  tottraintime-plot, include = TRUE, results='asis'}
+```{r  chunk-name, include = TRUE, results='asis', fig.cap = "Duration of instruction in each group"}
 
 mlm_data_labels <- mlm_data                     # Duplicate data
 levels(mlm_data_labels$group) <- c("Control",  # Relevel factor labels
@@ -515,23 +514,28 @@ ggboxplot(data = mlm_data_labels%>% filter(time == 1)%>% filter(group != "Contro
           color = "group", palette =c("#00AFBB", "#E7B800", "#FC4E07"),
           names = c("PB", "CB", "Combi"),
           add = "jitter",
-          title = "Duration of instruction in each group",
           xlab = F,
           ylab = "Minutes",
           legend = "none")
 
 ```
 
+
+
 ## Phonological awareness
 
-All groups improved in PA with time, `r apa_print(model_PA_3)$full_result$days_scale`, and the participants in the combination group improved more than the participants in the other groups, `r apa_print(model_PA_3)$full_result$days_scale_contrast_4vs23` (see Table\ \@ref(tab:PATable)). The effect of the phonics-based reading instruction, compared to the comparison group, approached statistical significance, `r apa_print(model_PA_3)$full_result$days_scale_contrast_1vs2`. However, the comprehension-based reading instruction did not lead to better development than the TAU approach in the comparison group, `r apa_print(model_PA_3)$full_result$days_scale_contrast_1vs3` (see Table\ \ref{tab:PATable} ). In sum, we found support for Hypothesis 3, but not for Hypotheses 1-2.   
+All groups improved in PA with time, `r apa_print(model_PA_3)$full_result$days_scale`, and the participants in the combination group improved more than the participants in the other groups, `r apa_print(model_PA_3)$full_result$days_scale_contrast_4vs23` . The effect of the phonics-based reading instruction, compared to the comparison group, approached statistical significance, `r apa_print(model_PA_3)$full_result$days_scale_contrast_1vs2`. However, the comprehension-based reading instruction did not lead to better development than the TAU approach in the comparison group, `r apa_print(model_PA_3)$full_result$days_scale_contrast_1vs3`. In sum, we found support for Hypothesis 3, but not for Hypotheses 1-2, see Table \@ref(tab:PATable).   
 
+
+(ref:est-heading) $\beta$  
 
 ```{r PATable, include = TRUE, results='asis'}
 tab_model(model_PA_3,
-          show.re.var= T, 
+  string.est = "(ref:est-heading)",
+  show.re.var= T,            
+  show.obs = T,
                   pred.labels =c("(Intercept)", "Days", "Control vs PB", "Control vs CB", "PB and CB vs Combi", "Days*Control vs PB", "Days*Control vs CB", "Days*PB and CB vs Combi"),
-                  dv.labels= "Effects of Interventions on Phonological Awareness")
+   title = "(\\#tab:PATable) Effects of Interventions on Phonological Awareness")
 ```
 
 ```{r  PA-plot, include = FALSE, results='asis'}
@@ -556,14 +560,16 @@ ggplot(data      = mlm_data,
 ```
 
 ## Word recognition
-For word recognition, participants improved with time, `r apa_print(model_word_3)$full_result$days_scale`. This applied to all four groups, and neither PB (`r apa_print(model_word_3)$full_result$days_scale_contrast_1vs2`), CB (`r apa_print(model_word_3)$full_result$days_scale_contrast_1vs3`), nor the combination of the two instructions (`r apa_print(model_word_3)$full_result$days_scale_contrast_4vs23`) led to a stronger development than what was observed in the comparison group (see  Table\ \@ref(tab:wordTable)). Thus, for word reading, we did not find support for Hypotheses 1-3.
+For word recognition, participants improved with time, `r apa_print(model_word_3)$full_result$days_scale`. This applied to all four groups, and neither PB (`r apa_print(model_word_3)$full_result$days_scale_contrast_1vs2`), CB (`r apa_print(model_word_3)$full_result$days_scale_contrast_1vs3`), nor the combination of the two instructions (`r apa_print(model_word_3)$full_result$days_scale_contrast_4vs23`) led to a stronger development than what was observed in the comparison group. Thus, for word reading, we did not find support for Hypotheses 1-3, see  Table \@ref(tab:wordTable).
 
 
 ```{r wordTable, include=TRUE, results='asis'}
 tab_model(model_word_3,
-          show.re.var= T, 
+          string.est = "(ref:est-heading)",
+          show.re.var= T,            
+          show.obs = T,
                   pred.labels =c("(Intercept)", "Days", "Control vs PB", "Control vs CB", "PB and CB vs Combi", "Days*Control vs PB", "Days*Control vs CB", "Days*PB and CB vs Combi"),
-                  dv.labels= "Effects of Interventions on Word Recognition")
+           title = "(\\#tab:wordTable) Effects of Interventions on Word Recognition")
 
 ```
 
@@ -591,15 +597,16 @@ ggplot(data      = mlm_data,
 
 # Reading comprehension
 
-There was a statistically significant effect of time, `r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale`, indicating that participants improved on reading comprehension, regardless of reading instruction condition. However, we did not see any effects of PB (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_1vs2`), CB (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_1vs3`), or the combination of the two instructions (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_4vs23`; Table\ \@ref(tab:DLSTable)). Thus, hypotheses 1-3 were not supported for reading comprehension. 
-
+There was a statistically significant effect of time, `r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale`, indicating that participants improved on reading comprehension, regardless of reading instruction condition. However, we did not see any effects of PB (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_1vs2`), CB (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_1vs3`), or the combination of the two instructions (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_4vs23`). Thus, hypotheses 1-3 were not supported for reading comprehension, see Table\ \@ref(tab:DLSTable). 
 
 
 ```{r DLSTable, include=TRUE, results='asis'}
 tab_model(DLS_poisson_3_no_rand_slope,
           show.re.var= T, 
+          show.obs = T,
                   pred.labels =c("(Intercept)", "Days", "Control vs PB", "Control vs CB", "PB and CB vs Combi", "Days*Control vs PB", "Days*Control vs CB", "Days*PB and CB vs Combi"),
-                  dv.labels= "Effects of Interventions on Reading comprehension")
+          
+          title = "(\\#tab:DLSTable) Effects of Interventions on Reading Comprehension")
 ```
 
 ```{r  DLS-plot, include = FALSE, results='asis'}
