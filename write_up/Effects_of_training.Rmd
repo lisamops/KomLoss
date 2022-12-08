@@ -293,7 +293,6 @@ apa_table(
 )
 ```
 
-
 ```{r descReadControlTable, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
 
 desc_data2 <- mlm_data %>% dplyr::select(-id, -days, - age_in_days, -IQ_scale, -tot_train_time_scale, -contrast_1vs234, -contrast_1vs2, -contrast_1vs3, -contrast_4vs23, -years_old, -IQ, -tot_train_time, -gender, -letter)
@@ -417,7 +416,7 @@ Means_t4 <- c(descriptives_animega2['PA_Mean', "V4"], descriptives_animega2['wor
 SDs_t4 <- c(descriptives_animega2['PA_SD', "V4"], descriptives_animega2['word_SD', "V4"], descriptives_animega2['DLS_SD', "V4"])
 Range_t4 <- c(descriptives_animega2['PA_Range', "V4"], descriptives_animega2['word_Range', "V4"], descriptives_animega2['DLS_Range', "V4"])
 
-descTable <- data.frame(Response_variable, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
+descTable3 <- data.frame(Response_variable, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
 
 var_names <- as.data.frame(c( "Word recognition","Sentence", "PA"))
 
@@ -484,6 +483,148 @@ apa_table(
 
 ```
 
+
+```{r allTables, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+
+
+desc_data2 <- mlm_data %>% dplyr::select(-id, -days, - age_in_days, -IQ_scale, -tot_train_time_scale, -contrast_1vs234, -contrast_1vs2, -contrast_1vs3, -contrast_4vs23, -years_old, -IQ, -tot_train_time, -gender, -letter)
+
+desc_data2$group <- as.numeric(desc_data2$group)
+
+#Comparison group
+descriptives_control <- desc_data2  %>% filter(group == 1) %>% group_by(time) %>%
+   summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+
+
+#descriptives[, -1] <- printnum(descriptives[, -1])
+descriptives_control2 <- as.data.frame(t(descriptives_control))
+
+Response_variable <- c("Comparison", "PA", "Word recognition", "Reading comp")
+#T1
+Means_t1 <- c(" ", descriptives_control2['PA_Mean',"V1"], descriptives_control2['word_Mean',"V1"], descriptives_control2['DLS_Mean',"V1"])
+SDs_t1 <- c(" ",descriptives_control2['PA_SD', "V1"], descriptives_control2['word_SD', "V1"], descriptives_control2['DLS_SD', "V1"])
+Range_t1 <- c(" ",descriptives_control2['PA_Range', "V1"], descriptives_control2['word_Range', "V1"], descriptives_control2['DLS_Range', "V1"])
+#T2
+Means_t2 <- c(" ",descriptives_control2['PA_Mean', "V2"], descriptives_control2['word_Mean', "V2"], descriptives_control2['DLS_Mean', "V2"])
+SDs_t2 <- c(" ",descriptives_control2['PA_SD', "V2"], descriptives_control2['word_SD', "V2"], descriptives_control2['DLS_SD', "V2"])
+Range_t2 <- c(" ",descriptives_control2['PA_Range', "V2"], descriptives_control2['word_Range', "V2"], descriptives_control2['DLS_Range', "V2"])
+#T3
+Means_t3 <- c(" ",descriptives_control2['PA_Mean', "V3"], descriptives_control2['word_Mean', "V3"], descriptives_control2['DLS_Mean', "V3"])
+SDs_t3 <- c(" ",descriptives_control2['PA_SD', "V3"], descriptives_control2['word_SD', "V3"], descriptives_control2['DLS_SD', "V3"])
+Range_t3 <- c(" ",descriptives_control2['PA_Range', "V3"], descriptives_control2['word_Range', "V3"], descriptives_control2['DLS_Range', "V3"])
+#T4
+Means_t4 <- c(" ",descriptives_control2['PA_Mean', "V4"], descriptives_control2['word_Mean', "V4"], descriptives_control2['DLS_Mean', "V4"])
+SDs_t4 <- c(" ",descriptives_control2['PA_SD', "V4"], descriptives_control2['word_SD', "V4"], descriptives_control2['DLS_SD', "V4"])
+Range_t4 <- c(" ",descriptives_control2['PA_Range', "V4"], descriptives_control2['word_Range', "V4"], descriptives_control2['DLS_Range', "V4"])
+
+descTableControl <- data.frame(Response_variable, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
+
+# Phonic-based group
+descriptives_all <- desc_data2  %>% filter(group == 2) %>% group_by(time) %>%
+   summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+
+#descriptives[, -1] <- printnum(descriptives[, -1])
+descriptives_all2 <- as.data.frame(t(descriptives_all))
+
+Response_variable <- c("Phonic-based" ,"PA", "Word recognition", "Reading comp")
+#T1
+Means_t1 <- c(" ",descriptives_all2['PA_Mean',"V1"], descriptives_all2['word_Mean',"V1"], descriptives_all2['DLS_Mean',"V1"])
+SDs_t1 <- c(" ",descriptives_all2['PA_SD', "V1"], descriptives_all2['word_SD', "V1"], descriptives_all2['DLS_SD', "V1"])
+Range_t1 <- c(" ",descriptives_all2['PA_Range', "V1"], descriptives_all2['word_Range', "V1"], descriptives_all2['DLS_Range', "V1"])
+#T2
+Means_t2 <- c(" ",descriptives_all2['PA_Mean', "V2"], descriptives_all2['word_Mean', "V2"], descriptives_all2['DLS_Mean', "V2"])
+SDs_t2 <- c(" ",descriptives_all2['PA_SD', "V2"], descriptives_all2['word_SD', "V2"], descriptives_all2['DLS_SD', "V2"])
+Range_t2 <- c(" ",descriptives_all2['PA_Range', "V2"], descriptives_all2['word_Range', "V2"], descriptives_all2['DLS_Range', "V2"])
+#T3
+Means_t3 <- c(" ",descriptives_all2['PA_Mean', "V3"], descriptives_all2['word_Mean', "V3"], descriptives_all2['DLS_Mean', "V3"])
+SDs_t3 <- c(" ",descriptives_all2['PA_SD', "V3"], descriptives_all2['word_SD', "V3"], descriptives_all2['DLS_SD', "V3"])
+Range_t3 <- c(" ",descriptives_all2['PA_Range', "V3"], descriptives_all2['word_Range', "V3"], descriptives_all2['DLS_Range', "V3"])
+#T4
+Means_t4 <- c(" ",descriptives_all2['PA_Mean', "V4"], descriptives_all2['word_Mean', "V4"], descriptives_all2['DLS_Mean', "V4"])
+SDs_t4 <- c(" ",descriptives_all2['PA_SD', "V4"], descriptives_all2['word_SD', "V4"], descriptives_all2['DLS_SD', "V4"])
+Range_t4 <- c(" ",descriptives_all2['PA_Range', "V4"], descriptives_all2['word_Range', "V4"], descriptives_all2['DLS_Range', "V4"])
+
+descTablePB <- data.frame(Response_variable, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
+
+# Comprehension based group
+descriptives_animega <- desc_data2  %>% filter(group == 3) %>% group_by(time) %>%
+   summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+
+#descriptives[, -1] <- printnum(descriptives[, -1])
+descriptives_animega2 <- as.data.frame(t(descriptives_animega))
+
+Response_variable <- c("Comprehension-based", "PA", "Word recognition", "Reading comp")
+#T1
+Means_t1 <- c(" ",descriptives_animega2['PA_Mean',"V1"], descriptives_animega2['word_Mean',"V1"], descriptives_animega2['DLS_Mean',"V1"])
+SDs_t1 <- c(" ",descriptives_animega2['PA_SD', "V1"], descriptives_animega2['word_SD', "V1"], descriptives_animega2['DLS_SD', "V1"])
+Range_t1 <- c(" ",descriptives_animega2['PA_Range', "V1"], descriptives_animega2['word_Range', "V1"], descriptives_animega2['DLS_Range', "V1"])
+#T2
+Means_t2 <- c(" ",descriptives_animega2['PA_Mean', "V2"], descriptives_animega2['word_Mean', "V2"], descriptives_animega2['DLS_Mean', "V2"])
+SDs_t2 <- c(" ",descriptives_animega2['PA_SD', "V2"], descriptives_animega2['word_SD', "V2"], descriptives_animega2['DLS_SD', "V2"])
+Range_t2 <- c(" ",descriptives_animega2['PA_Range', "V2"], descriptives_animega2['word_Range', "V2"], descriptives_animega2['DLS_Range', "V2"])
+#T3
+Means_t3 <- c(" ",descriptives_animega2['PA_Mean', "V3"], descriptives_animega2['word_Mean', "V3"], descriptives_animega2['DLS_Mean', "V3"])
+SDs_t3 <- c(" ",descriptives_animega2['PA_SD', "V3"], descriptives_animega2['word_SD', "V3"], descriptives_animega2['DLS_SD', "V3"])
+Range_t3 <- c(" ",descriptives_animega2['PA_Range', "V3"], descriptives_animega2['word_Range', "V3"], descriptives_animega2['DLS_Range', "V3"])
+#T4
+Means_t4 <- c(" ",descriptives_animega2['PA_Mean', "V4"], descriptives_animega2['word_Mean', "V4"], descriptives_animega2['DLS_Mean', "V4"])
+SDs_t4 <- c(" ",descriptives_animega2['PA_SD', "V4"], descriptives_animega2['word_SD', "V4"], descriptives_animega2['DLS_SD', "V4"])
+Range_t4 <- c(" ",descriptives_animega2['PA_Range', "V4"], descriptives_animega2['word_Range', "V4"], descriptives_animega2['DLS_Range', "V4"])
+
+descTableCB <- data.frame(Response_variable, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
+
+#Combi group
+descriptives_combi <- desc_data2  %>% filter(group == 4) %>% group_by(time) %>%
+   summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
+
+#descriptives[, -1] <- printnum(descriptives[, -1])
+descriptives_combi2 <- as.data.frame(t(descriptives_combi))
+
+Response_variable <- c("Combination", "PA", "Word recognition", "Reading comp")
+#T1
+Means_t1 <- c(" ",descriptives_combi2['PA_Mean',"V1"], descriptives_combi2['word_Mean',"V1"], descriptives_combi2['DLS_Mean',"V1"])
+SDs_t1 <- c(" ",descriptives_combi2['PA_SD', "V1"], descriptives_combi2['word_SD', "V1"], descriptives_combi2['DLS_SD', "V1"])
+Range_t1 <- c(" ",descriptives_combi2['PA_Range', "V1"], descriptives_combi2['word_Range', "V1"], descriptives_combi2['DLS_Range', "V1"])
+#T2
+Means_t2 <- c(" ",descriptives_combi2['PA_Mean', "V2"], descriptives_combi2['word_Mean', "V2"], descriptives_combi2['DLS_Mean', "V2"])
+SDs_t2 <- c(" ",descriptives_combi2['PA_SD', "V2"], descriptives_combi2['word_SD', "V2"], descriptives_combi2['DLS_SD', "V2"])
+Range_t2 <- c(" ",descriptives_combi2['PA_Range', "V2"], descriptives_combi2['word_Range', "V2"], descriptives_combi2['DLS_Range', "V2"])
+#T3
+Means_t3 <- c(" ",descriptives_combi2['PA_Mean', "V3"], descriptives_combi2['word_Mean', "V3"], descriptives_combi2['DLS_Mean', "V3"])
+SDs_t3 <- c(" ",descriptives_combi2['PA_SD', "V3"], descriptives_combi2['word_SD', "V3"], descriptives_combi2['DLS_SD', "V3"])
+Range_t3 <- c(" ",descriptives_combi2['PA_Range', "V3"], descriptives_combi2['word_Range', "V3"], descriptives_combi2['DLS_Range', "V3"])
+#T4
+Means_t4 <- c(" ",descriptives_combi2['PA_Mean', "V4"], descriptives_combi2['word_Mean', "V4"], descriptives_combi2['DLS_Mean', "V4"])
+SDs_t4 <- c(" ",descriptives_combi2['PA_SD', "V4"], descriptives_combi2['word_SD', "V4"], descriptives_combi2['DLS_SD', "V4"])
+Range_t4 <- c(" ",descriptives_combi2['PA_Range', "V4"], descriptives_combi2['word_Range', "V4"], descriptives_combi2['DLS_Range', "V4"])
+
+descTableCombi <- data.frame(Response_variable, Means_t1, SDs_t1, Range_t1, Means_t2, SDs_t2, Range_t2, Means_t3, SDs_t3, Range_t3, Means_t4, SDs_t4, Range_t4)
+
+var_names <- as.data.frame(c( "Word recognition","Sentence", "PA"))
+
+col.names = c(" ", "$M_{T1}$", "$SD_{T1}$", "$(Range)_{T1}$", "$M_{T2}$", "$SD_{T2}$", "$(Range)_{T2}$", "$M_{T3}$", "$SD_{T3}$", "$(Range)_{T3}$", "$M_{T4}$", "$SD_{T4}$", "$(Range)_{T4}$")
+
+apa_table(
+  list(
+    descTableControl,
+    descTablePB,
+    descTableCB,
+    descTableCombi
+  )
+    , caption = "Descriptive statistics for the Phonic-based group of included variables presented by time"
+  , note = "this is a note."
+  , col_spanners = list("T1" = c(2, 4), "T2" = c(5, 7), "T3" = c(8, 10), "T4" = c(11, 13)) # N.B. ignored in Word
+  , col.names = col.names
+  , row.names = FALSE
+  , align = c('l', 'c')
+  , font_size = c("small")
+  , merge_method = "indent"
+)
+
+
+```
+
+
 ## Intervention implementation
 
 ```{r train time in different groups}
@@ -525,7 +666,6 @@ ggboxplot(data = mlm_data_labels%>% filter(time == 1)%>% filter(group != "Contro
 ## Phonological awareness
 
 All groups improved in PA with time, `r apa_print(model_PA_3)$full_result$days_scale`, and the participants in the combination group improved more than the participants in the other groups, `r apa_print(model_PA_3)$full_result$days_scale_contrast_4vs23` . The effect of the phonics-based reading instruction, compared to the comparison group, approached statistical significance, `r apa_print(model_PA_3)$full_result$days_scale_contrast_1vs2`. However, the comprehension-based reading instruction did not lead to better development than the TAU approach in the comparison group, `r apa_print(model_PA_3)$full_result$days_scale_contrast_1vs3`. In sum, we found support for Hypothesis 3, but not for Hypotheses 1-2, see Table \@ref(tab:PATable).   
-
 
 (ref:est-heading) $\beta$  
 
@@ -597,7 +737,7 @@ ggplot(data      = mlm_data,
 
 # Reading comprehension
 
-There was a statistically significant effect of time, `r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale`, indicating that participants improved on reading comprehension, regardless of reading instruction condition. However, we did not see any effects of PB (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_1vs2`), CB (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_1vs3`), or the combination of the two instructions (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_4vs23`). Thus, hypotheses 1-3 were not supported for reading comprehension, see Table\ \@ref(tab:DLSTable). 
+There was a statistically significant effect of time, `r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale`, indicating that participants improved on reading comprehension, regardless of reading instruction condition. However, we did not see any effects of PB (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_1vs2`), CB (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_1vs3`), or the combination of the two instructions (`r apa_print(DLS_poisson_3_no_rand_slope)$full_result$days_scale_contrast_4vs23`). Thus, hypotheses 1-3 were not supported for reading comprehension, see Table \@ref(tab:DLSTable). 
 
 
 ```{r DLSTable, include=TRUE, results='asis'}
