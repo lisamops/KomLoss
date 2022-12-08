@@ -293,7 +293,7 @@ apa_table(
 )
 ```
 
-```{r descReadControlTable, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+```{r descReadControlTable, dev.args = list(bg = 'white'), include=FALSE, results='asis'}
 
 desc_data2 <- mlm_data %>% dplyr::select(-id, -days, - age_in_days, -IQ_scale, -tot_train_time_scale, -contrast_1vs234, -contrast_1vs2, -contrast_1vs3, -contrast_4vs23, -years_old, -IQ, -tot_train_time, -gender, -letter)
 
@@ -344,7 +344,7 @@ apa_table(
 
 ```
 
-```{r descReadPBTable, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+```{r descReadPBTable, dev.args = list(bg = 'white'), include=FALSE, results='asis'}
 
 descriptives_all <- desc_data2  %>% filter(group == 2) %>% group_by(time) %>%
    summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
@@ -390,7 +390,7 @@ apa_table(
 
 ```
 
-```{r descReadAnimegaTable, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+```{r descReadAnimegaTable, dev.args = list(bg = 'white'), include=FALSE, results='asis'}
 
 descriptives_animega <- desc_data2  %>% filter(group == 3) %>% group_by(time) %>%
    summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
@@ -436,7 +436,7 @@ apa_table(
 
 ```
 
-```{r descReadCombiTable, dev.args = list(bg = 'white'), include=TRUE, results='asis'}
+```{r descReadCombiTable, dev.args = list(bg = 'white'), include=FALSE, results='asis'}
 
 descriptives_combi <- desc_data2  %>% filter(group == 4) %>% group_by(time) %>%
    summarize_all(list(Mean=~round(mean(., na.rm = T), digits = 2),  SD=~round(sd(., na.rm = T), digits = 2), Range=~paste("(", toString(round(range(., na.rm = T), digits = 0)), ")", sep="")))
@@ -611,7 +611,7 @@ apa_table(
     descTableCB,
     descTableCombi
   )
-    , caption = "Descriptive statistics for the Phonic-based group of included variables presented by time"
+  , caption = "Descriptive statistics for the groups of predictor variables presented by time"
   , note = "this is a note."
   , col_spanners = list("T1" = c(2, 4), "T2" = c(5, 7), "T3" = c(8, 10), "T4" = c(11, 13)) # N.B. ignored in Word
   , col.names = col.names
